@@ -1,0 +1,47 @@
+<tr :id="index" v-for="(elt,index) of sqLines" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
+                                            <td class="has-text-left">
+                                                <span class="icon">
+                                                    <i class="fas fa-arrow-right has-text-grey"></i>
+                                                </span>
+                                            </td>
+
+                                            <td class="has-text-left p-0" >
+                                                <div :id="index+'-'+elt['No_']+'-No_'" class="editme p-1" contenteditable="true" v-text="elt['No_']" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                            </td>
+                                            <td class="has-text-left p-0" >
+                                                <div :id="index+'-'+elt['Description']+'-Description'" class="editme p-1" contenteditable="true" v-text="elt['Description']" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                            </td>
+                                            <td class="has-text-left p-0" >
+                                                <div :id="index+'-'+elt['Description 2']+'-Description 2'" class="editme p-1" contenteditable="true" v-text="elt['Description 2']" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                            </td>
+                                            <td class="has-text-left p-0" >
+                                                <div :id="index+'-'+elt['Location Code']+'-Location Code'" class="editme p-1" contenteditable="true" v-text="elt['Location Code']" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                            </td>
+                                            <td class="has-text-left p-0" >
+                                                <div :id="index+'-'+elt['Quantity']+'-Quantity'" class="editme p-1" contenteditable="true" v-text="elt['Quantity']" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                            </td>
+                                            <td class="has-text-left p-0" >
+                                                <div :id="index+'-'+elt['Unit of Measure']+'-Unit of Measure'" class="editme p-1" contenteditable="true" v-text="elt['Unit of Measure']" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                            </td>
+                                            <td class="has-text-left p-0" >
+                                                <div :id="index+'-'+elt['Unit Price']+'-Unit Price'" class="editme p-1" contenteditable="true" v-text="elt['Unit Price']" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                            </td>
+                                            <td class="has-text-left p-0" >
+                                                <div :id="index+'-'+elt['VAT_']+'-name'" class="editme p-1" contenteditable="true" v-text="elt['VAT_']" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                            </td>
+                                            <td class="has-text-left p-0" >
+                                                <div :id="index+'-'+elt.name+'-name'" class="editme p-1" contenteditable="true" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                            </td>
+                                            <td class="has-text-left p-0" >
+                                                <div :id="index+'-'+elt.name+'-name'" class="editme p-1" contenteditable="true"  @blur="onEdit" @keydown.enter="endEdit"></div>
+                                            </td>
+                                            <td class="has-text-left p-0" >
+                                                <div :id="index+'-'+elt.name+'-name'" class="editme p-1" contenteditable="true" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                            </td>
+                                            <td class="has-text-left p-0" >
+                                                <div :id="index+'-'+elt.name+'-name'" class="editme p-1" contenteditable="true" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                            </td>
+                            
+                            
+ 
+                                        </tr>

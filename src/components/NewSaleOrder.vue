@@ -11,6 +11,7 @@
 <!---------Composant rubban fiche client----------------------->      
             <s-o-card-ribbon
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+            @onSubmittingForm="getTheJsonData"
             componentWithCompInfo="neworderRightInfoMaxWidth"
             :newCardBtnDisabled="true"
             :editCardBtnDisabled="true"
@@ -442,6 +443,33 @@
             @onGettingLineFromSelectableAddressListModal="(elt)=>fillAddressInfoField(elt)">
         </modal-for-selectable-address-list>
 
+
+
+
+        <article v-if="error_message" class="message is-danger shadow" style="max-width: 500px; position: absolute;bottom: 20px;right:20px">
+            <div class="message-header">
+                <p>Message</p>
+                <button class="delete" aria-label="delete" @click="error_message='';error_message_code=''"></button>
+            </div>
+            <div class="message-body">
+                <span> {{ error_message }}</span><br>
+                <span v-if="error_message_code"> Code erreur: {{ error_message_code }}</span>
+            </div>
+        </article>
+
+        <article v-if="success_message" class="message is-primary shadow" style="max-width: 500px; position: absolute;bottom: 20px;right:20px">
+            <div class="message-header">
+                <p>Message</p>
+                <button class="delete" aria-label="delete" @click="success_message=''"></button>
+            </div>
+            <div class="message-body">
+                <span> {{ success_message }}</span><br>
+                <span class="icon is-large">
+                    <i class="fas fa-spinner fa-pulse fa-2x"></i>
+                </span>
+            </div>
+        </article>
+
     </div>     
 </template>
 <script>
@@ -464,6 +492,8 @@ import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 //import { useWebServiceInfoStore } from '@/Stores/WebServiceInfo'
 import  axios  from 'axios'
+import { useRouter } from 'vue-router'
+
 //import { Buffer } from 'buffer'
 
 
@@ -519,17 +549,26 @@ export default {
             editItemModalShowned:false,
 
             //élement pour le modal sélection des enregistrements
-            activeModalForSelectableElementList:''
+            activeModalForSelectableElementList:'',
 
         }
     },
     setup(){
 
- /////////////DATAS//////////////////////////           
+ /////////////DATAS//////////////////////////   
+            
+            const router = useRouter()
             const currentDate = new Date(new Date()).toISOString().split('T')[0]
 
             //nom de l'hote dans l'url 
             const hostname = window.location.hostname;
+
+            //variable d'erreur serveur
+            let error_message=ref('')
+            let error_message_code =ref('')
+
+            //variable de success serveur
+            let success_message=ref('')
             
             const customerInfo = {
                 customerCode : ref(''),
@@ -703,32 +742,31 @@ export default {
             }
 
             
-            function saveNewsaleQuote(sqData){
-                // const url = 'http://108.175.0.116:7048/BC230/ODataV4/api_GetLengthOfStringWithConfirmation?Company=b9643631-44bc-ee11-9080-6045bdc8c195'
-                // const credentials = Buffer.from('108.175.0.116\\webservices:Afrikedge@2003').toString('base64');
-
-
-                // const headers ={
-                //     'Content-Type': 'application/json',
-                //     'Authorization': `NTLM ${credentials}`,
-                //     'accept': 'application/json',
-                // }
-                axios.post('http://localhost:3000/app/saveSaleQuote',sqData)
-                .then(res => console.log(res))
-                .catch(err => console.log(err))
-               
-                
+            function saveNewsaleOrder(sqData){
+                axios.post(`http://${hostname}:3000/app/saveSaleOrder?company=${useWebUserInfoStore().activeCompanyId}`,sqData)
+                .then(res => {
+                    success_message.value='Enregistrement réussi, vous serez redirigé dans un instant'
+                    setTimeout(()=> router.push(`/saleOrderCard/${res.data.orderNo}`),3000)
+                   
+                            // console.log(res.data.orderNo)
+                })
+                .catch(err => {
+                    console.log(err)
+                    switch (err.response.status){
+                        case 401: error_message.value= err.response.data.message;break;
+                        case 400: 
+                            error_message.value= err.response.data.error.message
+                            error_message_code.value= err.response.data.error.code;break;
+                    }
+                })
             }
 
 
             function getTheJsonData(){
-                
                 const userInfoStore = useWebUserInfoStore()
-                //const serviceInfoStore = useWebServiceInfoStore()
-
                 const JSONData = {
                         webUserName:userInfoStore.name,
-                        QuoteNo:'',
+                        OrderNo:'',
                         IsDeletion:0,
                         customerNo:customerInfo.customerCode.value,
                         customerContactCode:customerInfo.customerPrimaryContactNo.value,
@@ -738,19 +776,19 @@ export default {
                         customerPhoneNo:customerInfo.customerPhone.value,
                         customerEmailAddress:customerInfo.customerEmailAddress.value,
                         saleQuoteOrderDate:dateInfo.orderDate.value,
-                        saleQuoteDocumentDate:dateInfo.documentDate.value,
-                        saleQuoteDueDate:dateInfo.dueDate.value,
-                        saleQuoteValidUntilDate:dateInfo.validityDate.value,
-                        saleQuoteShipRequestedDate:dateInfo.shipRequestedDate.value, 
-                        saleQuoteResponsibilityCenter:userInfoStore.responsibilityCenter, 
+                        saleOrderDocumentDate:dateInfo.documentDate.value,
+                        saleOrderDueDate:dateInfo.dueDate.value,
+                        saleOrderValidUntilDate:dateInfo.validityDate.value,
+                        saleOrderShipRequestedDate:dateInfo.shipRequestedDate.value, 
+                        saleOrderResponsibilityCenter:userInfoStore.responsibilityCenter, 
                         customerGenBusPostingGroup:customerInfo.customerGenBusPostingGroup.value, 
                         customerVATBusPostingGroup:customerInfo.customerVATBusPostingGroup.value, 
                         customerShipmentMethodCode:customerInfo.customerShipmentMethodCode.value, 
-                        saleQuoteShipToCode:customerInfo.customerShipToCode.value, 
-                        saleQuoteLocationCode:customerInfo.customerLocationCode.value, 
+                        saleOrderShipToCode:customerInfo.customerShipToCode.value, 
+                        saleOrderLocationCode:customerInfo.customerLocationCode.value, 
                         customerPaymentMethodCode:customerInfo.customerPaymentMethodCode.value, 
                         customerPaymentTermsCode:customerInfo.customerPaymentTermCode.value,
-                        saleQuoteLines:[
+                        saleOrderLines:[
                             ...soLines.value
                         ]
 
@@ -758,8 +796,8 @@ export default {
                 const JSONFormatedData = JSON.stringify(JSONData).split('"').join('\\"')
                 const JSONDataToSend = '{'+ '"inputJson":'+'"'+JSONFormatedData+'"' +'}'
 
-                saveNewsaleQuote({data:JSONDataToSend})
-                console.log(JSONDataToSend)
+                saveNewsaleOrder({data:JSONDataToSend})
+                //console.log(JSONDataToSend)
             }
 
  /////////////COMPUTED//////////////////////////           
@@ -804,7 +842,9 @@ export default {
             fillAddressInfoField,
             fillItemInfoField,
             getTheJsonData,
-            //saveNewsaleQuote,
+            error_message,
+            error_message_code,
+            success_message
         }
     },
     methods:{

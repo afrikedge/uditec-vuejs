@@ -330,7 +330,7 @@ import inputText from './input/input-text.vue'
 import inputText3 from './input/input-text1.vue'
 import printableOrderLayout1 from './PrintableOrderLayout1.vue'
 //import printableOrderLayout from './PrintableOrderLayout.vue'
-import ReportViewer from './RevportViewer.vue'
+import ReportViewer from './ReportViewer.vue'
 import axios from 'axios';
 //import html2pdf from 'html2pdf.js'
 import jsPDF from 'jspdf'; 

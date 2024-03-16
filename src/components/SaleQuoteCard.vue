@@ -264,6 +264,23 @@
                 <prospect-info class="prospect-info" v-else></prospect-info>
 
             </div>
+
+
+<!-----------reoprt viewer-------------------->
+
+            <div>
+                <div :class="{'modal':true , 'is-active':true }" v-if="reportViewerShowned">
+                    <div class="modal-background has-background-white" style="opacity:0.7" @click="reportViewerShowned=true"></div>
+                    <div class="modal-content box w-75" style=" background-color: rgba(255,255,255,1);border: none;">
+                        <report-viewer :documentNo="saleQuoteCardHeader['No_']"></report-viewer>
+                    </div>
+                    <button class=" modal-close is-large has-background-dark is-large is-danger" aria-label="close" @click.prevent="reportViewerShowned=false"></button>
+                </div>
+
+            </div>
+
+
+
         </div>
 
     </div>    
@@ -275,6 +292,7 @@ import ProspectInfo from './ProspectInfo.vue'
 import SQCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import inputText1 from './input/input-text1.vue'
+import ReportViewer from './ReportViewer.vue'
 import axios from 'axios'
 import { ref } from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
@@ -285,7 +303,7 @@ import { useNavigationTabStore } from '@/Stores/NavigationTab'
 export default {
     name:'sale-quote-card',
     components:{
-        SQCardHeader,CustomerInfo,ProspectInfo,inputText,inputText1,SQCardRibbon
+        SQCardHeader,CustomerInfo,ProspectInfo,inputText,inputText1,SQCardRibbon,ReportViewer
     },
     setup(){
         const saleQuoteCardHeader = ref({})

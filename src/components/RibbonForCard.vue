@@ -13,7 +13,7 @@
             </div>
 
             <div class="column is-narrow" v-if="readOnlyModeDisabled==true">
-                <a href="#" class="px-3 py-3" @click.prevent="">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onSubmittingForm')">
                     <span class="icon">
                         <i class="fas fa-save"></i>
                     </span>

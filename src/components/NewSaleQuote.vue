@@ -11,7 +11,8 @@
 <!---------Composant rubban fiche client----------------------->      
             <s-q-card-ribbon
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
-            componentWithCompInfo="newQuoteRightInfoMaxWidth"
+            @onSubmittingForm="getTheJsonData"
+            componentWithCompInfo="newquoteRightInfoMaxWidth"
             :newCardBtnDisabled="true"
             :editCardBtnDisabled="true"
             :printCardBtnDisabled="true"
@@ -22,8 +23,6 @@
 <!---------Section formulaire fiche client----------------------->      
             <div id="content-comp" class="columns mt-2" style="overflow-y: scroll;">
                 <div class="column" style="overflow-y: scroll;">
-
-                    <a class="button" href="#" @click="getTheJsonData">getJSON</a>
 
 <!---------sous-Section onglet 1 formulaire fiche client----------------------->                         
                     <div id="general">
@@ -68,7 +67,7 @@
                                 <input-text labelInputText="Adresse e*mail" :is_disabled="false"></input-text>
                             </div>
                             <div class="column">
-                                <input-date v-model="orderDate" labelInputText="Date commande"  :is_disabled="false" ></input-date>
+                                <input-date v-model="quoteDate" labelInputText="Date Devis"  :is_disabled="false" ></input-date>
                                 <input-date v-model="documentDate" labelInputText="Date document"  :is_disabled="false"></input-date>
                                 <input-date v-model="dueDate" labelInputText="Date d'échéance" :is_disabled="false" ></input-date>
                                 <input-date v-model="validityDate" labelInputText="Fin de validité devis" :is_disabled="false"></input-date>
@@ -106,8 +105,8 @@
                                         <span class="subtitle is-7" >Ligne</span>
                                     </a>
     
-                                    <a href="#" class="ml-5" v-if="onglet2_expanded && show_more_option" @click="selectOption('commande')">
-                                        <span class="subtitle is-7" >commande</span>
+                                    <a href="#" class="ml-5" v-if="onglet2_expanded && show_more_option" @click="selectOption('Devis')">
+                                        <span class="subtitle is-7" >Devis</span>
                                     </a>
     
                                     <a href="#" class="ml-5 is-hover-orange py-4 px-2" v-if="onglet2_expanded && show_more_option" @click="show_more_option=false">
@@ -208,7 +207,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr :id="index" v-for="(elt,index) of sqLines" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
+                                            <tr :id="index" v-for="(elt,index) of soLines" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
                                                 <td class="has-text-left">
                                                     <span class="icon">
                                                         <i class="fas fa-arrow-right has-text-grey"></i>
@@ -249,7 +248,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div v-if="sqLines.length==0">Il n'y'a rien à afficher</div>
+                                <div v-if="soLines.length==0">Il n'y'a rien à afficher</div>
                             </div>     
 
                         </div>
@@ -442,6 +441,33 @@
             @onGettingLineFromSelectableAddressListModal="(elt)=>fillAddressInfoField(elt)">
         </modal-for-selectable-address-list>
 
+
+
+
+        <article v-if="error_message" class="message is-danger shadow" style="max-width: 500px; position: absolute;bottom: 20px;right:20px">
+            <div class="message-header">
+                <p>Message</p>
+                <button class="delete" aria-label="delete" @click="error_message='';error_message_code=''"></button>
+            </div>
+            <div class="message-body">
+                <span> {{ error_message }}</span><br>
+                <span v-if="error_message_code"> Code erreur: {{ error_message_code }}</span>
+            </div>
+        </article>
+
+        <article v-if="success_message" class="message is-primary shadow" style="max-width: 500px; position: absolute;bottom: 20px;right:20px">
+            <div class="message-header">
+                <p>Message</p>
+                <button class="delete" aria-label="delete" @click="success_message=''"></button>
+            </div>
+            <div class="message-body">
+                <span> {{ success_message }}</span><br>
+                <span class="icon is-large">
+                    <i class="fas fa-spinner fa-pulse fa-2x"></i>
+                </span>
+            </div>
+        </article>
+
     </div>     
 </template>
 <script>
@@ -464,7 +490,9 @@ import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 //import { useWebServiceInfoStore } from '@/Stores/WebServiceInfo'
 import  axios  from 'axios'
-import { Buffer } from 'buffer'
+import { useRouter } from 'vue-router'
+
+//import { Buffer } from 'buffer'
 
 
 
@@ -494,7 +522,7 @@ export default {
             height:'5000px',
 
             //taille (largeur) initiale du composant custumerInfo
-            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.newQuoteRightInfoMaxWidth,
+            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.newquoteRightInfoMaxWidth,
 
             //indique si les onglets de la page sont réduits ou pas
             onglet1_expanded:true,
@@ -525,12 +553,21 @@ export default {
     },
     setup(){
 
- /////////////DATAS//////////////////////////           
-            const currentDate = new Date(new Date()).toISOString().split('T')[0]
+ /////////////DATAS//////////////////////////   
             
+            const router = useRouter()
+            const currentDate = new Date(new Date()).toISOString().split('T')[0]
+
             //nom de l'hote dans l'url 
             const hostname = window.location.hostname;
 
+            //variable d'erreur serveur
+            let error_message=ref('')
+            let error_message_code =ref('')
+
+            //variable de success serveur
+            let success_message=ref('')
+            
             const customerInfo = {
                 customerCode : ref(''),
                 customerName : ref(''),
@@ -554,7 +591,7 @@ export default {
 
             const dateInfo = {
                 documentDate : ref(currentDate),
-                orderDate : ref(currentDate),
+                quoteDate : ref(currentDate),
                 dueDate : ref(currentDate),
                 validityDate : ref(currentDate),
                 shipRequestedDate : ref(currentDate),
@@ -590,16 +627,16 @@ export default {
                 itemOnPurchaseGlobal:ref('')
             }
 
-            const sqLines =  ref([])
+            const soLines =  ref([])
 
 
 
  /////////////FUNCTIONS//////////////////////////      
    
             function  addEmptyRow(){
-                sqLines.value.push(
+                soLines.value.push(
                     {   
-                        'Line No_':(sqLines.value.length +1)*10000,
+                        'Line No_':(soLines.value.length +1),
                         Type:'',
                         No_:'',
                         Description:'',
@@ -613,9 +650,9 @@ export default {
             }
 
             function  addCommentRow(){
-                sqLines.value.push(
+                soLines.value.push(
                     {   
-                        'Line No_':(sqLines.value.length +1)*10000,
+                        'Line No_':(soLines.value.length +1),
                         Type:0,
                         No_:'',
                         Description:'',
@@ -630,9 +667,9 @@ export default {
 
             
             function addRowByForm(){
-                sqLines.value.push(
+                soLines.value.push(
                 {
-                    'Line No_':(sqLines.value.length +1)*10000,
+                    'Line No_':(soLines.value.length +1),
                     Type:2,    
                     No_:this.itemCode,
                     Description:this.itemDescription,
@@ -644,7 +681,7 @@ export default {
                     'Line Discount _':this.itemLineDiscount 
                 })
 
-                console.log(sqLines.value)
+                console.log(soLines.value)
             }
 
             function fillCustomerInfoField(customer){
@@ -702,50 +739,29 @@ export default {
                 this.itemUnitOfMeasure = item['Sales Unit of Measure']
             }
 
-
-                //console.log(sqData)
-
-                // const headers ={
-                //     'Content-Type': 'application/json',
-                //     'Authorization': `NTLM ${credentials}`,
-                //     'accept': 'application/json',
-                //     'Access-Control-Allow-Origin' : '*',
-                //     'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-                // }
-                // axios.post(url,sqData,{headers})
-                // .then(res => console.log(res))
-                // .catch(err => console.log(err))
-
-
-            function saveNewSaleQuote(){
-                const url = 'http://108.175.0.116:7048/BC230/ODataV4/quotes_run?Company=b9643631-44bc-ee11-9080-6045bdc8c195'
-                const credentials = Buffer.from('108.175.0.116\\webservices:Afrikedge@2003').toString('base64');
-
-                const requestOptions = {
-                    method: "POST",
-                    credentials: 'include',
-                    mode:'cors',
-                    redirect: "follow",
-                    referrerPolicy: "no-referrer",
-                    headers: {
-                        "Content-Type": "Application/json",
-                        "Accept":  "Application/json",
-                        "Authorization": `NTLM ${credentials}`,
-                        //"Origin":`http://${this.hostname}:8081`,
-                    },
-                    body: JSON.stringify({myName:'gerald'})
-                }
-                fetch(url,requestOptions)
-                .then(res=>console.log(res))
-                .catch(err=>console.log(err))
+            
+            function saveNewsaleQuote(sqData){
+                axios.post(`http://${hostname}:3000/app/saveSaleQuote?company=${useWebUserInfoStore().activeCompanyId}`,sqData)
+                .then(res => {
+                    success_message.value='Enregistrement réussi, vous serez redirigé dans un instant'
+                    setTimeout(()=> router.push(`/saleQuoteCard/${res.data.quoteNo}`),5000)
+                   
+                            // console.log(res.data.quoteNo)
+                })
+                .catch(err => {
+                    console.log(err)
+                    switch (err.response.status){
+                        case 401: error_message.value= err.response.data.message;break;
+                        case 400: 
+                            error_message.value= err.response.data.error.message
+                            error_message_code.value= err.response.data.error.code;break;
+                    }
+                })
             }
 
 
             function getTheJsonData(){
-                
                 const userInfoStore = useWebUserInfoStore()
-                //const serviceInfoStore = useWebServiceInfoStore()
-
                 const JSONData = {
                         webUserName:userInfoStore.name,
                         QuoteNo:'',
@@ -757,7 +773,7 @@ export default {
                         customerCity:customerInfo.customerCity.value,
                         customerPhoneNo:customerInfo.customerPhone.value,
                         customerEmailAddress:customerInfo.customerEmailAddress.value,
-                        saleQuoteOrderDate:dateInfo.orderDate.value,
+                        saleQuoteOrderDate:dateInfo.quoteDate.value,
                         saleQuoteDocumentDate:dateInfo.documentDate.value,
                         saleQuoteDueDate:dateInfo.dueDate.value,
                         saleQuoteValidUntilDate:dateInfo.validityDate.value,
@@ -771,15 +787,15 @@ export default {
                         customerPaymentMethodCode:customerInfo.customerPaymentMethodCode.value, 
                         customerPaymentTermsCode:customerInfo.customerPaymentTermCode.value,
                         saleQuoteLines:[
-                            ...sqLines.value
+                            ...soLines.value
                         ]
 
                 }
                 const JSONFormatedData = JSON.stringify(JSONData).split('"').join('\\"')
                 const JSONDataToSend = '{'+ '"inputJson":'+'"'+JSONFormatedData+'"' +'}'
 
-                saveNewSaleQuote()
-                console.log(JSONDataToSend)
+                saveNewsaleQuote({data:JSONDataToSend})
+                //console.log(JSONDataToSend)
             }
 
  /////////////COMPUTED//////////////////////////           
@@ -798,7 +814,6 @@ export default {
 //             )
 
             function getItemAvailibility(){
-                
                 if(ItemInfo.itemCode.value){
                     axios.get(`http://${hostname}:3000/app/ItemAvailabilityInfo/${ItemInfo.itemCode.value}/${ItemInfo.itemLocation.value}`)
                     .then(res => {
@@ -810,7 +825,7 @@ export default {
 
         return{
             ...customerInfo,
-            sqLines,
+            soLines,
             addEmptyRow,
             addCommentRow,
             addRowByForm,
@@ -825,18 +840,20 @@ export default {
             fillAddressInfoField,
             fillItemInfoField,
             getTheJsonData,
-            //saveNewSaleQuote,
+            error_message,
+            error_message_code,
+            success_message
         }
     },
     methods:{
         /////////////////////////methode pour masquer ou afficher le composant info à droite
         hideOrShowComponentInfo(){
             if(this.customerInfoCompMaxWidth=='0px') {
-                useNavigationTabStore().setMaxWidth('newQuoteRightInfoMaxWidth','800px')
+                useNavigationTabStore().setMaxWidth('newquoteRightInfoMaxWidth','800px')
                 this.customerInfoCompMaxWidth='800px'
             }
             else {
-                useNavigationTabStore().setMaxWidth('newQuoteRightInfoMaxWidth','0px')
+                useNavigationTabStore().setMaxWidth('newquoteRightInfoMaxWidth','0px')
                 this.customerInfoCompMaxWidth='0px'
             }
         },
@@ -893,8 +910,8 @@ export default {
             const value = evt.target.innerText
             const parentId= new String(id).split('-')[0]
             const parentAttri = new String(id).split('-')[2]
-            this.sqLines[parentId][parentAttri] = value
-            //console.log(this.sqLines)
+            this.soLines[parentId][parentAttri] = value
+            //console.log(this.soLines)
          },
          endEdit(){
             this.$el.querySelector('.editme').blur()

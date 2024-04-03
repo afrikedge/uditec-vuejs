@@ -1,5 +1,5 @@
 <template>
-        <div class="column is-3 has-background-white" style="overflow-y: hidden">
+        <div class="column is-3 has-background-white p-1" style="overflow-y: hidden">
 
 <!--------------Customer info header-------------->
                 <div id="customer-info-header" class="tabs">
@@ -39,8 +39,8 @@
                     </div>
     
                     
-                    <div class="columns is-mobile mt-5 is-centered is-multiline">
-                        <div class="column has-background-orange mr-1 is-3" style="min-width: 95px; min-height: 95px;">
+                    <div class="columns is-mobile mt-5 is-centered is-multiline ">
+                        <div class="column has-background-orange mr-1 mb-1 is-2 " style="width: 90px; height: 90px;">
                             <div class="has-text-right ">
                                 <span class="has-text-light subtitle is-5">0</span>
                             </div>
@@ -48,7 +48,7 @@
                                 Devis en cours
                             </h6>
                         </div>
-                        <div class="column has-background-orange  is-3" style="min-width: 95px; min-height: 95px;">
+                        <div class="column has-background-orange mr-1 mb-1 is-2 " style="width: 90px; height: 90px;">
                             <div class="has-text-right ">
                                 <span class="has-text-light subtitle is-5">0</span>
                             </div>
@@ -56,7 +56,7 @@
                                 Commandes vente en cours
                             </h6>
                         </div>
-                        <div class="column has-background-orange ml-1 is-3" style="min-width: 95px; min-height: 95px;">
+                        <div class="column has-background-orange mr-1 mb-1 is-2" style="width: 90px; height: 90px;">
                             <div class="has-text-right ">
                                 <span class="has-text-light subtitle is-5">0</span>
                             </div>
@@ -64,7 +64,7 @@
                                 Factures vente en cours
                             </h6>
                         </div>
-                        <div class="column has-background-orange mt-1 mr-1 is-3" style="min-width: 95px; min-height: 95px;">
+                        <div class="column has-background-orange mr-1 mb-1 is-2" style="width: 90px; height: 90px;">
                             <div class="has-text-right ">
                                 <span class="has-text-light subtitle is-5">0</span>
                             </div>
@@ -72,7 +72,7 @@
                                 Retours vente en cours
                             </h6>
                         </div>
-                        <div class="column has-background-orange mt-1 is-3" style="min-width: 95px; min-height: 95px;">
+                        <div class="column has-background-orange mr-1 mb-1 is-2" style="width: 90px; height: 90px;">
                             <div class="has-text-right ">
                                 <span class="has-text-light subtitle is-5">0</span>
                             </div>
@@ -80,7 +80,7 @@
                                 Avoirs vente en cours
                             </h6>
                         </div>
-                        <div class="column has-background-orange mt-1 ml-1 is-3" style="min-width: 95px; min-height: 95px;">
+                        <div class="column has-background-orange mr-1 mb-1 is-2" style="width: 90px; height: 90px;">
                             <div class="has-text-right ">
                                 <span class="has-text-light subtitle is-5">0</span>
                             </div>
@@ -88,7 +88,7 @@
                                 Expéditions enregistrées
                             </h6>
                         </div>
-                        <div class="column has-background-orange mt-1 mr-1 is-3" style="min-width: 95px; min-height: 95px;">
+                        <div class="column has-background-orange mr-1 mb-1 is-2" style="width: 90px; height: 90px;">
                             <div class="has-text-right ">
                                 <span class="has-text-light subtitle is-5">0</span>
                             </div>
@@ -96,7 +96,7 @@
                                 Factures enregistrées
                             </h6>
                         </div>
-                        <div class="column has-background-orange mt-1 is-3" style="min-width: 95px; min-height: 95px;">
+                        <div class="column has-background-orange mr-1 mb-1 is-2" style="width: 90px; height: 90px;">
                             <div class="has-text-right ">
                                 <span class="has-text-light subtitle is-5">0</span>
                             </div>
@@ -104,7 +104,7 @@
                                 Avoirs vente enregistrées
                             </h6>
                         </div>
-                        <div class="column has-background-orange mt-1 ml-1 is-3" style="min-width: 95px; min-height: 95px;">
+                        <div class="column has-background-orange mr-1 mb-1 is-2" style="width: 90px; height: 90px;">
                             <div class="has-text-right ">
                                 <span class="has-text-light subtitle is-5">0</span>
                             </div>

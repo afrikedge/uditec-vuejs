@@ -57,6 +57,7 @@
 </template>
 <script>
 import axios from 'axios'
+import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 
 export default{
     name:'modal-for-selectable-element-list',
@@ -71,10 +72,8 @@ export default{
         }
     },
     beforeMount(){
-        console.log(this.getAction)
-        console.log(this.listTitle)
-        console.log(this.cardTitle)
-        axios.get(`http://${this.hostname}:3000/app/${this.getAction}`)
+
+        axios.get(`http://${this.hostname}:3000/app/${this.getAction}?respCenter=${useWebUserInfoStore().responsibilityCenter}`)
         .then(result => {
             this.elementList=result.data.recordset
         }).catch(err=>console.log(err))

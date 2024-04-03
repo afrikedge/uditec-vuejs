@@ -6,17 +6,21 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <contact-card-Header soNo="000001" soDesc="client Gérald" pageTitle="Fiche contact" />
+                <shiptoaddress-card-Header :soNo="ShiptoaddressCardId2" :soDesc="ShipToAddressCard['Name']" pageTitle="Fiche adresse de livraison" />
             </div>
             
-<!---------Composant rubban fiche client----------------------->      
-            <contact-card-ribbon></contact-card-ribbon>
+<!---------Composant rubban fiche adresse destinataire----------------------->      
+            <shiptoaddress-card-ribbon
+            :newCardBtnDisabled="false"
+            :editCardBtnDisabled="true"
+            :readOnlyModeDisabled="true"
+            ></shiptoaddress-card-ribbon>
 
-<!---------Section formulaire fiche client----------------------->      
+<!---------Section formulaire fiche adresse destinataire----------------------->      
             <div id="content-comp" class="columns mt-2" style="overflow-y: scroll;">
                 <div class="column" style="overflow-y: scroll;">
 
-<!---------sous-Section ongle 1 formulaire fiche client----------------------->                         
+<!---------sous-Section ongle 1 formulaire fiche adresse destinataire----------------------->                         
                     <div id="general">
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
@@ -34,163 +38,103 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="N° client" valueInputText="soHeader['Code client']" ></input-text>
-                                <input-text labelInputText="Nom du client" valueInputText="soHeader['Nom du client']" ></input-text>
-                                <input-text labelInputText="Contact" valueInputText="soHeader['Contact client']" ></input-text>
-                                <input-text labelInputText="Adresse" valueInputText="soHeader['Adresse du client']" ></input-text>
-                                <input-text labelInputText="Ville" valueInputText="soHeader['Ville du client']" ></input-text>
+                                <input-text labelInputText="Code client" :valueInputText="ShipToAddressCard['Customer No_']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Code adresse" :valueInputText="ShipToAddressCard['Code']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Nom de l'adresse" :valueInputText="ShipToAddressCard['Name']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Adresse:Ligne 1" :valueInputText="ShipToAddressCard['Address']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Adresse:Ligne 2" :valueInputText="ShipToAddressCard['Address 2']" :is_disabled="readOnlyMode"></input-text>
+                                
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Date commande" valueInputText="new Date(soHeader['Date de commande']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date comptabilisation " valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date document" valueInputText="new Date(soHeader['Date document']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date d'échéance" valueInputText="new Date(soHeader[`Date d'échéance`]).toDateString()" ></input-text>
+                                <input-text labelInputText="Ville" :valueInputText="ShipToAddressCard['City']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Téléphone" :valueInputText="ShipToAddressCard['Phone No_']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Téléphone Mobile" :valueInputText="ShipToAddressCard['Mobile Phone No_']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Lieu" :valueInputText="ShipToAddressCard['Place']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Quartier" :valueInputText="ShipToAddressCard['Neighborhood']" :is_disabled="readOnlyMode"></input-text>
                             </div>
                         </div>                    
                     </div>
                     <br><br>
-
-<!---------sous-Section ongle 2 formulaire fiche client----------------------->
-                    <div id="historique" :class="{'has-background-light':onglet4_expanded}">
-                        <div :class="{'columns':!onglet4_expanded,'p-3':onglet4_expanded,'has-border-bottom-grey':onglet4_expanded,'has-border-bottom':!onglet4_expanded}">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('history_content');onglet4_expanded=!onglet4_expanded" v-if="onglet4_expanded">
-                                    <span>Historique</span>
-                                </a>
-                                <a @click="expand('history_content');onglet4_expanded=!onglet4_expanded" v-if="!onglet4_expanded">
-                                    <span>Historique</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
-                                <span class="mx-2 subtitle" v-if="onglet4_expanded">|</span>
-                                <a href="#">
-                                    <span class="subtitle is-7" v-if="onglet4_expanded">Gérer</span>
-                                </a>
-                                <a href="#" class="mx-2">
-                                    <span class="subtitle is-7" v-if="onglet4_expanded">Fonction</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div id="history_content" class="columns px-5" style="max-height: 250px; overflow:scroll;">
-                            <table class="table  is-narrow is-hoverable is-fullwidth">
-                                <thead class=" my-2">
-                                    <tr> 
-                                        <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;" > Type</th>
-                                        <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N°</th>
-                                        <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description</th>
-                                        <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code magasin</th>
-                                        <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Quantité</th>
-                                        <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code unité</th>
-                                        <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Prix unitaire HT</th>
-                                        <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">% remise ligne</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr id="" v-for="elt of [1,2,3,4,5,6,7,8,9,11,10,12,13,14,145,14,1,1,1,4,4,4,44,4,7]" :key="elt">
-                                        <td class="has-text-left has-background-light"> salut</td>
-                                        <td class="has-text-left has-background-light"> salut</td>
-                                        <td class="has-text-left has-background-light"> salut</td>
-                                        <td class="has-text-left has-background-light"> slaut</td>
-                                        <td class="has-text-left has-background-light"> slaut</td>
-                                        <td class="has-text-left has-background-light"> slaut</td>                
-                                        <td class="has-text-left has-background-light"> slaut</td>                
-                                        <td class="has-text-left has-background-light"> slaut</td>                
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>                    
-                    </div>                         
-                    <br><br>
-
-<!---------sous-Section ongle 3 formulaire fiche client----------------------->                         
-                    <div id="communication">
+                    <!---------sous-Section ongle 2 formulaire fiche adresse destinataire----------------------->                         
+                    <div id="details">
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('communication_content');onglet3_expanded=!onglet3_expanded" v-if="onglet3_expanded">
-                                    <span>Communication</span>
+                                <a @click="collapse('general_content');onglet1_expanded=!onglet1_expanded" v-if="onglet1_expanded">
+                                    <span>Détails</span>
                                 </a>
-                                <a @click="expand('communication_content');onglet3_expanded=!onglet3_expanded" v-if="!onglet3_expanded">
-                                    <span>Communication</span>
+                                <a @click="expand('general_content');onglet1_expanded=!onglet1_expanded" v-if="!onglet1_expanded">
+                                    <span>Détails</span>
                                     <span class="icon">
                                         <i class="fas fa-angle-right"></i>
                                     </span>
                                 </a>
                             </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
+                            <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
                         </div>
-                        <div id="communication_content" class="columns">
+                        <div id="general_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="N° client" valueInputText="soHeader['Code client']" ></input-text>
-                                <input-text labelInputText="Nom du client" valueInputText="soHeader['Nom du client']" ></input-text>
-                                <input-text labelInputText="Contact" valueInputText="soHeader['Contact client']" ></input-text>
+                                <input-text labelInputText="Zone" :valueInputText="ShipToAddressCard['Service Zone Code']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Créneau de préférence" :valueInputText="ShipToAddressCard['Time preference']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Type de route" :valueInputText="ShipToAddressCard['Road Type']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Autres préciser" :valueInputText="ShipToAddressCard['Road Type(Others)']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Distance de transport à pied" :valueInputText="ShipToAddressCard['Walking distance']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Autres préciser" :valueInputText="ShipToAddressCard['Walking distance(Others)']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Emplacement de livraison" :valueInputText="ShipToAddressCard['Delivery Location']==0 ? 'Residence Société' : 'Residence Client'" :is_disabled="readOnlyMode"></input-text>
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Date commande" valueInputText="new Date(soHeader['Date de commande']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date comptabilisation " valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()" ></input-text>
+                                <input-text labelInputText="Accès moto" :valueInputText="ShipToAddressCard['Motorcycle Access']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Plan d'accès" :valueInputText="ShipToAddressCard['Access Plan']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Type d'accès" :valueInputText="ShipToAddressCard['Access Type']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Type de camion" :valueInputText="ShipToAddressCard['Truck Type']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Plan d'accès" :valueInputText="ShipToAddressCard['']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Parking Public" :valueInputText="ShipToAddressCard['Public parking presence']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Remarques" :valueInputText="ShipToAddressCard['Remarks']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Plan de masse" :valueInputText="ShipToAddressCard['Ground plan']" :is_disabled="readOnlyMode"></input-text>
                             </div>
                         </div>                    
                     </div>
                     <br><br>
-
-<!---------sous-Section ongle 4 formulaire fiche client----------------------->                         
-                    <div id="international">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('international_content');onglet2_expanded=!onglet2_expanded" v-if="onglet2_expanded">
-                                    <span>International</span>
-                                </a>
-                                <a @click="expand('international_content');onglet2_expanded=!onglet2_expanded" v-if="!onglet2_expanded">
-                                    <span>International</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
-                        </div>
-                        <div id="international_content" class="columns">
-                            <div class="column">
-                                <input-text labelInputText="N° client" valueInputText="soHeader['Code client']" ></input-text>
-                                <input-text labelInputText="Nom du client" valueInputText="soHeader['Nom du client']" ></input-text>
-                                <input-text labelInputText="Contact" valueInputText="soHeader['Contact client']" ></input-text>
-                                <input-text labelInputText="Adresse" valueInputText="soHeader['Adresse du client']" ></input-text>
-                                <input-text labelInputText="Ville" valueInputText="soHeader['Ville du client']" ></input-text>
-                            </div>
-                            <div class="column">
-                                <input-text labelInputText="Date commande" valueInputText="new Date(soHeader['Date de commande']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date comptabilisation " valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date document" valueInputText="new Date(soHeader['Date document']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date d'échéance" valueInputText="new Date(soHeader[`Date d'échéance`]).toDateString()" ></input-text>
-                            </div>
-                        </div>                    
-                    </div>
-                    <br><br>
-
                 </div>
+                <!---------composant info adresse destinataire----------------------->
+                <shiptoaddress-info id="shiptoaddress-info"></shiptoaddress-info>
             </div>
         </div>
 
     </div> 
 </template>
 <script>
-import ContactCardHeader from './HeaderForCard.vue'
-import ContactCardRibbon from './RibbonForCard.vue'
+import shiptoaddressCardHeader from './HeaderForCard.vue'
+import shiptoaddressCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
+import axios from 'axios'
+import { ref } from 'vue'
 
 export default {
     name:'ship-to-address-card',
     components:{
-        ContactCardHeader,inputText,ContactCardRibbon
+        shiptoaddressCardHeader,inputText,shiptoaddressCardRibbon
+    },
+    setup(){
+        const ShipToAddressCard = ref({})
+       
+        const readOnlyMode = ref(true)
+        // expose to template and other options API hooks
+        return {
+            ShipToAddressCard,readOnlyMode
+        }
     },
     data(){
         return{
-
+            //indique la route active
+            ShiptoaddressCardId1:this.$route.params.id1,
+            ShiptoaddressCardId2:this.$route.params.id2,
             //indique si les onglets sont réduits ou non
             onglet1_expanded:true,
             onglet2_expanded:true,
             onglet3_expanded:true,
             onglet4_expanded:true,
+
+            hostname:window.location.hostname
         }
     },
     methods:{
@@ -205,7 +149,14 @@ export default {
             console.log(myElt.style.maxHeight)
             myElt.style.maxHeight="0px"
         }
-    }
+    },
+    mounted(){
+        axios.get(`http://${this.hostname}:3000/app/getShipToAddressCard/${this.ShiptoaddressCardId1}/${this.ShiptoaddressCardId2}`)
+        .then(result => {
+            this.ShipToAddressCard = result.data.recordset[0]
+        }).catch(err=>console.log(err))
+
+    },
 
 }
 </script>

@@ -16,7 +16,8 @@
                     <div class="column is-narrow" v-if="!searchInput_isDisabled">
                         <div class="field px-2 has-addons">
                             <div class="control has-icons-left">
-                                <input class="input has-border-bottom-orange is-small " type="text" placeholder="Rechercher" v-model="searchInput_data">
+                                <input class="input has-border-bottom-orange is-small " type="text" placeholder="Rechercher" 
+                                v-model="searchInput_data" @input.prevent="$emit('onInputSearchData',searchInput_data)">
                                 <span class="icon is-small is-left">
                                 <i class="fas fa-search"></i>
                                 </span>

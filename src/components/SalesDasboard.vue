@@ -4,7 +4,7 @@
         <div id="first-block-dsb" class="columns pt-5 px-5">
             <div class="column is-half has-text-left">
                 <p class="subtitlte is-7 has-text-grey">Titre</p>
-                <p class="subtitle is-1">Bonjour Gérald!</p>
+                <p class="subtitle is-1">Bonjour DAVID!</p>
             </div>
             <div class="column is-half has-text-left">
                 <p class="subtitlte is-7 has-text-grey">Actions</p>
@@ -105,7 +105,7 @@
                     </div>
                 </div>
                 <div class="column is-narrow mx-2 " >
-                    <p class="title is-7 has-text-left ">Commmandes vente lancéeset non livrées </p>
+                    <p class="title is-7 has-text-left ">Commmandes vente lancées et non livrées </p>
                     <div class="columns is-mobile is-multiline" >
                         <div class="column has-background-orange py-0 mx-1 is-narrow shadow" style="width: 150px;">
                             <div class="has-text-left mt-2" style="height: 50px;">
@@ -135,10 +135,10 @@
                             <div class="has-text-left mt-2" style="height: 50px;">
                                 <span class="subtitle is-6 has-text-light"> En retard</span>
                             </div>
-                            <div class="has-text-left" style="border-bottom: 1px solid white;">
+                            <div class="has-text-left" style="border-bottom: 5px solid white;">
                                 <span class="subtitle is-1 has-text-light"> 0 </span>
                             </div>
-                            <div class="has-text-left mt-1 mb-2">
+                            <div class="has-text-left  mb-2">
                                 <span class="subtitle is-6 has-text-light"> ></span>
                             </div>
                         </div>
@@ -163,10 +163,10 @@
                             <div class="has-text-left mt-2" style="height: 50px;">
                                 <span class="subtitle is-6 has-text-light"> Demandes refusées</span>
                             </div>
-                            <div class="has-text-left" style="border-bottom: 1px solid white;">
+                            <div class="has-text-left" style="border-bottom: 5px solid white;">
                                 <span class="subtitle is-1 has-text-light"> 0 </span>
                             </div>
-                            <div class="has-text-left mt-1 mb-2">
+                            <div class="has-text-left  mb-2">
                                 <span class="subtitle is-6 has-text-light"> ></span>
                             </div>
                         </div>
@@ -175,12 +175,12 @@
                 </div>
             </div>
         </div>
-        <div id="third-block-dsb" class="mt-5 px-5">
+        <div id="third-block-dsb" class="my-5 px-5">
             <div class="columns">
                 <div class="column is-narrow">
                     <p class="title is-5 has-text-left pb-1" style="border-bottom:2px solid black;">Autres activités</p>
                     <p class="title is-7 has-text-left mx-2">Demande de revision</p>
-                    <div class="columns is-mobile is-multiline mx-1">
+                    <div class="columns is-mobile is-multiline">
                         <div class="column has-background-orange py-0 mx-1 is-narrow shadow" style="width: 150px;">
                             <div class="has-text-left mt-2" style="height: 50px;">
                                 <span class="subtitle is-6 has-text-light"> Brouillon</span>
@@ -218,10 +218,10 @@
                             <div class="has-text-left mt-2" style="height: 50px;">
                                 <span class="subtitle is-6 has-text-light"> Rejetées</span>
                             </div>
-                            <div class="has-text-left" style="border-bottom: 1px solid white;">
+                            <div class="has-text-left" style="border-bottom: 5px solid white;">
                                 <span class="subtitle is-1 has-text-light"> 0 </span>
                             </div>
-                            <div class="has-text-left mt-1 mb-2">
+                            <div class="has-text-left  mb-2">
                                 <span class="subtitle is-6 has-text-light"> ></span>
                             </div>
                         </div>

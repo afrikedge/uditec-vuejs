@@ -53,6 +53,7 @@
 </template>
 <script>
 import axios from 'axios'
+import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 
 export default{
     name:'modal-for-selectable-item-list',
@@ -60,12 +61,14 @@ export default{
     data(){
     return{
             ModalForSelectableItemListShowned:true,
-            elementList:[]
+            elementList:[],
+            hostname:window.location.hostname
         }
     },
-    beforeMount(){
-        axios.get(`http://localhost:3000/app/getItemList`)
+    Mounted(){
+        axios.get(`http://${this.hostname}:3000/app/getItemList?respCenter=${useWebUserInfoStore().responsibilityCenter}`)
         .then(result => {
+            console.log(result)
             this.elementList=result.data.recordset
         }).catch(err=>console.log(err))
 

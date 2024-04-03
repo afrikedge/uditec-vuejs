@@ -57,7 +57,7 @@ import { computed, ref } from 'vue'
 
 export default{
     name:'modal-for-selectable-contact-list',
-    props:['customerName','isActive'],
+    props:['customerNo','isActive'],
     data(){
         return {
             //nom de l'hote dans l'url 
@@ -85,7 +85,7 @@ export default{
         }
     },
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getContactList/${this.customerName}`)
+        axios.get(`http://${this.hostname}:3000/app/getContactList/${this.customerNo}`)
         .then(result => {
             this.elementList=result.data.recordset
         }).catch(err=>console.log(err))

@@ -48,6 +48,7 @@
 import axios from 'axios'
 import inputSearch from './input/input-search.vue'
 import { computed, ref } from 'vue'
+import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 
 export default{
     name:'modal-for-selectable-location-list',
@@ -80,7 +81,7 @@ export default{
         }
     },
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getLocationList`)
+        axios.get(`http://${this.hostname}:3000/app/getLocationList?respCenter=${useWebUserInfoStore().responsibilityCenter}`)
         .then(result => {
             this.elementList=result.data.recordset
         }).catch(err=>console.log(err))

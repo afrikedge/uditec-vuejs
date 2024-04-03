@@ -4,10 +4,11 @@
         <div class="field-label is-expanded is-normal">
             <label class="label has-text-grey has-text-left is-size-7 is-narrow" >  {{ labelInputText }} </label>
         </div>
-        <div class="field-body" style="max-width: 100px;">
+        <div class="field-body">
             <div class="field">
                 <p class="control">
-                    <input :disabled="props.is_disabled" class="input " type="text has-text-dark" v-model="model" >
+                    <input :disabled="props.is_disabled" class="input " type="text has-text-dark" :value="props.valueInputText" v-if="props.is_disabled==true">
+                    <input :disabled="props.is_disabled" class="input " type="text has-text-dark" v-model="model" v-else>
                 </p>
             </div>
         </div>

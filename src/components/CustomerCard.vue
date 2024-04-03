@@ -10,7 +10,10 @@
             </div>
             
 <!---------Composant rubban fiche client----------------------->      
-            <Customer-card-ribbon></Customer-card-ribbon>
+            <Customer-card-ribbon
+            @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+            componentWithCompInfo="customerCardRightInfoMaxWidth"
+            ></Customer-card-ribbon>
 
 <!---------Section formulaire fiche client----------------------->      
             <div id="content-comp" class="columns mt-2" style="overflow-y: scroll;">
@@ -34,140 +37,29 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="N°" :valueInputText="CustomerCard['No_']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Nom" :valueInputText="CustomerCard['Name']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Solde DS" :valueInputText="CustomerCard['Balance Amount']" :is_disabled="readOnlyMode"></input-text>  
+                                <input-text labelInputText="Code client" :valueInputText="CustomerCard['No_']" :is_disabled="readOnlyMode" ></input-text>
+                                <input-text labelInputText="Nom du client" :valueInputText="CustomerCard['Name']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Nom de recherche" :valueInputText="CustomerCard['Search Name']" :is_disabled="readOnlyMode"></input-text>  
+                                <input-text labelInputText="Type client" :valueInputText="CustomerCard['Customer Type']" :is_disabled="readOnlyMode" ></input-text>
+                                <input-text labelInputText="Libellé Type Client" :valueInputText="CustomerCard['Customer Type Name']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Adresse:Ligne 1" :valueInputText="CustomerCard['Address']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Adresse:Ligne 2" :valueInputText="CustomerCard['Address 2']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Ville" :valueInputText="CustomerCard['City']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Téléphone" :valueInputText="CustomerCard['Phone No_']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Limit de crédit" :valueInputText="CustomerCard['Credit Limit(LCY)']" :is_disabled="readOnlyMode"></input-text>
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Solde dû DS" :valueInputText="CustomerCard['Amount Due']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Code vendeur" :valueInputText="CustomerCard['Salesperson Code']" :is_disabled="readOnlyMode"></input-text>
-
-                            </div>
-                        </div>                    
-                    </div>
-                    <br><br>
-
-<!---------sous-Section ongle 2 formulaire fiche client----------------------->                         
-                    <div id="adresse">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('address_content');onglet2_expanded=!onglet2_expanded" v-if="onglet2_expanded">
-                                    <span>Adresse et contact</span>
-                                </a>
-                                <a @click="expand('address_content');onglet2_expanded=!onglet2_expanded" v-if="!onglet2_expanded">
-                                    <span>Adresse et contact</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
-                        </div>
-                        <div id="address_content" class="columns">
-                            <div class="column">
-                                <input-text labelInputText="Adresse" :valueInputText="CustomerCard['Address']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Adresse (2ième ligne)" :valueInputText="CustomerCard['Address 2']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Ville" :valueInputText="CustomerCard['City']" :is_disabled="readOnlyMode"></input-text>
-                                
-                                
-                            </div>
-                            <div class="column">
-                                <input-text labelInputText="N° téléphone" :valueInputText="CustomerCard['Phone No_']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Code langue " :valueInputText="CustomerCard['Language Code']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Nom contact" :valueInputText="CustomerCard['Contact']" :is_disabled="readOnlyMode"></input-text>
-                            </div>
-                        </div>                    
-                    </div>
-                    <br><br>
-
-<!---------sous-Section ongle 3 formulaire fiche client----------------------->                         
-                    <div id="facturation">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('invoicing_content');onglet3_expanded=!onglet3_expanded" v-if="onglet3_expanded">
-                                    <span>Facturation</span>
-                                </a>
-                                <a @click="expand('invoicing_content');onglet3_expanded=!onglet3_expanded" v-if="!onglet3_expanded">
-                                    <span>Facturation</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
-                        </div>
-                        <div id="invoicing_content" class="columns">
-                            <div class="column">
-                                <input-text labelInputText="Code devise" :valueInputText="CustomerCard['Currency Code']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Code remise facture" :valueInputText="CustomerCard['No_']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Groupe compta. marché" :valueInputText="CustomerCard['Gen_ Bus_ Posting Group']" :is_disabled="readOnlyMode"></input-text>
-                                
-                                
-                               
-                            </div>
-                            <div class="column">
-                                <input-text labelInputText="Groupe compta. marché TVA" :valueInputText="CustomerCard['VAT Bus_ Posting Group']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Groupe compta. client" :valueInputText="CustomerCard['Customer Posting Group']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Groupe prix client" :valueInputText="CustomerCard['Customer Price Group']" :is_disabled="readOnlyMode"></input-text>
-                                
-                            </div>
-                        </div>                    
-                    </div>
-                    <br><br>
-
-<!---------sous-Section ongle 4 formulaire fiche client----------------------->                         
-                    <div id="paiement">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('cash_content');onglet4_expanded=!onglet4_expanded" v-if="onglet4_expanded">
-                                    <span>Paiements</span>
-                                </a>
-                                <a @click="expand('cash_content');onglet4_expanded=!onglet4_expanded" v-if="!onglet4_expanded">
-                                    <span>Paiements</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
-                        </div>
-                        <div id="cash_content" class="columns">
-                            <div class="column">
-                                <input-text labelInputText="Type partenaire" :valueInputText="CustomerCard['Partner Type']==0 ? 'Societe':'Personne'" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Code conditions paiement" :valueInputText="CustomerCard['Payment Terms Code']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Code mode de règlement" :valueInputText="CustomerCard['Payment Method Code']" :is_disabled="readOnlyMode"></input-text>
-                               
-                            </div>
-                            <div class="column">
-                                <input-text labelInputText="Solde DS" :valueInputText="CustomerCard['Balance Amount']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Montant net DS" :valueInputText="CustomerCard['Balance Amount']" :is_disabled="readOnlyMode"></input-text>
-                            </div>
-                        </div>                    
-                    </div>
-                    <br><br>
-
-<!---------sous-Section ongle 5 formulaire fiche client----------------------->                         
-                    <div id="Livraison">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('delivery_content');onglet5_expanded=!onglet5_expanded" v-if="onglet5_expanded">
-                                    <span>Livraison</span>
-                                </a>
-                                <a @click="expand('delivery_content');onglet5_expanded=!onglet5_expanded" v-if="!onglet5_expanded">
-                                    <span>Livraison</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
-                        </div>
-                        <div id="delivery_content" class="columns">
-                            <div class="column">
-                                <input-text labelInputText="Code magasin" :valueInputText="CustomerCard['Location Code']" :is_disabled="readOnlyMode"></input-text>
-                            </div>
-                            <div class="column">
-                                <input-text labelInputText="Code" :valueInputText="CustomerCard['Shipment Method Code']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Canal de vente" :valueInputText="CustomerCard['Sales channel']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Mode de vente" :valueInputText="CustomerCard['Sales Mode']" :is_disabled="readOnlyMode" ></input-text>
+                                <input-text labelInputText="Groupe Client" :valueInputText="CustomerCard['Customer Posting Group']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Délai de paiement" :valueInputText="CustomerCard['Payment Terms Code']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Mode de paiement" :valueInputText="CustomerCard['Payment Method Code']" :is_disabled="readOnlyMode" ></input-text>
+                                <input-text labelInputText="Mode de livraison" :valueInputText="CustomerCard['Shipment Method Code']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Catégorie TVA" :valueInputText="CustomerCard['VAT Bus_Posting Group']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="% Acompte exigé" :valueInputText="CustomerCard['Prepayment_']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Encours" :valueInputText="CustomerCard['Balance Amount']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Encours échue" :valueInputText="CustomerCard['Amount Due']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Contact principal" :valueInputText="CustomerCard['Primary Contact No_']" :is_disabled="readOnlyMode"></input-text> 
                             </div>
                         </div>                    
                     </div>
@@ -175,7 +67,7 @@
 
                 </div>
 <!---------composant info client----------------------->
-                <customer-info id="customer-info"></customer-info>
+                <customer-info class="customer-info"></customer-info>
 
             </div>
         </div>
@@ -190,6 +82,7 @@ import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import axios from 'axios'
 import { ref } from 'vue'
+import { useNavigationTabStore } from '@/Stores/NavigationTab'
 
 export default {
     name:'customer-card',
@@ -206,6 +99,9 @@ export default {
     },
     data(){
         return{
+            //taille (largeur) initiale du composant customerInfo
+            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerCardRightInfoMaxWidth,
+
             //indique la route active
             customerCardId:this.$route.params.id,
 
@@ -221,6 +117,17 @@ export default {
         }
     },
     methods:{
+        /////////////////////////methode pour masquer ou afficher le composant info à droite
+     hideOrShowComponentInfo(){
+            if(this.customerInfoCompMaxWidth=='0px') {
+                useNavigationTabStore().setMaxWidth('customerCardRightInfoMaxWidth','800px')
+                this.customerInfoCompMaxWidth='800px'
+            }
+            else {
+                useNavigationTabStore().setMaxWidth('customerCardRightInfoMaxWidth','0px')
+                this.customerInfoCompMaxWidth='0px'
+            }
+        },
         formatDate(date){
             const dateString = new String(date)
             if (dateString.includes('1753-')) return ''
@@ -249,6 +156,11 @@ export default {
 
 </script>
 <style scoped>
+.customer-info{
+    max-width: v-bind(customerInfoCompMaxWidth);
+    transition: max-width 0.5s;
+}
+
 #general_content,#address_content,#invoicing_content,#cash_content,#delivery_content{
     max-height: 5000px;
     overflow: hidden;

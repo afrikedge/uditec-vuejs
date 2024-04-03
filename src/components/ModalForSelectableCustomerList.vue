@@ -17,16 +17,16 @@
                 <table class="table is-narrow is-hoverable">
                     <thead class=" my-2">
                         <tr> 
-                            <th class="tableFixHead1 has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N°</th>
-                            <th class="tableFixHead has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Nom</th>
-                            <th class="tableFixHead has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code magasin</th>
-                            <th class="tableFixHead has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Adresse</th>
-                            <th class="tableFixHead has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Contact</th>
-                            <th class="tableFixHead has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code vendeur</th>
-                            <th class="tableFixHead has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Plafond de crédit DS</th>
-                            <th class="tableFixHead has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Plafond de crédit DS</th>
-                            <th class="tableFixHead has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Plafond de crédit DS</th>
-                            <th class="tableFixHead has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Plafond de crédit DS</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code client</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Nom du client</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Ville</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Téléphone</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Adresse:Ligne 1</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Contact principal</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Groupe client</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Délai de paiement</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode de livraison</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Catégorie TVA</th>
                         </tr>
                     </thead>
                     <tbody style="">
@@ -39,12 +39,15 @@
                                         </a>
                                     </router-link>
                                 </td>
-                                <td class="has-text-left  is-narrow"> {{ elt['Name'] }}</td>
-                                <td class="has-text-left is-narrow"> {{ elt['Location Code'] }}</td>
-                                <td class="has-text-left  is-narrow"> {{ elt['Address'] }} </td>                
-                                <td class="has-text-left  is-narrow"> {{ elt['Contact'] }}</td>                
-                                <td class="has-text-left  is-narrow"> {{ elt['Salesperson Code'] }}</td>                
-                                <td class="has-text-left  is-narrow"> {{ elt['Credit Limit'] }}</td>                
+                                <td class="has-text-left is-narrow"> {{ elt['Name'] }}</td>
+                                <td class="has-text-left is-narrow"> {{ elt['City'] }}</td>
+                                <td class="has-text-left is-narrow"> {{ elt['Phone No_'] }}</td>
+                                <td class="has-text-left is-narrow"> {{ elt['Address'] }}</td>
+                                <td class="has-text-left is-narrow"> {{ elt['Primary Contact No_'] }}</td>
+                                <td class="has-text-left is-narrow"> {{ elt['Customer Posting Group'] }}</td>
+                                <td class="has-text-left is-narrow"> {{ elt['Payment Terms Code'] }}</td>                    
+                                <td class="has-text-left is-narrow"> {{ elt['Shipment Method Code'] }}</td>
+                                <td class="has-text-left is-narrow"> {{ elt['VAT Bus_Posting Group'] }}</td>        
                             </tr>
                     </tbody>
                 </table>
@@ -93,6 +96,7 @@ export default{
     beforeMount(){
         axios.get(`http://${this.hostname}:3000/app/getCustomerList`)
         .then(result => {
+            console.log(result)
             this.elementList=result.data.recordset
         }).catch(err=>console.log(err))
 

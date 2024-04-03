@@ -6,11 +6,17 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <prospect-card-Header soNo="000001" soDesc="prospect Gérald" pageTitle="Fiche prospect" />
+                <prospect-card-Header :soNo="leadCardId" :soDesc="LeadCard['Search Name']" pageTitle="Fiche prospect" />
             </div>
             
 <!---------Composant rubban fiche client----------------------->      
-            <prospect-card-ribbon></prospect-card-ribbon>
+            <prospect-card-ribbon
+            @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+            componentWithCompInfo="leadCardRightInfoMaxWidth"
+            :newCardBtnDisabled="false"
+            :editCardBtnDisabled="true"
+            :readOnlyModeDisabled="true"
+            ></prospect-card-ribbon>
 
 <!---------Section formulaire fiche client----------------------->      
             <div id="content-comp" class="columns mt-2" style="overflow-y: scroll;">
@@ -34,188 +40,21 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="N° client" valueInputText="soHeader['Code client']" ></input-text>
-                                <input-text labelInputText="Nom du client" valueInputText="soHeader['Nom du client']" ></input-text>
-                                <input-text labelInputText="Contact" valueInputText="soHeader['Contact client']" ></input-text>
-                                <input-text labelInputText="Adresse" valueInputText="soHeader['Adresse du client']" ></input-text>
-                                <input-text labelInputText="Ville" valueInputText="soHeader['Ville du client']" ></input-text>
-                                <input-text labelInputText="Code postal" valueInputText="soHeader['Code postal client']" ></input-text>
-                                <input-text labelInputText="Code pays/région" valueInputText="soHeader['Code région client']" ></input-text>
-                                <input-text labelInputText="Code vendeur" valueInputText="soHeader['Code vendeur']" ></input-text>
+                                <input-text labelInputText="Nom" :valueInputText="LeadCard['Name']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Adresse" :valueInputText="LeadCard['Address']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Adresse (2ème ligne)" :valueInputText="LeadCard['Address 2']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Ville" :valueInputText="LeadCard['City']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="N° téléphone" :valueInputText="LeadCard['Phone No_']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Code vendeur" :valueInputText="LeadCard['Salesperson Code']" :is_disabled="readOnlyMode"></input-text>
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Date commande" valueInputText="new Date(soHeader['Date de commande']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date comptabilisation " valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date document" valueInputText="new Date(soHeader['Date document']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date d'échéance" valueInputText="new Date(soHeader[`Date d'échéance`]).toDateString()" ></input-text>
-                                <input-text labelInputText="N° doc. externe" valueInputText="soHeader['N° doc. externe']" ></input-text>
-                                <input-text labelInputText="N° devis" valueInputText="soHeader['N° devis']" ></input-text>
-                                <input-text labelInputText="Utilisateur affecté" valueInputText="soHeader['Code utilisateur assigné']" ></input-text>
-                                <input-text labelInputText="Statut" valueInputText="soHeader['Statut']" ></input-text>
-                            </div>
-                        </div>                    
-                    </div>
-                    <br><br>
+                                <input-text labelInputText="Adresse e-mail" :valueInputText="LeadCard['E-Mail']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Page d'accueil" :valueInputText="LeadCard['Home Page']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Pays/région" :valueInputText="LeadCard['County']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Code postal" :valueInputText="LeadCard['Post Code']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Type prospect" :valueInputText="LeadCard['Type']==0 ? 'valide' : 'Non valide'" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="N° téléphone mobile" :valueInputText="LeadCard['Mobile Phone No_']" :is_disabled="readOnlyMode"></input-text>
 
-<!---------sous-Section ongle 2 formulaire fiche client----------------------->                         
-                    <div id="adresse">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('address_content');onglet2_expanded=!onglet2_expanded" v-if="onglet2_expanded">
-                                    <span>Adresse et contact</span>
-                                </a>
-                                <a @click="expand('address_content');onglet2_expanded=!onglet2_expanded" v-if="!onglet2_expanded">
-                                    <span>Adresse et contact</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
-                        </div>
-                        <div id="address_content" class="columns">
-                            <div class="column">
-                                <input-text labelInputText="N° client" valueInputText="soHeader['Code client']" ></input-text>
-                                <input-text labelInputText="Nom du client" valueInputText="soHeader['Nom du client']" ></input-text>
-                                <input-text labelInputText="Contact" valueInputText="soHeader['Contact client']" ></input-text>
-                                <input-text labelInputText="Adresse" valueInputText="soHeader['Adresse du client']" ></input-text>
-                                <input-text labelInputText="Ville" valueInputText="soHeader['Ville du client']" ></input-text>
-                                <input-text labelInputText="Code postal" valueInputText="soHeader['Code postal client']" ></input-text>
-                                <input-text labelInputText="Code pays/région" valueInputText="soHeader['Code région client']" ></input-text>
-                                <input-text labelInputText="Code vendeur" valueInputText="soHeader['Code vendeur']" ></input-text>
-                            </div>
-                            <div class="column">
-                                <input-text labelInputText="Date commande" valueInputText="new Date(soHeader['Date de commande']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date comptabilisation " valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date document" valueInputText="new Date(soHeader['Date document']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date d'échéance" valueInputText="new Date(soHeader[`Date d'échéance`]).toDateString()" ></input-text>
-                                <input-text labelInputText="N° doc. externe" valueInputText="soHeader['N° doc. externe']" ></input-text>
-                                <input-text labelInputText="N° devis" valueInputText="soHeader['N° devis']" ></input-text>
-                                <input-text labelInputText="Utilisateur affecté" valueInputText="soHeader['Code utilisateur assigné']" ></input-text>
-                                <input-text labelInputText="Statut" valueInputText="soHeader['Statut']" ></input-text>
-                            </div>
-                        </div>                    
-                    </div>
-                    <br><br>
-
-<!---------sous-Section ongle 3 formulaire fiche client----------------------->                         
-                    <div id="facturation">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('invoicing_content');onglet3_expanded=!onglet3_expanded" v-if="onglet3_expanded">
-                                    <span>Facturation</span>
-                                </a>
-                                <a @click="expand('invoicing_content');onglet3_expanded=!onglet3_expanded" v-if="!onglet3_expanded">
-                                    <span>Facturation</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
-                        </div>
-                        <div id="invoicing_content" class="columns">
-                            <div class="column">
-                                <input-text labelInputText="N° client" valueInputText="soHeader['Code client']" ></input-text>
-                                <input-text labelInputText="Nom du client" valueInputText="soHeader['Nom du client']" ></input-text>
-                                <input-text labelInputText="Contact" valueInputText="soHeader['Contact client']" ></input-text>
-                                <input-text labelInputText="Adresse" valueInputText="soHeader['Adresse du client']" ></input-text>
-                                <input-text labelInputText="Ville" valueInputText="soHeader['Ville du client']" ></input-text>
-                                <input-text labelInputText="Code postal" valueInputText="soHeader['Code postal client']" ></input-text>
-                                <input-text labelInputText="Code pays/région" valueInputText="soHeader['Code région client']" ></input-text>
-                                <input-text labelInputText="Code vendeur" valueInputText="soHeader['Code vendeur']" ></input-text>
-                            </div>
-                            <div class="column">
-                                <input-text labelInputText="Date commande" valueInputText="new Date(soHeader['Date de commande']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date comptabilisation " valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date document" valueInputText="new Date(soHeader['Date document']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date d'échéance" valueInputText="new Date(soHeader[`Date d'échéance`]).toDateString()" ></input-text>
-                                <input-text labelInputText="N° doc. externe" valueInputText="soHeader['N° doc. externe']" ></input-text>
-                                <input-text labelInputText="N° devis" valueInputText="soHeader['N° devis']" ></input-text>
-                                <input-text labelInputText="Utilisateur affecté" valueInputText="soHeader['Code utilisateur assigné']" ></input-text>
-                                <input-text labelInputText="Statut" valueInputText="soHeader['Statut']" ></input-text>
-                            </div>
-                        </div>                    
-                    </div>
-                    <br><br>
-
-<!---------sous-Section ongle 4 formulaire fiche client----------------------->                         
-                    <div id="paiement">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('cash_content');onglet4_expanded=!onglet4_expanded" v-if="onglet4_expanded">
-                                    <span>Paiements</span>
-                                </a>
-                                <a @click="expand('cash_content');onglet4_expanded=!onglet4_expanded" v-if="!onglet4_expanded">
-                                    <span>Paiements</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
-                        </div>
-                        <div id="cash_content" class="columns">
-                            <div class="column">
-                                <input-text labelInputText="N° client" valueInputText="soHeader['Code client']" ></input-text>
-                                <input-text labelInputText="Nom du client" valueInputText="soHeader['Nom du client']" ></input-text>
-                                <input-text labelInputText="Contact" valueInputText="soHeader['Contact client']" ></input-text>
-                                <input-text labelInputText="Adresse" valueInputText="soHeader['Adresse du client']" ></input-text>
-                                <input-text labelInputText="Ville" valueInputText="soHeader['Ville du client']" ></input-text>
-                                <input-text labelInputText="Code postal" valueInputText="soHeader['Code postal client']" ></input-text>
-                                <input-text labelInputText="Code pays/région" valueInputText="soHeader['Code région client']" ></input-text>
-                                <input-text labelInputText="Code vendeur" valueInputText="soHeader['Code vendeur']" ></input-text>
-                            </div>
-                            <div class="column">
-                                <input-text labelInputText="Date commande" valueInputText="new Date(soHeader['Date de commande']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date comptabilisation " valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date document" valueInputText="new Date(soHeader['Date document']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date d'échéance" valueInputText="new Date(soHeader[`Date d'échéance`]).toDateString()" ></input-text>
-                                <input-text labelInputText="N° doc. externe" valueInputText="soHeader['N° doc. externe']" ></input-text>
-                                <input-text labelInputText="N° devis" valueInputText="soHeader['N° devis']" ></input-text>
-                                <input-text labelInputText="Utilisateur affecté" valueInputText="soHeader['Code utilisateur assigné']" ></input-text>
-                                <input-text labelInputText="Statut" valueInputText="soHeader['Statut']" ></input-text>
-                            </div>
-                        </div>                    
-                    </div>
-                    <br><br>
-
-<!---------sous-Section ongle 5 formulaire fiche client----------------------->                         
-                    <div id="Livraison">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('delivery_content');onglet5_expanded=!onglet5_expanded" v-if="onglet5_expanded">
-                                    <span>Livraison</span>
-                                </a>
-                                <a @click="expand('delivery_content');onglet5_expanded=!onglet5_expanded" v-if="!onglet5_expanded">
-                                    <span>Livraison</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
-                        </div>
-                        <div id="delivery_content" class="columns">
-                            <div class="column">
-                                <input-text labelInputText="N° client" valueInputText="soHeader['Code client']" ></input-text>
-                                <input-text labelInputText="Nom du client" valueInputText="soHeader['Nom du client']" ></input-text>
-                                <input-text labelInputText="Contact" valueInputText="soHeader['Contact client']" ></input-text>
-                                <input-text labelInputText="Adresse" valueInputText="soHeader['Adresse du client']" ></input-text>
-                                <input-text labelInputText="Ville" valueInputText="soHeader['Ville du client']" ></input-text>
-                                <input-text labelInputText="Code postal" valueInputText="soHeader['Code postal client']" ></input-text>
-                                <input-text labelInputText="Code pays/région" valueInputText="soHeader['Code région client']" ></input-text>
-                                <input-text labelInputText="Code vendeur" valueInputText="soHeader['Code vendeur']" ></input-text>
-                            </div>
-                            <div class="column">
-                                <input-text labelInputText="Date commande" valueInputText="new Date(soHeader['Date de commande']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date comptabilisation " valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date document" valueInputText="new Date(soHeader['Date document']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date d'échéance" valueInputText="new Date(soHeader[`Date d'échéance`]).toDateString()" ></input-text>
-                                <input-text labelInputText="N° doc. externe" valueInputText="soHeader['N° doc. externe']" ></input-text>
-                                <input-text labelInputText="N° devis" valueInputText="soHeader['N° devis']" ></input-text>
-                                <input-text labelInputText="Utilisateur affecté" valueInputText="soHeader['Code utilisateur assigné']" ></input-text>
-                                <input-text labelInputText="Statut" valueInputText="soHeader['Statut']" ></input-text>
                             </div>
                         </div>                    
                     </div>
@@ -224,7 +63,7 @@
                 </div>
 
 <!---------composant info client----------------------->
-                <prospect-info id="prospect-info"></prospect-info>
+                <prospect-info class="prospect-info"></prospect-info>
 
             </div>
         </div>
@@ -236,14 +75,29 @@ import ProspectCardHeader from './HeaderForCard.vue'
 import ProspectInfo from './ProspectInfo.vue'
 import ProspectCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
-
+import axios from 'axios'
+import { ref } from 'vue'
+import { useNavigationTabStore } from '@/Stores/NavigationTab'
 export default {
-    name:'prospect-card',
+    name:'lead-card',
     components:{
         ProspectCardHeader,ProspectInfo,inputText,ProspectCardRibbon
     },
+    setup(){
+        const LeadCard = ref({})
+        const readOnlyMode = ref(true)
+        // expose to template and other options API hooks
+        return {
+            LeadCard,readOnlyMode
+        }
+    },
     data(){
         return{
+             //taille (largeur) initiale du composant customerInfo
+             leadInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.leadCardRightInfoMaxWidth,
+
+             //indique la route active
+             leadCardId:this.$route.params.id,
 
             //indique si les onglets sont réduits ou non
             onglet1_expanded:true,
@@ -251,15 +105,22 @@ export default {
             onglet3_expanded:true,
             onglet4_expanded:true,
             onglet5_expanded:true,
-            id1:this.$route.params.id1,
-            id2:this.$route.params.id2
+
+            hostname:window.location.hostname
         }
     },
-    mounted(){
-        console.log('id1',this.id1)
-        console.log('id2',this.id2)
-    },
     methods:{
+        /////////////////////////methode pour masquer ou afficher le composant info à droite
+        hideOrShowComponentInfo(){
+            if(this.leadInfoCompMaxWidth=='0px') {
+                useNavigationTabStore().setMaxWidth('leadCardRightInfoMaxWidth','800px')
+                this.leadInfoCompMaxWidth='800px'
+            }
+            else {
+                useNavigationTabStore().setMaxWidth('leadCardRightInfoMaxWidth','0px')
+                this.leadInfoCompMaxWidth='0px'
+            }
+        },
         expand(id){
             const myElt=document.getElementById(id);
             myElt.style.maxHeight='500px'
@@ -270,11 +131,24 @@ export default {
             console.log(myElt.style.maxHeight)
             myElt.style.maxHeight="0px"
         }
+    },
+    mounted(){
+        axios.get(`http://${this.hostname}/app/getLeadCard/${this.leadCardId}`)
+        .then(result => {
+            this.LeadCard = result.data.recordset[0]
+        }).catch(err=>console.log(err))
+
     }
 }
 
 </script>
 <style scoped>
+.prospect-info{
+    max-width: v-bind(leadInfoCompMaxWidth);
+    transition: max-width 0.5s;
+}
+
+
 #general_content,#address_content,#invoicing_content,#cash_content,#delivery_content{
     max-height: 5000px;
     overflow: hidden;

@@ -4,20 +4,31 @@
 </template>
 
 <script>
+import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
+import axios from 'axios'
+import { onBeforeMount } from 'vue'
 
 export default {
   name: 'App',
-  components: {
-  },
-  data(){
-    return{
-    }
-  },
-  methods:{
-    
-  },
-  mounted(){
-    }
+  setup(){
+            const userStore = useWebUserInfoStore()
+            const hostname = window.location.hostname
+
+            onBeforeMount(()=>
+
+                axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
+                .then(res=>{
+                    userStore.fillWebUserInfo(res.data.recordset[0])
+
+                    axios.get(`http://${hostname}:3000/app/getCustomerCard/${userStore.defaultCustomerNo}`)
+                    .then(result => {
+                        userStore.fillWebUserCustomerInfo(result.data.recordset[0])
+                        //console.log(userStore)
+                    }).catch(err=>console.log(err))
+                })
+                .catch(err=>console.log(err))
+            )
+        },
 
 }
 </script>

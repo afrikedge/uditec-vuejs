@@ -38,6 +38,7 @@
 <script>
 import axios from 'axios'
 import { computed, ref} from 'vue'
+import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 
 
 export default{
@@ -58,8 +59,8 @@ export default{
 
         const filteredItemList = computed(()=>
             elementList.value
-            .filter((row) => new String(row['Description']).includes(props.itemDescription)
-            && new String(row['No_']).toLowerCase().includes(props.itemCode)
+            .filter((row) => new String(row['Description']).toLocaleLowerCase().includes(new String(props.itemDescription).toLowerCase())
+            && new String(row['No_']).toLocaleLowerCase().includes(new String(props.itemCode).toLocaleLowerCase())
                 
             )
         )
@@ -70,7 +71,7 @@ export default{
 
     },
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getItemList`)
+        axios.get(`http://${this.hostname}:3000/app/getItemList?respCenter=${useWebUserInfoStore().responsibilityCenter}`)
         .then(result => {
             this.elementList=result.data.recordset
         }).catch(err=>console.log(err))

@@ -6,19 +6,59 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <s-q-card-Header :soNo="'Client N° : '+customerCode" :soDesc="customerName" pageTitle="Devis vente"></s-q-card-Header>
+                <s-q-card-Header :soNo="'Client N° : '+saleQuoteCustomerNo" :soDesc="saleQuoteCustomerName" pageTitle="Devis vente"
+                @onGoingBackToList='goBackToList'
+                ></s-q-card-Header>
             </div>
 <!---------Composant rubban fiche client----------------------->      
             <s-q-card-ribbon
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
-            @onSubmittingForm="getTheJsonData"
+            @onSubmittingForm="submitForm"
             componentWithCompInfo="newquoteRightInfoMaxWidth"
-            :newCardBtnDisabled="true"
-            :editCardBtnDisabled="true"
-            :printCardBtnDisabled="true"
-            :convertQuoteBtnDisabled="true"
-            :readOnlyModeDisabled="true"
+            :newCardBtnIsDisabled="true"
+            :editCardBtnIsDisabled="true"
+            :printCardBtnIsDisabled="true"
+            :convertQuoteBtnIsDisabled="true"
+            :readOnlyModeIsDisabled="true"
+            :cancelEditCardBtnIsDisabled="true"
+            :checkItemAvailabilityBtnIsDisabled="false"
             ></s-q-card-ribbon>
+
+<!---------Composant message d'enregistrement en cours ou d'erreur ou de success----------------------->      
+            <article v-if="submitting_message" class="" >
+                <span class="icon">
+                    <i class="fas fa-spinner fa-pulse"></i>
+                </span>
+                <span class="subtitle is-7"> Enregistrement en cours </span>
+            </article>
+
+            <article v-if="error_message" class="message is-danger shadow" >
+                <div class="message-header">
+                    <p class="is-size-7">
+                        <span class="icon has-text-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                        Error Message
+                    </p>
+                    <button class="delete" aria-label="delete" @click="error_message='';error_message_code=''"></button>
+                </div>
+                <div class="message-body is-size-7">
+                    <span> {{ error_message }}</span><br>
+                    <span v-if="error_message_code"> Code erreur: {{ error_message_code }}</span>
+                </div>
+            </article>
+
+            <article v-if="success_message" class="message is-primary shadow">
+                <div class="message-header">
+                        <span class="subtitle is-7 m-0 has-text-white"> 
+                            <span class="icon ">
+                                <i class="fas fa-spinner fa-pulse"></i>
+                            </span>
+                            {{ success_message }}
+                        </span>
+                    <button class="delete" aria-label="delete" @click="success_message=''"></button>
+                </div>
+            </article>
 
 <!---------Section formulaire fiche client----------------------->      
             <div id="content-comp" class="columns mt-2" style="overflow-y: scroll;">
@@ -44,37 +84,37 @@
                                 </a>
                             </div>
                             <div class="column py-0 has-text-right is-size-7" v-if="!onglet1_expanded">
-                                <span class="has-background-grey-lighter py-2 px-3">client gérald</span>
-                                <span class="has-background-grey-lighter py-2 px-3" style="border-left:1px solid black;border-right:1px solid black;">26/02/2024</span>
-                                <span class="has-background-grey-lighter py-2 px-3">ouvert</span>
+                                <span class="has-background-grey-lighter py-2 px-3" v-if="saleQuoteCustomerName"> {{ 'client '+ saleQuoteCustomerName }}</span>
+                                <span class="has-background-grey-lighter py-2 px-3" v-if="documentDate" style="border-left:1px solid black;border-right:1px solid black;">{{ documentDate }}</span>
+                                <span class="has-background-grey-lighter py-2 px-3" v-if="saleQuoteCustomerContactCode"> {{ saleQuoteCustomerContactCode }}</span>
                             </div>
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-                                <input-select v-model="customerCode" labelInputText="N° client" :is_disabled="false"  @openModal="activeModalForSelectableElementList='customerList';"></input-select>
-                                <input-text v-model="customerName" labelInputText="Nom du client" :is_disabled="false" ></input-text>
-                                <p class="has-text-left">
-                                    <span class="title is-6">
-                                        Donneur d'ordre
-                                    </span>
-                                </p>
-                                <input-select v-model="customerPrimaryContactNo" labelInputText="N° Contact" :is_disabled="false" @openModal="activeModalForSelectableElementList='contactList'"></input-select>
-                                <input-text v-model="customerContactName" labelInputText="Contact" :is_disabled="false"></input-text>
-                                <input-text v-model="customerAddress" labelInputText="Adresse" :is_disabled="false"></input-text>
-                                <input-text v-model="customerAddress2" labelInputText="Adresse (2ème ligne)" :is_disabled="false"></input-text>
-                                <input-text v-model="customerCity" labelInputText="Ville" :is_disabled="false"></input-text>
-                                <input-text v-model="customerPhone" labelInputText="N° Téléphone" :is_disabled="false"></input-text>
-                                <input-text labelInputText="Adresse e*mail" :is_disabled="false"></input-text>
+                                <input-select v-model="saleQuoteCustomerNo" labelInputText="Code client" :is_disabled="false"  @openModal="activeModalForSelectableElementList='customerList';"></input-select>
+                                
+                                <input-text v-model="saleQuoteCustomerName" labelInputText="Nom du client" :is_disabled="false" ></input-text>
+                                
+                                <input-select v-model="saleQuoteCustomerContactCode" labelInputText="N° Contact" :is_disabled="false" @openModal="activeModalForSelectableElementList='contactList'"></input-select>
+                                
+                                <input-select v-model="saleQuoteCampaignNo" labelInputText="Code promo" :is_disabled="false" @openModal="activeModalForSelectableElementList='campaignList'"></input-select>
+                                
+                                <input-select v-model="saleQuoteLocationCode" labelInputText="Code magasin" :is_disabled="false" @openModal="activeModalForSelectableElementList='locationList'"></input-select>
+                                
+                                <input-select v-model="saleQuoteShipmentMethodCode" labelInputText="Mode de livraison" :is_disabled="false" @openModal="activeModalForSelectableElementList='shipmentMethodList'"></input-select>
+                                
+                                <input-select v-model="saleQuoteCustomerShipToCode" labelInputText="Adresse de livraison" :is_disabled="false" @openModal="activeModalForSelectableElementList='addressList'"></input-select>
                             </div>
                             <div class="column">
-                                <input-date v-model="quoteDate" labelInputText="Date Devis"  :is_disabled="false" ></input-date>
-                                <input-date v-model="documentDate" labelInputText="Date document"  :is_disabled="false"></input-date>
-                                <input-date v-model="dueDate" labelInputText="Date d'échéance" :is_disabled="false" ></input-date>
-                                <input-date v-model="validityDate" labelInputText="Fin de validité devis" :is_disabled="false"></input-date>
+                                <input-date v-model="documentDate" labelInputText="Date du devis"  :is_disabled="false"></input-date>
+                                
+                                <input-date v-model="validityDate" labelInputText="Date fin validité" :is_disabled="false"></input-date>
+                                
                                 <input-date v-model="shipRequestedDate" labelInputText="Date livraison demandée"  :is_disabled="false"></input-date>
-                                <input-text v-model="customerSalespersonCode" labelInputText="Code vendeur" :is_disabled="false"></input-text>
-                                <input-text labelInputText="N° campagne" :is_disabled="false"></input-text>
-                                <input-text labelInputText="Centre de gestion" :is_disabled="false"></input-text>
+                                
+                                <input-date v-model="promisedDeliveryDate" labelInputText="Date livraison promise" :is_disabled="false" ></input-date>
+                                
+                                <input-select v-model="saleQuotePaymentMethodCode" labelInputText="Mode de règlement" :is_disabled="false" @openModal="activeModalForSelectableElementList='paymentMethodList'"></input-select>
                             </div>
                         </div>                    
                     </div>
@@ -96,27 +136,7 @@
                                         </span>
                                     </a>
                                     <span class="ml-5 subtitle" v-if="onglet2_expanded">|</span>
-    
-                                    <!------------a href="#" class="ml-5" v-if="onglet2_expanded" @click="selectOption('gérer')">
-                                        <span class="subtitle is-7" >Gérer</span>
-                                    </a>
-    
-                                    <a href="#" class="ml-5" v-if="onglet2_expanded" @click="selectOption('ligne')">
-                                        <span class="subtitle is-7" >Ligne</span>
-                                    </a>
-    
-                                    <a href="#" class="ml-5" v-if="onglet2_expanded && show_more_option" @click="selectOption('Devis')">
-                                        <span class="subtitle is-7" >Devis</span>
-                                    </a>
-    
-                                    <a href="#" class="ml-5 is-hover-orange py-4 px-2" v-if="onglet2_expanded && show_more_option" @click="show_more_option=false">
-                                        <span class="subtitle is-7" >Moins d'options</span>
-                                    </a>
-    
-                                    <a href="#" class="ml-5 is-hover-orange py-4 px-2" v-if="onglet2_expanded && !show_more_option" @click="show_more_option=true">
-                                        <span class="subtitle is-7" >Plus d'options</span>
-                                    </a------------------->
-                                    <a href="#" class="is-hover-orange py-3 px-3" v-if="onglet2_expanded" @click="showAddRowByFormModal">
+                                    <a href="#" class="is-hover-orange py-3 px-3" v-if="onglet2_expanded" @click="showaddRowByForm">
                                         <span class="icon">
                                             <i class="fas fa-plus has-text-orange"></i>
                                         </span>
@@ -129,7 +149,15 @@
                                             <i class="fas fa-pen has-text-orange"></i>
                                         </span>
                                         <span class="subtitle is-7" >
-                                            Ajouter un commentaire
+                                            Ajouter une ligne commentaire
+                                        </span>
+                                    </a>
+                                    <a href="#" class="is-hover-orange py-3 px-3" v-if="onglet2_expanded" @click="addEmptyRow">
+                                        <span class="icon">
+                                            <i class="fas fa-plus has-text-orange"></i>
+                                        </span>
+                                        <span class="subtitle is-7">
+                                            Insérer une ligne article
                                         </span>
                                     </a>
                                     <a href="#" class="is-hover-orange py-3 px-3" v-if="onglet2_expanded" @click="showEditRowByFormModal">
@@ -138,14 +166,6 @@
                                         </span>
                                         <span class="subtitle is-7" >
                                             Modifier l'article
-                                        </span>
-                                    </a>
-                                    <a href="#" class="is-hover-orange py-3 px-3" v-if="onglet2_expanded" @click="addEmptyRow">
-                                        <span class="icon">
-                                            <i class="fas fa-plus has-text-orange"></i>
-                                        </span>
-                                        <span class="subtitle is-7">
-                                            Insérer une ligne
                                         </span>
                                     </a>
                                     <a href="#" class="is-hover-orange py-3 px-3" v-if="onglet2_expanded" @click="deleteRow">
@@ -158,56 +178,30 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="has-background-white shadow has-text-left p-3" v-if="show_option_btn_bar">
-                                <!---------------a href="#" class="is-hover-orange py-3 px-3" v-if="selected_option=='gérer'">
-                                    <span class="icon">
-                                        <i class="fas fa-plus"></i>
-                                    </span>
-                                    <span class="subtitle is-7" >
-                                        <a href="#" @click="showAddRowByFormModal">Ajouter un article</a>
-                                    </span>
-                                </a>
-                                <a href="#" class="is-hover-orange py-3 px-3" v-if="selected_option=='gérer'">
-                                    <span class="icon">
-                                        <i class="fas fa-edit"></i>
-                                    </span>
-                                    <span class="subtitle is-7" >
-                                        <a href="#" @click="showEditRowByFormModal">Modifier l'article</a>
-                                    </span>
-                                </a>
-                                <a href="#" class="is-hover-orange py-3 px-3" v-if="selected_option=='ligne'">
-                                    <span class="icon">
-                                        <i class="fas fa-plus"></i>
-                                    </span>
-                                    <span class="subtitle is-7" @click="addEmptyRow">Ajouter une ligne</span>
-                                </a>
-                                <a href="#" class="is-hover-orange py-3 px-3" v-if="selected_option=='ligne'">
-                                    <span class="icon">
-                                        <i class="fas fa-eraser"></i>
-                                    </span>
-                                    <span class="subtitle is-7" @click="deleteRow">Supprimer la ligne</span>
-                                </a--------------->
-                            </div>
                             <div id="line_content" class=" px-5 mt-5" style="max-height: 250px; overflow:scroll;">
                                 <div>
                                     <table class="table  is-narrow  is-fullwidth">
                                         <thead class=" my-2">
                                             <tr > 
-                                                <th class="has-text-grey has-text-left has-text-weight-normal is-size-7"></th>
-                                                <th class="has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Ligne</th>
-                                                <th class="has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type</th>
-                                                <th class="has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N°</th>
-                                                <th class="has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description</th>
-                                                <th class="has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description 2</th>
-                                                <th class="has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code magasin</th>
-                                                <th class="has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Quantité</th>
-                                                <th class="has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code unité</th>
-                                                <th class="has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Prix unitaire HT</th>
-                                                <th class="has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">% remise ligne</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7"></th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° ligne</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code Article</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description 2</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code Variant</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Magasin de livraison</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Emplacement</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Unité de mesure</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Quantité</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode de livraison</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Prix unitaire HT</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">TVA</th>
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant ligne HT</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr :id="index" v-for="(elt,index) of soLines" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
+                                            <tr :id="index" v-for="(elt,index) of saleQuoteCardLines" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
                                                 <td class="has-text-left">
                                                     <span class="icon">
                                                         <i class="fas fa-arrow-right has-text-grey"></i>
@@ -223,34 +217,54 @@
                                                 <td class="has-text-left p-0" >
                                                     <div :id="index+'-'+elt['No_']+'-No_'" class="editme p-1" :contenteditable="elt['Type']==2" v-text="elt['No_']" @blur="onEdit" @keydown.enter="endEdit"></div>
                                                 </td>
-                                                <td class="has-text-left p-0" >
+                                                <td class="has-text-left p-0" style="min-width: 300px;">
                                                     <div :id="index+'-'+elt['Description']+'-Description'" class="editme p-1" :contenteditable="true" v-text="elt['Description']" @blur="onEdit" @keydown.enter="endEdit"></div>
                                                 </td>
+                                                <td class="has-text-left p-0" style="min-width: 300px;">
+                                                    <div :id="index+'-'+elt['Description 2']+'-Description 2'" class="editme p-1" :contenteditable="true" v-text="elt['Description 2']" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                                </td>
                                                 <td class="has-text-left p-0" >
-                                                    <div :id="index+'-'+elt['Description 2']+'-Description 2'" class="editme p-1" :contenteditable="elt['Type']==2" v-text="elt['Description 2']" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                                    <div :id="index+'-'+elt['Variant Code']+'-Variant Code'" class="editme p-1" :contenteditable="elt['Type']==2" v-text="elt['Variant Code']" @blur="onEdit" @keydown.enter="endEdit"></div>
                                                 </td>
                                                 <td class="has-text-left p-0" >
                                                     <div :id="index+'-'+elt['Location Code']+'-Location Code'" class="editme p-1" :contenteditable="elt['Type']==2" v-text="elt['Location Code']" @blur="onEdit" @keydown.enter="endEdit"></div>
                                                 </td>
                                                 <td class="has-text-left p-0" >
+                                                    {{ elt['Bin Code'] }}
+                                                </td>
+                                                <td class="has-text-left p-0" >
+                                                    {{ elt['Unit of Measure'] }}
+                                                </td>
+                                                <td class="has-text-left p-0" >
                                                     <div :id="index+'-'+elt['Quantity']+'-Quantity'" class="editme p-1" :contenteditable="elt['Type']==2"  v-text="elt['Quantity']" @blur="onEdit" @keydown.enter="endEdit"></div>
                                                 </td>
                                                 <td class="has-text-left p-0" >
-                                                    <div :id="index+'-'+elt['Unit of Measure']+'-Unit of Measure'" class="editme p-1" :contenteditable="elt['Type']==2" v-text="elt['Unit of Measure']" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                                    <div :id="index+'-'+elt['Shipment Method Code']+'-Shipment Method Code'" class="editme p-1" :contenteditable="elt['Type']==2"  v-text="elt['Shipment Method Code']" @blur="onEdit" @keydown.enter="endEdit"></div>
                                                 </td>
                                                 <td class="has-text-left p-0" >
-                                                    <div :id="index+'-'+elt['Unit Price']+'-Unit Price'" class="editme p-1" :contenteditable="elt['Type']==2" v-text="elt['Unit Price']" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                                    {{ elt['Unit Price'] }}
                                                 </td>
                                                 <td class="has-text-left p-0" >
-                                                    <div :id="index+'-'+elt['Line Discount _']+'-name'" class="editme p-1" :contenteditable="elt['Type']==2" v-text="elt['Line Discount _']" @blur="onEdit" @keydown.enter="endEdit"></div>
+                                                    {{ elt['VAT _'] }}
+                                                </td>
+                                                <td class="has-text-left p-0" >
+                                                    {{ elt['Line Amount'] }}
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <div v-if="soLines.length==0">Il n'y'a rien à afficher</div>
+                                <div v-if="saleQuoteCardLines.length==0">Il n'y'a rien à afficher</div>
                             </div>     
-
+                            <div class="columns mt-3" id="line_total" v-if="onglet2_expanded">
+                                <div class="column">
+                                    <input-text1 :is_disabled="true" :valueInputText="0" labelInputText="Montant TVA"></input-text1>
+                                </div>
+                                <div class="column">
+                                    <input-text1 :is_disabled="true" :valueInputText="0" labelInputText="Montant HT"></input-text1>
+                                    <input-text1 :is_disabled="true" :valueInputText="0" labelInputText="Montant TTC"></input-text1>
+                                </div>
+                            </div>   
                         </div>
                         
 <!---------sous-Section onglet 2 formulaire fiche client -----Modal d'ajout d'article----------------------->                         
@@ -258,7 +272,7 @@
                             <div class="modal-background has-background-white" style="opacity:0.7" @click.prevent="addItemModalShowned=false"></div>
                             <div class="modal-content box w-75" style=" background-color: rgba(255,255,255,1);border: none;">
                                 
-                                <form @submit.prevent="addRowByForm">
+                                <form @submit.prevent="addRowByForm_andContinue">
 
                                     <div class="has-text-left mb-5">
                                         <span class="is-size-3 subtitle ">Fiche ligne article</span>
@@ -269,36 +283,40 @@
                                         <div class="columns" >
                                             <div class="column">
                                                 <div>
-                                                    <input-text  v-model="itemCode" labelInputText="N°" :is_disabled="false"></input-text>
-                                                    <input-text  v-model="itemDescription" labelInputText="Description" :is_disabled="false"></input-text>
-                                                    <input-text  v-model="itemDescription2" labelInputText="Description 2" :is_disabled="false"></input-text>
-                                                    <input-text  v-model="itemLocation" labelInputText="Code magasin" :is_disabled="false"></input-text>
-                                                    <input-text  v-model="itemQuantity" labelInputText="Quantité"  :is_disabled="false"></input-text>
-                                                    <input-text  v-model="itemUnitOfMeasure" labelInputText="Code unité"  :is_disabled="false"></input-text>
-                                                    <input-text  v-model="itemUnitPrice" labelInputText="Prix unitaire" :is_disabled="false" ></input-text>
-                                                    <input-text  v-model="itemLineDiscount" labelInputText="% remise"  :is_disabled="false" ></input-text>
+                                                     <!---input-text  :valueInputText="itemLineNo" labelInputText="N° ligne" :is_disabled="true " ></input-text--->
+                                                     <input-select-basic  v-model="itemType" labelInputText="Type ligne"></input-select-basic>
+                                                    <input-text v-show="itemType==2" v-model="itemCode" labelInputText="Code article" :is_disabled="false" :is_readOnly="itemType==0"></input-text>
+                                                    <input-text v-model="itemDescription" labelInputText="Description" :is_disabled="false"></input-text>
+                                                    <input-text v-show="itemType==0" v-model="itemDescription2" labelInputText="Description 2" :is_disabled="false"></input-text>
+                                                    <input-text v-show="itemType==2" v-model="itemVariant" labelInputText="Code variant" :is_disabled="false" :is_readOnly="itemType==0"></input-text>
+                                                    <input-select v-show="itemType==2" v-model="itemLocation" labelInputText="magasin de livraison" :is_disabled="false" :is_readOnly="itemType==0" @openModal="()=>{activeModalForSelectableElementList='locationList',isItemInfoToFill=true}"></input-select>
+                                                    <!----input-text  :valueInputText="itemBinCode" labelInputText="Emplacement" :is_disabled="true"></input-text---->
+                                                    <!----input-text :valueInputText="itemUnitOfMeasure" labelInputText="Unité de mesure"  :is_disabled="true"></input-text---->
+                                                    <input-text  v-show="itemType==2" v-model="itemQuantity" labelInputText="Quantité"  :is_disabled="false" :is_readOnly="itemType==0"></input-text>
+                                                    <input-select  v-show="itemType==2" v-model="itemShipmentMethod" labelInputText="Mode de livraison"  :is_disabled="false" :is_readOnly="itemType==0" @openModal="()=>{activeModalForSelectableElementList='shipmentMethodList',isItemInfoToFill=true}"></input-select>
+                                                    <input-text  v-show="itemType==2" v-model="itemUnitPrice" :valueInputText="itemUnitPrice" labelInputText="Prix unitaire" :is_disabled="false" :is_readOnly="itemType==0"></input-text>
                                                 </div>
                                                 <p class="title has-text-left is-6 mt-3">Disponibilité article Magasin : </p>
                                                 <div class="columns">
                                                     <div class="column box is-narrow mx-1">
-                                                        <inputText1 v-model="itemInStockLocation" labelInputText="En stock" :is_disabled="true"></inputText1>
+                                                        <inputText1 :valueInputText="itemInStockLocation" labelInputText="En stock" :is_disabled="true"></inputText1>
                                                     </div>
                                                     <div class="column box is-narrow mx-1">
-                                                        <inputText1 v-model="itemOnSalesLocation" labelInputText="En vente" :is_disabled="true"></inputText1>
+                                                        <inputText1  :valueInputText="itemOnSalesLocation" labelInputText="En vente" :is_disabled="true"></inputText1>
                                                     </div>
                                                     <div class="column">
                                                     </div>
                                                 </div>
                                                 <p class="title has-text-left is-6 mt-3">Disponibilité article Global : </p>
-                                                <div class="columns my-0">
+                                                <div class="columns my-0 is-multiline">
                                                     <div class="column box is-narrow mx-1">
-                                                        <inputText1 v-model="itemInStockGlobal" labelInputText="En stock" :is_disabled="true"></inputText1>
+                                                        <inputText1 :valueInputText="itemInStockGlobal"  labelInputText="En stock" :is_disabled="true"></inputText1>
                                                     </div>
                                                     <div class="column box is-narrow mx-1">
-                                                        <inputText1 v-model="itemOnSalesGlobal" labelInputText="En vente" :is_disabled="true"></inputText1>
+                                                        <inputText1 :valueInputText="itemOnSalesGlobal"  labelInputText="En vente" :is_disabled="true"></inputText1>
                                                     </div>
                                                     <div class="column box is-narrow mx-1">
-                                                        <inputText1 v-model="itemOnPurchaseGlobal" labelInputText="Sur achat" :is_disabled="true"></inputText1>
+                                                        <inputText1 :valueInputText="itemOnPurchaseGlobal" labelInputText="Sur achat" :is_disabled="true"></inputText1>
                                                     </div>
                                                     <div class="column">
                                                     </div>
@@ -306,16 +324,29 @@
                                             </div>
                                             <div class="column is-6" style="overflow-y:scroll;overflow-x:hidden;height: 650px;">
                                                 <selectable-item-list-for-sale
-                                                :itemCode="itemCode" 
-                                                :itemDescription ="itemDescription"
-                                                @onGettingLineFromSelectableItemList="(elt)=>fillItemInfoField(elt)">
-                                            </selectable-item-list-for-sale> 
+                                                    :itemCode="itemCode" 
+                                                    :itemDescription ="itemDescription"
+                                                    @onGettingLineFromSelectableItemList="(elt)=>fillItemInfoField(elt)">
+                                                </selectable-item-list-for-sale> 
                                             </div>
-                                    </div> 
-                                        
-                                    <button type="submit" class="button has-background-orange is-fullwidth shadow has-text-white"> Ajouter la ligne</button>
-                                    <button class="button has-background-white mt-1 is-fullwidth " @click="getItemAvailibility"> Disponibilité </button>
-                                    
+                                        </div>
+                                        <div class="field is-grouped">
+                                            <p class="control">
+                                            <button type="submit" class="button has-background-orange  shadow has-text-white">
+                                                Ajouter et continuer
+                                            </button>
+                                            </p>
+                                            <p class="control">
+                                            <button class="button has-background-orange  shadow has-text-white" @click.prevent="()=>{addRowByForm_andClose();addItemModalShowned=false}">
+                                                Ajouter et fermer
+                                            </button>
+                                            </p>
+                                            <p class="control">
+                                            <button class="button" @click.prevent="resetForm">
+                                                Réinitialiser
+                                            </button>
+                                            </p>
+                                        </div>   
                                     </div> 
                                 </form>
                             </div>
@@ -325,13 +356,13 @@
                     <br><br>
 
 <!---------sous-Section ongle 3 formulaire fiche client----------------------->                         
-                    <div id="details-facture">
+                    <div id="quote-details">
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('invoice_details_content');onglet3_expanded=!onglet3_expanded" v-if="onglet3_expanded">
+                                <a @click="collapse('quote_details_content');onglet3_expanded=!onglet3_expanded" v-if="onglet3_expanded">
                                     <span>Détails facture</span>
                                 </a>
-                                <a @click="expand('invoice_details_content');onglet3_expanded=!onglet3_expanded" v-if="!onglet3_expanded">
+                                <a @click="expand('quote_details_content');onglet3_expanded=!onglet3_expanded" v-if="!onglet3_expanded">
                                     <span>Détails facture</span>
                                     <span class="icon">
                                         <i class="fas fa-angle-right"></i>
@@ -340,61 +371,28 @@
                             </div>
                            <div class="column py-0 has-text-right is-size-7" v-if="onglet3_expanded">Afficher plus</div>
                         </div>
-                        <div id="invoice_details_content" class="columns">
+                        <div id="quote_details_content" class="columns">
                             <div class="column">
-                                <input-select v-model="customerGenBusPostingGroup" labelInputText="Groupe compta. marché TVA" :is_disabled="false"></input-select>
-                                <input-select v-model="customerVATBusPostingGroup" labelInputText="Groupe compta. marché" :is_disabled="false"></input-select>
-                                <input-select v-model="customerShipmentMethodCode" labelInputText="Code condition règlement" :is_disabled="false"></input-select>
+                                <input-text labelInputText="Centre de gestion" :valueInputText="saleQuoteResponsibilityCenter" :is_disabled="true"></input-text>
+                                
+                                <input-text labelInputText="Code vendeur" :valueInputText="saleQuoteSalesperson" :is_disabled="true"></input-text>
+                                
+                                <input-text labelInputText="Canal de vente" :valueInputText="saleQuoteSalesChannel" :is_disabled="true"></input-text>
+                                
+                                <input-text labelInputText="Mode de vente" :valueInputText="saleQuoteSalesMode" :is_disabled="true"></input-text>
+                                
+                                <input-text labelInputText="Groupe tarifaire" :valueInputText="saleQuoteCustomerPriceGroup" :is_disabled="true"></input-text>
                             </div>
                             <div class="column">
-                                <input-select v-model="customerLocationCode" labelInputText="Code magasin" :is_disabled="false"   @openModal="activeModalForSelectableElementList='locationList'"></input-select>
-                                <input-select v-model="customerPaymentTermCode" labelInputText="Code condition paiement" :is_disabled="false"></input-select>
+                                <input-text labelInputText="Catégorie TVA" :valueInputText="saleQuoteVATBusPostingGroup" :is_disabled="true"></input-text>
+                                
+                                <input-text labelInputText="Condition de paiement" :valueInputText="saleQuotePaymentTermsCode" :is_disabled="true"></input-text>
+                                
+                                <input-text labelInputText="% Acompte" :valueInputText="saleQuotePrepayment" :is_disabled="true"></input-text>
                             </div>
                         </div>                    
                     </div>
                     <br><br>
-
-<!---------sous-Section ongle 4 formulaire fiche client----------------------->                         
-                    <div id="expedition-facturation">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('delivery_invoicing_content');onglet4_expanded=!onglet4_expanded" v-if="onglet4_expanded">
-                                    <span>Expedition et facturation</span>
-                                </a>
-                                <a @click="expand('delivery_invoicing_content');onglet4_expanded=!onglet4_expanded" v-if="!onglet4_expanded">
-                                    <span>Expedition et facturation</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                           <div class="column py-0 has-text-right is-size-7" v-if="onglet4_expanded">Afficher plus</div>
-                        </div>
-                        <div id="delivery_invoicing_content" class="columns">
-                            <div class="column">
-                                <input-select v-model="customerPrimaryContactNo" labelInputText="Contact" :is_disabled="false" @openModal="activeModalForSelectableElementList='contactList'"></input-select>
-                                <p class="has-text-left">
-                                    <span class="title is-6">
-                                        Conditions de livraison
-                                    </span>
-                                </p>
-                                <input-select v-model="customerShipmentMethodCode" labelInputText="Condition de livraison"  :is_disabled="false"></input-select>
-                                <input-select v-model="customerShipToCode" labelInputText="Adresse de livraison"  :is_disabled="false" @openModal="activeModalForSelectableElementList='addressList'"></input-select>
-                            </div>
-                            <div class="column">
-                                <input-text v-model="customerContactName" labelInputText="Nom Contact"  :is_disabled="false"></input-text>
-                                <!--input-text v-model="customer" labelInputText="Nom" valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()"  :is_disabled="false"></input-text-->
-                                <input-text v-model="shipToAddress" labelInputText="Adresse" valueInputText="new Date(soHeader['Date document']).toDateString()"  :is_disabled="false"></input-text>
-                                <input-text labelInputText="Adresse (2ème ligne)" valueInputText="new Date(soHeader[`Date d'échéance`]).toDateString()"  :is_disabled="false"></input-text>
-                                <input-text v-model="shipToCity" labelInputText="Ville" valueInputText="soHeader['N° doc. externe']"  :is_disabled="false"></input-text>
-                                <input-text v-model="customer" labelInputText="Région/Etat" valueInputText="soHeader['N° devis']"  :is_disabled="false"></input-text>
-                                <input-text v-model="customer" labelInputText="Code postal" valueInputText="soHeader['Code utilisateur assigné']"  :is_disabled="false"></input-text>
-                                <input-text v-model="customer" labelInputText="Pays/région" valueInputText="soHeader['Statut']"  :is_disabled="false"></input-text>
-                            </div>
-                        </div>                    
-                    </div>
-                    <br><br>
-
                 </div>
 
 <!---------composant info client----------------------->
@@ -429,7 +427,7 @@
             v-if="activeModalForSelectableElementList=='contactList'" 
             :isActive="activeModalForSelectableElementList=='contactList'" 
             @closeModal="activeModalForSelectableElementList=''"
-            :customerName="customerName" 
+            :customerNo="saleQuoteCustomerNo" 
             @onGettingLineFromSelectableContactListModal="(elt)=>fillContactInfoField(elt)">
         </modal-for-selectable-contact-list>
 
@@ -437,36 +435,30 @@
             v-if="activeModalForSelectableElementList=='addressList'" 
             :isActive="activeModalForSelectableElementList=='addressList'" 
             @closeModal="activeModalForSelectableElementList=''" 
-            :customerId="customerCode" 
+            :customerNo="saleQuoteCustomerNo" 
             @onGettingLineFromSelectableAddressListModal="(elt)=>fillAddressInfoField(elt)">
         </modal-for-selectable-address-list>
 
+        <modal-for-selectable-campaign-list 
+            v-if="activeModalForSelectableElementList=='campaignList'" 
+            :isActive="activeModalForSelectableElementList=='campaignList'" 
+            @closeModal="activeModalForSelectableElementList=''" 
+            @onGettingLineFromSelectableCampaignListModal="(elt)=>fillCampaignInfoField(elt)">
+        </modal-for-selectable-campaign-list>
 
+        <modal-for-selectable-payment-method-list 
+            v-if="activeModalForSelectableElementList=='paymentMethodList'" 
+            :isActive="activeModalForSelectableElementList=='paymentMethodList'" 
+            @closeModal="activeModalForSelectableElementList=''" 
+            @onGettingLineFromSelectablePaymentMethodListModal="(elt)=>fillPaymentMethodInfoField(elt)">
+        </modal-for-selectable-payment-method-list>
 
-
-        <article v-if="error_message" class="message is-danger shadow" style="max-width: 500px; position: absolute;bottom: 20px;right:20px">
-            <div class="message-header">
-                <p>Message</p>
-                <button class="delete" aria-label="delete" @click="error_message='';error_message_code=''"></button>
-            </div>
-            <div class="message-body">
-                <span> {{ error_message }}</span><br>
-                <span v-if="error_message_code"> Code erreur: {{ error_message_code }}</span>
-            </div>
-        </article>
-
-        <article v-if="success_message" class="message is-primary shadow" style="max-width: 500px; position: absolute;bottom: 20px;right:20px">
-            <div class="message-header">
-                <p>Message</p>
-                <button class="delete" aria-label="delete" @click="success_message=''"></button>
-            </div>
-            <div class="message-body">
-                <span> {{ success_message }}</span><br>
-                <span class="icon is-large">
-                    <i class="fas fa-spinner fa-pulse fa-2x"></i>
-                </span>
-            </div>
-        </article>
+        <modal-for-selectable-shipment-method-list 
+            v-if="activeModalForSelectableElementList=='shipmentMethodList'" 
+            :isActive="activeModalForSelectableElementList=='shipmentMethodList'" 
+            @closeModal="activeModalForSelectableElementList=''" 
+            @onGettingLineFromSelectableShipmentMethodListModal="(elt)=>fillShipmentMethodInfoField(elt)">
+        </modal-for-selectable-shipment-method-list>
 
     </div>     
 </template>
@@ -478,8 +470,12 @@ import SQCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import inputText1 from './input/input-text1.vue'
 import inputSelect from './input/input-select.vue'
+import inputSelectBasic from './input/input-select-basic.vue'
 import inputDate from './input/input-date.vue'
 import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
+import ModalForSelectableCampaignList from './ModalForSelectableCampaignList.vue'
+import ModalForSelectableShipmentMethodList from './ModalForSelectableShipmentMethodList.vue'
+import ModalForSelectablePaymentMethodList from './ModalForSelectablePaymentMethodList.vue'
 import ModalForSelectableItemList from './ModalForSelectableItemList.vue'
 import ModalForSelectableLocationList from './ModalForSelectableLocationList.vue'
 import ModalForSelectableContactList from './ModalForSelectableContactList.vue'
@@ -488,7 +484,6 @@ import SelectableItemListForSale from './SelectableItemListForSale.vue'
 import { ref } from 'vue'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
-//import { useWebServiceInfoStore } from '@/Stores/WebServiceInfo'
 import  axios  from 'axios'
 import { useRouter } from 'vue-router'
 
@@ -506,8 +501,12 @@ export default {
         inputText1,
         SQCardRibbon,
         inputSelect,
+        inputSelectBasic,
         inputDate,
         ModalForSelectableCustomerList,
+        ModalForSelectableCampaignList,
+        ModalForSelectablePaymentMethodList,
+        ModalForSelectableShipmentMethodList,
         ModalForSelectableItemList,
         ModalForSelectableLocationList,
         ModalForSelectableContactList,
@@ -519,7 +518,7 @@ export default {
 
             //list:[],
             //taille (hauteur) initiale des onglets de la page
-            height:'5000px',
+            height:'700px',
 
             //taille (largeur) initiale du composant custumerInfo
             customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.newquoteRightInfoMaxWidth,
@@ -557,9 +556,13 @@ export default {
             
             const router = useRouter()
             const currentDate = new Date(new Date()).toISOString().split('T')[0]
+            const isItemInfoToFill = ref(false)
 
             //nom de l'hote dans l'url 
             const hostname = window.location.hostname;
+
+            //variable de soumission forme
+            let submitting_message=ref('') 
 
             //variable d'erreur serveur
             let error_message=ref('')
@@ -567,285 +570,426 @@ export default {
 
             //variable de success serveur
             let success_message=ref('')
-            
-            const customerInfo = {
-                customerCode : ref(''),
-                customerName : ref(''),
-                customerPrimaryContactNo : ref(''),
-                customerContactName : ref(''),
-                customerAddress : ref(''),
-                customerAddress2 : ref(''),
-                customerCity : ref(''),
-                customerPhone : ref(''),
-                customerEmailAddress : ref(''),
-                customerShipToCode : ref(''),
-                customerPaymentTermCode : ref(''),
-                customerSalespersonCode : ref(''),
-                customerShipmentMethodCode : ref(''),
-                customerPaymentMethodCode : ref(''),
-                customerLocationCode : ref(''),
-                customerGenBusPostingGroup : ref(''),
-                customerVATBusPostingGroup : ref(''),
-                customerPostingGroup : ref(''),
-            }
 
+            const webUserInfo = {
+                ...useWebUserInfoStore().getWebUser
+            }
+            
             const dateInfo = {
                 documentDate : ref(currentDate),
-                quoteDate : ref(currentDate),
-                dueDate : ref(currentDate),
                 validityDate : ref(currentDate),
                 shipRequestedDate : ref(currentDate),
+                promisedDeliveryDate : ref(currentDate),
             }
 
-            const shipToAddressInfo = {
-                shipToCode : ref(''),
-                shipToName :ref(''),
-                shipToAddress :ref(''),
-                shipToCity :ref(''),
-                shipToPhone :ref(''),
-            }
-
-
-            const ItemInfo = {
-                itemLineNo:ref(''),
-                itemType: ref(''),
+            const itemInfo = {
+                itemLineNo:ref(1),
+                itemType: ref(2),
                 itemCode: ref(''),
                 itemDescription: ref(''),
                 itemDescription2: ref(''),
+                itemVariant: ref(''),
                 itemLocation: ref(''),
-                itemQuantity: ref(''),
+                itemBinCode: ref(''),
                 itemUnitOfMeasure: ref(''),
+                itemQuantity: ref(''),
+                itemShipmentMethod: ref(''),
                 itemUnitPrice: ref(''),
-                itemLineDiscount: ref(''),
+                itemVAT:ref(0),
+                itemLineAmount:ref(0)
             }
 
-            const itemAvailibilityInfo = {
-                itemInStockLocation:ref(''),
-                itemInStockGlobal:ref(''),
-                itemOnSalesLocation:ref(''),
-                itemOnSalesGlobal:ref(''),
-                itemOnPurchaseGlobal:ref('')
+            const itemAvailabilityInfo = {
+            itemInStockLocation:ref(0),
+            itemOnSalesLocation:ref(0),
+            itemInStockGlobal:ref(0),
+            itemOnSalesGlobal:ref(0),
+            itemOnPurchaseGlobal:ref(0),
+        }
+
+            const saleQuoteCardHeaderInfo = {
+                saleQuoteCustomerNo : ref(webUserInfo.defaultCustomerNo),
+                saleQuoteCustomerName : ref(webUserInfo.defaultCustomerName),
+                saleQuoteCustomerContactCode : ref(webUserInfo.defaultCustomerContactCode),
+                saleQuoteCampaignNo : ref(''),
+                saleQuoteLocationCode : ref(webUserInfo.defaultLocation),
+                saleQuoteShipmentMethodCode : ref(webUserInfo.defaultCustomerShipmentMethodCode),
+                saleQuoteCustomerShipToCode : ref(webUserInfo.defaultCustomerShipToCode),
+                saleQuotePaymentMethodCode : ref(webUserInfo.defaultCustomerPaymentMethodCode),
+                saleQuoteResponsibilityCenter : ref(webUserInfo.responsibilityCenter),
+                saleQuoteSalesperson : ref(webUserInfo.defaultSalesPersonCode),
+                saleQuoteSalesChannel : ref(webUserInfo.defaultSalesChannel),
+                saleQuoteSalesMode : ref(webUserInfo.defaultCustomerSalesMode),
+                saleQuoteCustomerPriceGroup : ref(webUserInfo.defaultCustomerPriceGroup),
+                saleQuoteVATBusPostingGroup : ref(webUserInfo.defaultCustomerVATBusPostingGroup),
+                saleQuotePaymentTermsCode : ref(webUserInfo.defaultCustomerPaymentTermsCode),
+                saleQuotePrepayment: ref(webUserInfo.defaultCustomerPrepayment),
             }
 
-            const soLines =  ref([])
+
+
+            const saleQuoteCardLines =  ref([])
 
 
 
  /////////////FUNCTIONS//////////////////////////      
    
             function  addEmptyRow(){
-                soLines.value.push(
+                saleQuoteCardLines.value.push(
                     {   
-                        'Line No_':(soLines.value.length +1),
-                        Type:'',
+                        'Line No_':saleQuoteCardLines.value.length +1,
+                        Type:2,
                         No_:'',
                         Description:'',
                         'Description 2':'',
+                        'Variant Code':'',
                         'Location Code':'',
-                        Quantity:'',
+                        'Bin Code':'',
                         'Unit of Measure':'',
-                        'Unit Price':'',
-                        'Line Discount _':''
+                        Quantity:0,
+                        'Shipment Method Code':'',
+                        'Unit Price':0,
+                        'VAT _':0,
+                        'Line Amount':0,
                     })
+                    itemInfo.itemLineNo.value=saleQuoteCardLines.value.length +1
             }
 
             function  addCommentRow(){
-                soLines.value.push(
+                console.log(saleQuoteCardLines.value[0])
+                saleQuoteCardLines.value.push(
                     {   
-                        'Line No_':(soLines.value.length +1),
+                        'Line No_':saleQuoteCardLines.value.length +1,
                         Type:0,
                         No_:'',
                         Description:'',
                         'Description 2':'',
+                        'Variant Code':'',
                         'Location Code':'',
-                        Quantity:'',
+                        'Bin Code':'',
                         'Unit of Measure':'',
+                        Quantity:'',
+                        'Shipment Method Code':'',
                         'Unit Price':'',
-                        'Line Discount _':''
+                        'VAT _':'',
+                        'Line Amount':'',
                     })
+                    itemInfo.itemLineNo.value=saleQuoteCardLines.value.length +1
             }
 
             
-            function addRowByForm(){
-                soLines.value.push(
-                {
-                    'Line No_':(soLines.value.length +1),
-                    Type:2,    
-                    No_:this.itemCode,
-                    Description:this.itemDescription,
-                    'Description 2':this.itemDescription2,
-                    'Location Code':this.itemLocation,
-                    Quantity:this.itemQuantity,
-                    'Unit of Measure':this.itemUnitOfMeasure,
-                    'Unit Price':this.itemUnitPrice,
-                    'Line Discount _':this.itemLineDiscount 
-                })
+            function addRowByForm_andContinue(){
+                if (itemInfo.itemType.value==2){
+                    saleQuoteCardLines.value.push({
+                        'Line No_':itemInfo.itemLineNo.value,
+                        Type:itemInfo.itemType.value,
+                        No_:itemInfo.itemCode.value,
+                        Description:itemInfo.itemDescription.value,
+                        'Description 2':itemInfo.itemDescription2.value?itemInfo.itemDescription2.value:'',
+                        'Variant Code':itemInfo.itemVariant.value,
+                        'Location Code':itemInfo.itemLocation.value,
+                        'Bin Code':itemInfo.itemBinCode.value,
+                        'Unit of Measure':itemInfo.itemUnitOfMeasure.value,
+                        Quantity:+itemInfo.itemQuantity.value*1,
+                        'Shipment Method Code':itemInfo.itemShipmentMethod.value,
+                        'Unit Price':+itemInfo.itemUnitPrice.value*1,
+                        'VAT _':+itemInfo.itemVAT.value*1,
+                        'Line Amount':itemInfo.itemQuantity.value*itemInfo.itemUnitPrice.value,
+                    })
+                }else{
+                    saleQuoteCardLines.value.push({   
+                        'Line No_':itemInfo.itemLineNo.value,
+                        Type:0,
+                        No_:'',
+                        Description:itemInfo.itemDescription.value,
+                        'Description 2':itemInfo.itemDescription2.value,
+                        'Variant Code':'',
+                        'Location Code':'',
+                        'Bin Code':'',
+                        'Unit of Measure':'',
+                        Quantity:'',
+                        'Shipment Method Code':'',
+                        'Unit Price':'',
+                        'VAT _':'',
+                        'Line Amount':'',
+                    })
+                }
+                itemInfo.itemLineNo.value++
+                resetForm()
+            }
 
-                console.log(soLines.value)
+            function addRowByForm_andClose(){
+                if (itemInfo.itemType.value==2){
+                    saleQuoteCardLines.value.push(
+                    {
+                        'Line No_':itemInfo.itemLineNo.value,
+                        Type:itemInfo.itemType.value,
+                        No_:itemInfo.itemCode.value,
+                        Description:itemInfo.itemDescription.value,
+                        'Description 2':itemInfo.itemDescription2.value?itemInfo.itemDescription2.value:'',
+                        'Variant Code':itemInfo.itemVariant.value,
+                        'Location Code':itemInfo.itemLocation.value,
+                        'Bin Code':itemInfo.itemBinCode.value,
+                        'Unit of Measure':itemInfo.itemUnitOfMeasure.value,
+                        Quantity:itemInfo.itemQuantity.value*1,
+                        'Shipment Method Code':itemInfo.itemShipmentMethod.value,
+                        'Unit Price':itemInfo.itemUnitPrice.value*1,
+                        'VAT _':itemInfo.itemVAT.value*1,
+                        'Line Amount':itemInfo.itemQuantity.value*itemInfo.itemUnitPrice.value,
+                    })
+                }else{
+                    saleQuoteCardLines.value.push(
+                    {   
+                        'Line No_':itemInfo.itemLineNo.value,
+                        Type:0,
+                        No_:'',
+                        Description:itemInfo.itemDescription.value,
+                        'Description 2':itemInfo.itemDescription2.value,
+                        'Variant Code':'',
+                        'Location Code':'',
+                        'Bin Code':'',
+                        'Unit of Measure':'',
+                        Quantity:'',
+                        'Shipment Method Code':'',
+                        'Unit Price':'',
+                        'VAT _':'',
+                        'Line Amount':'',
+                    })
+                }
+                console.log(saleQuoteCardLines.value)
+                itemInfo.itemLineNo.value++
+                resetForm()
+
+            }
+
+            function resetForm(){
+                itemInfo.itemType.value=2
+                itemInfo.itemCode.value=''
+                itemInfo.itemDescription.value=''
+                itemInfo.itemDescription2.value=''
+                itemInfo.itemVariant.value=''
+                itemInfo.itemLocation.value=''
+                itemInfo.itemBinCode.value=''
+                itemInfo.itemUnitOfMeasure.value=''
+                itemInfo.itemQuantity.value=''
+                itemInfo.itemShipmentMethod.value=''
+                itemInfo.itemUnitPrice.value=''
+                itemInfo.itemVAT.value=0
+                itemInfo.itemLineAmount.value=0
+
+                itemAvailabilityInfo.itemInStockGlobal.value=0
+                itemAvailabilityInfo.itemInStockLocation.value=0
+                itemAvailabilityInfo.itemOnPurchaseGlobal.value=0
+                itemAvailabilityInfo.itemOnSalesGlobal.value=0
+                itemAvailabilityInfo.itemOnSalesLocation.value=0
             }
 
             function fillCustomerInfoField(customer){
-                this.customerCode=customer['No_']
-                this.customerName=customer['Name']
-                this.customerPrimaryContactNo=customer['Primary Contact No_']
-                this.customerContactName=customer['Contact']
-                this.customerAddress=customer['Address']
-                this.customerAddress2=customer['Address 2']
-                this.customerCity=customer['City']
-                this.customerPhone =customer['Phone No_']
-                this.customerShipToCode=customer['Ship-to Code']
-                this.customerPaymentTermCode=customer['Payment Terms Code']
-                this.customerSalespersonCode=customer['Salesperson Code']
-                this.customerShipmentMethodCode=customer['Shipment Method Code']
-                this.customerPaymentMethodCode=customer['Payment Method Code']
-                this.customerLocationCode=customer['Location Code']
-                this.itemLocation=customer['Location Code']
-                this.customerGenBusPostingGroup=customer['Gen_ Bus_ Posting Group']
-                this.customerVATBusPostingGroup=customer['VAT Bus_ Posting Group']
-                this.customerPostingGroup=customer['Customer Posting Group']
-                this.customerGlobalDim1=customer['Global Dimension 1 Code']
-                this.customerGlobalDim2=customer['Global Dimension 2 Code']
-                this.customerPriceGroup=customer['Customer Price Group']
+                saleQuoteCardHeaderInfo.saleQuoteCustomerNo.value=customer['No_']
+                saleQuoteCardHeaderInfo.saleQuoteCustomerName.value=customer['Name']
+                saleQuoteCardHeaderInfo.saleQuoteCustomerContactCode.value=customer["Primary Contact No_"]
+                saleQuoteCardHeaderInfo.saleQuotePaymentMethodCode.value=customer['Payment Method Code']
+                saleQuoteCardHeaderInfo.saleQuotePaymentTermsCode.value=customer['Payment Terms Code']
+                saleQuoteCardHeaderInfo.saleQuotePrepayment.value=customer['Prepayment _']
+                saleQuoteCardHeaderInfo.saleQuoteShipmentMethodCode.value=customer['Shipment Method Code']
+                saleQuoteCardHeaderInfo.saleQuoteVATBusPostingGroup.value=customer['VAT Bus_ Posting Group']
+                saleQuoteCardHeaderInfo.saleQuoteCustomerPriceGroup.value=customer['Customer Price Group']
+                saleQuoteCardHeaderInfo.saleQuoteCustomerShipToCode.value=customer['Ship-to Code']
+                saleQuoteCardHeaderInfo.saleQuoteSalesMode.value=customer['Sales Mode']
             }
 
             function fillContactInfoField(contact){
-                this.customerPrimaryContactNo=contact['No_']
-                this.customerContactName=contact['Name']
-                this.customerAddress=contact['Address']
-                this.customerAddress2=contact['Address 2']
-                this.customerEmailAddress=contact['E-Mail']
-                this.customerCity=contact['City']
-                this.customerPhone=contact['Phone No']
-                this.customerSalespersonCode=contact['Salesperson Code']
+                saleQuoteCardHeaderInfo.saleQuoteCustomerContactCode.value=contact['No_']
             }
 
             function fillLocationInfoField(location){
-                this.customerLocationCode = location['Code']
+                if(isItemInfoToFill.value){
+                    itemInfo.itemLocation.value=location['Code']
+                    isItemInfoToFill.value=false
+                }else{
+                    saleQuoteCardHeaderInfo.saleQuoteLocationCode.value = location['Code']
+                }
             }
 
             function fillAddressInfoField(address){
-                this.customerShipToCode = address['Code']
-                this.shipToAddress = address['Address']
-                this.shipToCity = address['City']
-                this.shipToPhone = address['Phone No_']
-                this.customerShipmentMethodCode = this.customerShipmentMethodCode? this.customerShipmentMethodCode:address['Shipment Method Code']
+                saleQuoteCardHeaderInfo.saleQuoteCustomerShipToCode.value = address["Code"]
+            }
+
+            function fillCampaignInfoField(campaign){
+            saleQuoteCardHeaderInfo.saleQuoteCampaignNo.value=campaign["No_"]
+            }
+
+            function fillPaymentMethodInfoField(paymentMethod){
+                saleQuoteCardHeaderInfo.saleQuotePaymentMethodCode.value=paymentMethod["Code"]
+            }
+
+            function fillShipmentMethodInfoField(shipmentMethod){
+                if(isItemInfoToFill.value){
+                    itemInfo.itemShipmentMethod.value=shipmentMethod['Code']
+                    isItemInfoToFill.value=false
+                }else{
+                    saleQuoteCardHeaderInfo.saleQuoteShipmentMethodCode.value=shipmentMethod["Code"]
+                }
             }
 
             function fillItemInfoField(item){
-                this.itemType = item['Type']
-                this.itemCode = item['No_']
-                this.itemDescription = item['Description']
-                this.itemDescription2 = item['Description 2']
-                this.itemUnitOfMeasure = item['Sales Unit of Measure']
+                itemInfo.itemType.value = 2
+                itemInfo.itemCode.value = item['No_']
+                itemInfo.itemDescription.value = item['Description']
+                itemInfo.itemDescription2.value = item['Description 2']
+                itemInfo.itemLocation.value = saleQuoteCardHeaderInfo.saleQuoteLocationCode.value
+                itemInfo.itemUnitOfMeasure.value = item['Sales Unit of Measure']
+                itemInfo.itemShipmentMethod.value = item["Shipment Method"]?item["Shipment Method"]:saleQuoteCardHeaderInfo.saleQuoteShipmentMethodCode.value
+
+
+                if (itemInfo.itemLocation.value){
+                    getItemLocationBinCode(itemInfo.itemLocation.value)
+                }
+
+                if (itemInfo.itemCode.value && itemInfo.itemLocation.value){
+                    getItemAvailabilityInfo()
+                }
             }
 
-            
-            function saveNewsaleQuote(sqData){
-                axios.post(`http://${hostname}:3000/app/saveSaleQuote?company=${useWebUserInfoStore().activeCompanyId}`,sqData)
-                .then(res => {
-                    success_message.value='Enregistrement réussi, vous serez redirigé dans un instant'
-                    setTimeout(()=> router.push(`/saleQuoteCard/${res.data.quoteNo}`),5000)
-                   
-                            // console.log(res.data.quoteNo)
-                })
-                .catch(err => {
-                    console.log(err)
-                    switch (err.response.status){
-                        case 401: error_message.value= err.response.data.message;break;
-                        case 400: 
-                            error_message.value= err.response.data.error.message
-                            error_message_code.value= err.response.data.error.code;break;
+            function getItemLocationBinCode(itemLocation){
+                axios.get(`http://${hostname}:3000/app/getLocationBinCode/${itemLocation}?respCenter=${webUserInfo.responsibilityCenter}`)
+                    .then(res => {
+                        itemInfo.itemBinCode.value = res.data.recordset[0]['Shipment Bin Code']
+                    })
+                    .catch(err => console.log(err))
+            }
+
+            function displayErrorMessage(errorObject){
+                if(errorObject.response && errorObject.response.status){
+                    switch (errorObject.response.status){
+                        case 401: 
+                            submitting_message.value=''
+                            error_message.value= errorObject.response.data.message;break;
+                        case 400:
+                            submitting_message.value='' 
+                            error_message.value= errorObject.response.data.error.message
+                            error_message_code.value= errorObject.response.data.error.code;break;
+                        case 404:
+                            submitting_message.value=''
+                            error_message.value=errorObject.response.data.error.message
+                            error_message_code.value= errorObject.response.data.error.code;break;
+                        default:
+                            submitting_message.value=''
+                            error_message.value=errorObject.response
+                    }
+                }
+                else{
+                    error_message.value = errorObject.message
+                    error_message_code.value = errorObject.code
+                    console.log(errorObject)
+                }
+            }
+
+            function getItemAvailabilityInfo(){
+                axios.get(`http://${hostname}:3000/app/getItemAvailabilityInfo/${itemInfo.itemCode.value}/${itemInfo.itemLocation.value}`)
+                .then(res =>{
+                    if (new Array(res.data.recordset).length>0){
+                        const data =  res.data.recordset[0]
+                        itemAvailabilityInfo.itemInStockLocation.value = data["In Stock Location"]
+                        itemAvailabilityInfo.itemOnSalesLocation.value = data["On Sales Location"]
+                        itemAvailabilityInfo.itemInStockGlobal.value = data["In Stock Global"]
+                        itemAvailabilityInfo.itemOnSalesGlobal.value = data["On Sales Global"]
+                        itemAvailabilityInfo.itemOnPurchaseGlobal.value = data["On Purchase Global"]
                     }
                 })
+                .catch((err) => {
+                    console.log(err)
+                })
+            }
+            
+            function createSaleQuote(sqData){
+                axios.post(`http://${hostname}:3000/app/getBCWSResponse?company=${useWebUserInfoStore().activeCompanyId}`,sqData)
+                .then(res => {
+                    submitting_message.value=''
+                    success_message.value='Enregistrement réussi, vous serez redirigé dans un instant'
+                    error_message.value=''
+                    setTimeout(()=> router.push(`/saleQuoteCard/${res.data.documentNo}`),5000)
+                })
+                .catch(err => {
+                    displayErrorMessage(err)
+                })
             }
 
-
-            function getTheJsonData(){
-                const userInfoStore = useWebUserInfoStore()
-                const JSONData = {
-                        webUserName:userInfoStore.name,
-                        QuoteNo:'',
-                        IsDeletion:0,
-                        customerNo:customerInfo.customerCode.value,
-                        customerContactCode:customerInfo.customerPrimaryContactNo.value,
-                        customerAddrese:customerInfo.customerAddress.value,
-                        customerAddresse2:customerInfo.customerAddress2.value,
-                        customerCity:customerInfo.customerCity.value,
-                        customerPhoneNo:customerInfo.customerPhone.value,
-                        customerEmailAddress:customerInfo.customerEmailAddress.value,
-                        saleQuoteOrderDate:dateInfo.quoteDate.value,
-                        saleQuoteDocumentDate:dateInfo.documentDate.value,
-                        saleQuoteDueDate:dateInfo.dueDate.value,
-                        saleQuoteValidUntilDate:dateInfo.validityDate.value,
-                        saleQuoteShipRequestedDate:dateInfo.shipRequestedDate.value, 
-                        saleQuoteResponsibilityCenter:userInfoStore.responsibilityCenter, 
-                        customerGenBusPostingGroup:customerInfo.customerGenBusPostingGroup.value, 
-                        customerVATBusPostingGroup:customerInfo.customerVATBusPostingGroup.value, 
-                        customerShipmentMethodCode:customerInfo.customerShipmentMethodCode.value, 
-                        saleQuoteShipToCode:customerInfo.customerShipToCode.value, 
-                        saleQuoteLocationCode:customerInfo.customerLocationCode.value, 
-                        customerPaymentMethodCode:customerInfo.customerPaymentMethodCode.value, 
-                        customerPaymentTermsCode:customerInfo.customerPaymentTermCode.value,
-                        saleQuoteLines:[
-                            ...soLines.value
-                        ]
-
-                }
-                const JSONFormatedData = JSON.stringify(JSONData).split('"').join('\\"')
+            function formatToBCJsonData(data){
+                
+                const JSONFormatedData = JSON.stringify(data).split('"').join('\\"')
                 const JSONDataToSend = '{'+ '"inputJson":'+'"'+JSONFormatedData+'"' +'}'
-
-                saveNewsaleQuote({data:JSONDataToSend})
-                //console.log(JSONDataToSend)
+                console.log(JSONDataToSend)
+                return {data:JSONDataToSend}
             }
 
- /////////////COMPUTED//////////////////////////           
-//  const getItemAvailibility = computed(()=>{
-//         if(ItemInfo.itemLocation.value && ItemInfo.itemCode.value){
-//             let result
-//             axios.get(`http://localhost:3000/app/ItemAvailabilityInfo/${ItemInfo.itemCode.value}/${ItemInfo.itemLocation.value}`)
-//             .then(res => {
-//                 result = res.data.recordset
-//             })
-//             return result
-//             }
-//         else return ''
-//  }
 
-//             )
-
-            function getItemAvailibility(){
-                if(ItemInfo.itemCode.value){
-                    axios.get(`http://${hostname}:3000/app/ItemAvailabilityInfo/${ItemInfo.itemCode.value}/${ItemInfo.itemLocation.value}`)
-                    .then(res => {
-                        console.log(res)
-                    }).catch(err=>console.log(err))
+            function submitForm(){
+                submitting_message.value='Enregistrement en cours'
+                const JSData = {
+                    Parameter:'quotes_insert',
+                    webUserName:webUserInfo.name,
+                    QuoteNo:'',
+                    saleQuoteCustomerNo: saleQuoteCardHeaderInfo.saleQuoteCustomerNo.value,
+                    saleQuoteCustomerContactCode: saleQuoteCardHeaderInfo.saleQuoteCustomerContactCode.value,
+                    saleQuoteResponsibilityCenter:saleQuoteCardHeaderInfo.saleQuoteResponsibilityCenter.value,
+                    saleQuoteSalesperson:saleQuoteCardHeaderInfo.saleQuoteSalesperson.value,
+                    saleQuoteCampaignNo:saleQuoteCardHeaderInfo.saleQuoteCampaignNo.value,
+                    saleQuoteLocationCode:saleQuoteCardHeaderInfo.saleQuoteLocationCode.value,
+                    saleQuoteSalesChannel:saleQuoteCardHeaderInfo.saleQuoteSalesChannel.value,
+                    saleQuoteSalesMode:saleQuoteCardHeaderInfo.saleQuoteSalesMode.value?saleQuoteCardHeaderInfo.saleQuoteSalesMode.value:'',
+                    saleQuoteCustomerPriceGroup:saleQuoteCardHeaderInfo.saleQuoteCustomerPriceGroup.value,
+                    saleQuoteVATBusPostingGroup:saleQuoteCardHeaderInfo.saleQuoteVATBusPostingGroup.value, 
+                    saleQuoteDocumentDate:dateInfo.documentDate.value?dateInfo.documentDate.value:'1753-01-01',
+                    saleQuoteValidUntilDate:dateInfo.validityDate.value?dateInfo.validityDate.value:'1753-01-01',
+                    saleQuoteShipRequestedDate:dateInfo.shipRequestedDate.value?dateInfo.shipRequestedDate.value:'1753-01-01', 
+                    saleQuotePromisedDeliveryDate:dateInfo.promisedDeliveryDate.value?dateInfo.promisedDeliveryDate.value:'1753-01-01', 
+                    saleQuotePaymentMethodCode:saleQuoteCardHeaderInfo.saleQuotePaymentMethodCode.value, 
+                    saleQuotePaymentTermsCode:saleQuoteCardHeaderInfo.saleQuotePaymentTermsCode.value,
+                    saleQuotePrepayment:saleQuoteCardHeaderInfo.saleQuotePrepayment.value, 
+                    saleQuoteCustomerShipToCode:saleQuoteCardHeaderInfo.saleQuoteCustomerShipToCode.value, 
+                    saleQuoteShipmentMethodCode:saleQuoteCardHeaderInfo.saleQuoteShipmentMethodCode.value, 
+                    saleQuoteLines:[
+                        ...saleQuoteCardLines.value
+                    ]
                 }
-
+                createSaleQuote(formatToBCJsonData(JSData))
             }
+
+
 
         return{
-            ...customerInfo,
-            soLines,
-            addEmptyRow,
-            addCommentRow,
-            addRowByForm,
-            ...ItemInfo,
-            ...shipToAddressInfo,
+            isItemInfoToFill,
+            ...saleQuoteCardHeaderInfo,
+            saleQuoteCardLines,
+            ...itemInfo,
+            ...itemAvailabilityInfo,
             ...dateInfo,
-            ...itemAvailibilityInfo,
-            getItemAvailibility,
             fillCustomerInfoField,
             fillContactInfoField,
             fillLocationInfoField,
             fillAddressInfoField,
+            fillCampaignInfoField,
+            fillPaymentMethodInfoField,
+            fillShipmentMethodInfoField,
             fillItemInfoField,
-            getTheJsonData,
+            addEmptyRow,
+            addCommentRow,
+            addRowByForm_andContinue,
+            addRowByForm_andClose,
+            submitForm,
+            resetForm,
             error_message,
             error_message_code,
-            success_message
+            success_message,
+            submitting_message
         }
     },
     methods:{
+        goBackToList(){
+            useNavigationTabStore().setActiveTab('saleQuotes')
+            this.$router.push('/')
+        },
         /////////////////////////methode pour masquer ou afficher le composant info à droite
         hideOrShowComponentInfo(){
             if(this.customerInfoCompMaxWidth=='0px') {
@@ -858,8 +1002,15 @@ export default {
             }
         },
         ///////////////////////methode pour  afficher le formulaire d'ajout d'article
-        showAddRowByFormModal(){
-            this.addItemModalShowned = true
+        showaddRowByForm(){
+            if (this.saleQuoteLocationCode){
+                this.addItemModalShowned = true
+                this.error_message=''
+                this.error_message_code=''
+            }else{
+                this.error_message = "Vous devez d'abord indiquer le code magasin"
+                this.error_message_code ="ERROR_FIELD_REQUIRED"
+            }
         },
         ////////////////////////methode pour ajouter le formulaire de modification d'article
         showEditRowByFormModal(){
@@ -907,18 +1058,25 @@ export default {
         ///////////methode pour modifier directement une ligne d'article
         onEdit(evt){
             const id =evt.target.id
-            const value = evt.target.innerText
+            let value = evt.target.innerText
             const parentId= new String(id).split('-')[0]
             const parentAttri = new String(id).split('-')[2]
-            this.soLines[parentId][parentAttri] = value
-            //console.log(this.soLines)
+            if (parentAttri=="Quantity") {
+                value = value*1
+                this.saleQuoteCardLines[parentId][parentAttri] = value
+                this.saleQuoteCardLines[parentId]["Line Amount"] = value * this.saleQuoteCardLines[parentId]["Unit Price"]
+            }
+            else{
+                this.saleQuoteCardLines[parentId][parentAttri] = value
+            }
+            //console.log(this.saleQuoteCardLines)
          },
          endEdit(){
             this.$el.querySelector('.editme').blur()
          }
     },
     mounted(){
-
+        
     }
 }
 
@@ -930,7 +1088,7 @@ export default {
     transition: max-width 0.5s;
 }
 
-#general_content,#line_content,#invoice_details_content,#international_content,#delivery_invoicing_content{
+#general_content,#line_content,#quote_details_content,#international_content,#delivery_invoicing_content{
     max-height: v-bind(height);
     overflow: hidden;
     transition: max-height 0.5s

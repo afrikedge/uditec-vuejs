@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useNavigationTabStore = defineStore('navigationTab', {
     state: () => ({
+        activeGroup:'sales',
         activeTab:'dashboard',
         tabRightInfo:{
             customerListRightInfoMaxWidth:'800px',
@@ -10,6 +11,8 @@ export const useNavigationTabStore = defineStore('navigationTab', {
             itemCardRightInfoMaxWidth:'800px',
             contactListRightInfoMaxWidth:'800px',
             contactCardRightInfoMaxWidth:'800px',
+            creditRequestListRightInfoMaxWidth:'800px',
+            creditRequestCardRightInfoMaxWidth:'800px',
             leadListRightInfoMaxWidth:'800px',
             leadCardRightInfoMaxWidth:'800px',
             newquoteRightInfoMaxWidth:'800px',
@@ -23,6 +26,7 @@ export const useNavigationTabStore = defineStore('navigationTab', {
             customerListPresentation:'list',
             itemListPresentation:'list',
             contactListPresentation:'list',
+            creditRequestListPresentation:'list',
             leadListPresentation:'list',
             quoteListPresentation:'list',
             orderListPresentation:'list',
@@ -32,14 +36,17 @@ export const useNavigationTabStore = defineStore('navigationTab', {
     //   getActiveTab: (state) => state.activeTab,
     // },
     actions: {
-      setActiveTab(tab) {
-        this.activeTab = tab
-      },
-      setMaxWidth(property,value) {
-          this.tabRightInfo[`${property}`] = value
-      },
-      setPresentation(property,presentation) {
-          this.presentationForPageList[`${property}`] = presentation
-      }
+        setActiveTab(tab) {
+            this.activeTab = tab
+        },
+        setActiveGroup(group)  {
+            this.activeGroup = group
+        },
+        setMaxWidth(property,value) {
+            this.tabRightInfo[`${property}`] = value
+        },
+        setPresentation(property,presentation) {
+            this.presentationForPageList[`${property}`] = presentation
+        }
     },
   })

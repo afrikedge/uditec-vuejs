@@ -1,6 +1,6 @@
 <template>
     <div class="my-5 mx-5">
-        
+        <!---->
         <c-r-list-ribbon 
         pageTitle="Demandes de crédit"
         routeForNewCard="NewcreditRequest"

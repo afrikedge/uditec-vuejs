@@ -1,7 +1,7 @@
 <template>
     <div :class="{'modal':true , 'is-active': true,}" v-if="isActive">
         <div class="modal-background has-background-dark" style="opacity:0.2" @click.prevent="$emit('closeModal')"></div>
-        <div class="modal-content box w-75 h-75 shadow has-background-light shadow" style="border: none; overflow: hidden;">
+        <div class="modal-content box w-75 h-75  has-background-light shadow" style="border: none; overflow: hidden;">
 
             <div class="has-text-left mb-5 columns">
                 <div>
@@ -81,9 +81,9 @@ export default{
 
         const filteredCustomerList = computed(()=>
             elementList.value
-            .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value)
-                || new String(row['Name']).toLowerCase().includes(eltToSearch.value)
-                || new String(row['Contact']).toLowerCase().includes(eltToSearch.value)
+            .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Name']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Contact']).toLowerCase().includes(eltToSearch.value.toLowerCase())
             )
       
         )

@@ -17,6 +17,8 @@ export const useNavigationTabStore = defineStore('navigationTab', {
             leadCardRightInfoMaxWidth:'800px',
             newquoteRightInfoMaxWidth:'800px',
             newOrderRightInfoMaxWidth:'800px',
+            newrepossRightInfoMaxWidth:'800px',
+
             quoteListRightInfoMaxWidth:'800px',
             quoteCardRightInfoMaxWidth:'800px',
             orderListRightInfoMaxWidth:'800px',

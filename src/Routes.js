@@ -72,6 +72,8 @@ import PaymentPromiseList from "./components/PaymentPromiseList.vue"
 import RecoveryActivityCard from "./components/RecoveryActivityCard.vue"
 import RecoveryActivityList from "./components/RecoveryActivityList.vue"
 
+//11-----Formulaire création recouvrement
+import NewRepossessionRequest from "./components/NewRepossessionRequest.vue"
 
 const routes = [
   ///////////////////1
@@ -138,6 +140,9 @@ const routes = [
   {path:'/PaymentPromiseList',component:PaymentPromiseList,name:'PaymentPromiseListPage'},
   {path:'/RecoveryActivityCard/:id',component:RecoveryActivityCard,name:'RecoveryActivityCardPage'},
   {path:'/RecoveryActivityList',component:RecoveryActivityList,name:'RecoveryActivityListPage'},
+
+///////////////////11
+  {path:'/NewRepossessionRequest',component:NewRepossessionRequest,name:'NewRepossessionRequestPage'},
 
 
 

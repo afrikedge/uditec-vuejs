@@ -85,88 +85,96 @@
                     <ul>
                         <li :class="{'is-active':store.activeTab=='dashboard'}">
                             <a @click="store.setActiveTab('dashboard')" :class="{'has-text-orange':store.activeTab=='dashboard'}">
-                              <span class="icon is-small"><i class="fas fa-gauge" aria-hidden="true"></i></span>
-                              <span>Dashboard</span>
+                                <span class="icon is-small"><i class="fas fa-gauge" aria-hidden="true"></i></span>
+                                <span>Dashboard</span>
                             </a>
                         </li>
+
                         <li :class="{'is-active':store.activeTab=='customers'}" v-if="store.activeGroup=='sales'">
-                          <a @click="store.setActiveTab('customers')" :class="{'has-text-orange':store.activeTab=='customers'}">
-                            <span class="icon is-small"><i class="fas fa-user" aria-hidden="true"></i></span>
-                            <span>Clients</span>
-                          </a>
+                            <a @click="store.setActiveTab('customers')" :class="{'has-text-orange':store.activeTab=='customers'}">
+                                <span class="icon is-small"><i class="fas fa-user" aria-hidden="true"></i></span>
+                                <span>Clients</span>
+                            </a>
                         </li>
+
                         <li :class="{'is-active':store.activeTab=='contacts'}" v-if="store.activeGroup=='sales'">
-                          <a @click="store.setActiveTab('contacts')" :class="{'has-text-orange':store.activeTab=='contacts'}">
-                            <span class="icon is-small"><i class="fas fa-user-plus" aria-hidden="true"></i></span>
-                            <span>Contacts</span>
-                          </a>
+                            <a @click="store.setActiveTab('contacts')" :class="{'has-text-orange':store.activeTab=='contacts'}">
+                                <span class="icon is-small"><i class="fas fa-user-plus" aria-hidden="true"></i></span>
+                                <span>Contacts</span>
+                            </a>
                         </li>
+
                         <li :class="{'is-active':store.activeTab=='prospects'}" v-if="store.activeGroup=='sales'">
-                          <a @click="store.setActiveTab('prospects')" :class="{'has-text-orange':store.activeTab=='prospects'}">
-                            <span class="icon is-small"><i class="fas fa-user-plus" aria-hidden="true"></i></span>
-                            <span>Prospects</span>
-                          </a>
+                            <a @click="store.setActiveTab('prospects')" :class="{'has-text-orange':store.activeTab=='prospects'}">
+                                <span class="icon is-small"><i class="fas fa-user-plus" aria-hidden="true"></i></span>
+                                <span>Prospects</span>
+                            </a>
                         </li>
+
                         <li :class="{'is-active':store.activeTab=='items'}" v-if="store.activeGroup=='sales' || store.activeGroup=='inventory' ">
-                          <a @click="store.setActiveTab('items')" :class="{'has-text-orange':store.activeTab=='items'}">
-                            <span class="icon is-small"><i class="fas fa-mobile-screen" aria-hidden="true"></i></span>
-                            <span>Articles</span>
-                          </a>
+                            <a @click="store.setActiveTab('items')" :class="{'has-text-orange':store.activeTab=='items'}">
+                                <span class="icon is-small"><i class="fas fa-mobile-screen" aria-hidden="true"></i></span>
+                                <span>Articles</span>
+                            </a>
                         </li>
+
                         <li :class="{'is-active':store.activeTab=='inventoryAvailability'}" v-if="store.activeGroup=='inventory' ">
-                          <a @click="store.setActiveTab('inventoryAvailability')" :class="{'has-text-orange':store.activeTab=='inventoryAvailability'}">
-                            <span class="icon is-small"><i class="fas fa-mobile-screen" aria-hidden="true"></i></span>
-                            <span>Disponibilité stock</span>
-                          </a>
+                            <a @click="store.setActiveTab('inventoryAvailability')" :class="{'has-text-orange':store.activeTab=='inventoryAvailability'}">
+                                <span class="icon is-small"><i class="fas fa-mobile-screen" aria-hidden="true"></i></span>
+                                <span>Disponibilité stock</span>
+                            </a>
                         </li>
+
                         <li :class="{'is-active':store.activeTab=='saleOrders'}" v-if="store.activeGroup=='sales'">
-                          <a @click="store.setActiveTab('saleOrders')" :class="{'has-text-orange':store.activeTab=='saleOrders'}">
-                            <span class="icon is-small"><i class="fas fa-cart-shopping" aria-hidden="true"></i></span>
-                            <span>Commandes vente</span>
-                          </a>
+                            <a @click="store.setActiveTab('saleOrders')" :class="{'has-text-orange':store.activeTab=='saleOrders'}">
+                                <span class="icon is-small"><i class="fas fa-cart-shopping" aria-hidden="true"></i></span>
+                                <span>Commandes vente</span>
+                            </a>
                         </li>
+
                         <li :class="{'is-active':store.activeTab=='saleQuotes'}" v-if="store.activeGroup=='sales'">
-                          <a @click="store.setActiveTab('saleQuotes')" :class="{'has-text-orange':store.activeTab=='saleQuotes'}">
-                            <span class="icon is-small"><i class="fas fa-coins" aria-hidden="true"></i></span>
-                            <span>Devis vente</span>
-                          </a>
+                            <a @click="store.setActiveTab('saleQuotes')" :class="{'has-text-orange':store.activeTab=='saleQuotes'}">
+                                <span class="icon is-small"><i class="fas fa-coins" aria-hidden="true"></i></span>
+                                <span>Devis vente</span>
+                            </a>
                         </li>
+
                         <li :class="{'is-active':store.activeTab=='creditRequests'}" v-if="store.activeGroup=='sales'">
-                          <a @click="store.setActiveTab('creditRequests')" :class="{'has-text-orange':store.activeTab=='creditRequests'}">
-                            <span class="icon is-small"><i class="fas fa-coins" aria-hidden="true"></i></span>
-                            <span>Demande de crédit</span>
-                          </a>
+                            <a @click="store.setActiveTab('creditRequests')" :class="{'has-text-orange':store.activeTab=='creditRequests'}">
+                                <span class="icon is-small"><i class="fas fa-coins" aria-hidden="true"></i></span>
+                                <span>Demande de crédit</span>
+                            </a>
                         </li>
-                        <li :class="{'is-active':store.activeTab=='repossessionRequests'}" v-if="store.activeGroup=='recovery'">
-                          <a @click="store.setActiveTab('repossessionRequests')" :class="{'has-text-orange':store.activeTab=='repossessionRequests'}">
-                            <span class="icon is-small"><i class="fas fa-tag" aria-hidden="true"></i></span>
-                            <span>Demandes de repossession</span>
-                          </a>
-                        </li>
-                        <li :class="{'is-active':store.activeTab=='repossessionRequests'}" v-if="store.activeGroup=='recovery'">
-                          <a @click="store.setActiveTab('repossessionRequests')" :class="{'has-text-orange':store.activeTab=='repossessionRequests'}">
-                            <span class="icon is-small"><i class="fas fa-tag" aria-hidden="true"></i></span>
-                            <span>Demandes de repossession</span>
-                          </a>
-                        </li>
-                        <li :class="{'is-active':store.activeTab=='repossessionRequests'}" v-if="store.activeGroup=='recovery'">
-                          <a @click="store.setActiveTab('repossessionRequests')" :class="{'has-text-orange':store.activeTab=='repossessionRequests'}">
-                            <span class="icon is-small"><i class="fas fa-tag" aria-hidden="true"></i></span>
-                            <span>Demandes de repossession</span>
-                          </a>
-                        </li>
-                        <li :class="{'is-active':store.activeTab=='paymentPromises'}" v-if="store.activeGroup=='recovery'">
-                          <a @click="store.setActiveTab('paymentPromises')" :class="{'has-text-orange':store.activeTab=='paymentPromises'}">
-                            <span class="icon is-small"><i class="fas fa-tag" aria-hidden="true"></i></span>
-                            <span>Promesse de règlement</span>
-                          </a>
-                        </li>
+
                         <li :class="{'is-active':store.activeTab=='recoveryActivities'}" v-if="store.activeGroup=='recovery'">
-                          <a @click="store.setActiveTab('recoveryActivities')" :class="{'has-text-orange':store.activeTab=='recoveryActivities'}">
-                            <span class="icon is-small"><i class="fas fa-tag" aria-hidden="true"></i></span>
-                            <span>Activité recouvrement</span>
-                          </a>
+                            <a @click="store.setActiveTab('recoveryActivities')" :class="{'has-text-orange':store.activeTab=='recoveryActivities'}">
+                                <span class="icon is-small"><i class="fas fa-tag" aria-hidden="true"></i></span>
+                                <span>Activité recouvrement</span>
+                            </a>
                         </li>
+
+                        <li :class="{'is-active':store.activeTab=='paymentPromises'}" v-if="store.activeGroup=='recovery'">
+                            <a @click="store.setActiveTab('paymentPromises')" :class="{'has-text-orange':store.activeTab=='paymentPromises'}">
+                                <span class="icon is-small"><i class="fas fa-tag" aria-hidden="true"></i></span>
+                                <span>Promesse de règlement</span>
+                            </a>
+                        </li>
+
+                        <li :class="{'is-active':store.activeTab=='repossessionRequests'}" v-if="store.activeGroup=='recovery'">
+                            <a @click="store.setActiveTab('repossessionRequests')" :class="{'has-text-orange':store.activeTab=='repossessionRequests'}">
+                                <span class="icon is-small"><i class="fas fa-tag" aria-hidden="true"></i></span>
+                                <span>Demandes de repossession</span>
+                            </a>
+                        </li>
+
+                        <li :class="{'is-active':store.activeTab=='assignedDebts'}" v-if="store.activeGroup=='recovery'">
+                            <a @click="store.setActiveTab('assignedDebts')" :class="{'has-text-orange':store.activeTab=='assignedDebts'}">
+                                <span class="icon is-small"><i class="fas fa-tag" aria-hidden="true"></i></span>
+                                <span>Créances</span>
+                            </a>
+                        </li>
+
+
 
 
                         <!---li :class="{'is-active':store.activeTab=='discountRequests'}" v-if="store.activeGroup=='others'">

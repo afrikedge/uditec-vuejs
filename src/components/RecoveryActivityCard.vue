@@ -6,7 +6,7 @@
  
 <!---------Composant entête carte----------------------->      
             <div id="card-header-comp">
-                <Customer-Card-Header   :soNo="debtCardId" :soDesc="debtcollectionCard.Name" pageTitle="Fiche client" 
+                <Customer-Card-Header   :soNo="recoveryActivityCardId" :soDesc="recoveryActivityCard.Name" pageTitle="Fiche client" 
                 @onGoingBackToList='goBackToList'
                 />
             </div>
@@ -41,32 +41,32 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="N°" :valueInputText="debtcollectionCard['No_']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="N° Client" :valueInputText="debtcollectionCard['Customer No_']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Nom client" :valueInputText="debtcollectionCard['Name']" :is_disabled="readOnlyMode"></input-text>  
-                                <input-text labelInputText="Type" :valueInputText="debtcollectionCard['Activity Type']==0 ? 'Webmaster' : 'IA developer'" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Objet" :valueInputText="debtcollectionCard['Subject']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Description" :valueInputText="debtcollectionCard['Description']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Crée le" :valueInputText="formatDate(debtcollectionCard['Created on'])" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Crée par" :valueInputText="debtcollectionCard['Created by']" :is_disabled="readOnlyMode"></input-text> 
-                                <input-text labelInputText="Date et heure début prévue" :valueInputText="formatDate(debtcollectionCard['Scheduled Start Date'])" :is_disabled="readOnlyMode"></input-text> 
-                                <input-text labelInputText="Date et heure fin prévue" :valueInputText="formatDate(debtcollectionCard['Scheduled End Date'])" :is_disabled="readOnlyMode"></input-text> 
-                                <input-text labelInputText="Date et heure début réelle" :valueInputText="formatDate(debtcollectionCard['Actual Start Date'])" :is_disabled="readOnlyMode"></input-text> 
-                                <input-text labelInputText="Date et heure fin réelle" :valueInputText="formatDate(debtcollectionCard['Actual End Date'])" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="N°" :valueInputText="recoveryActivityCard['No_']" :is_disabled="readOnlyMode" ></input-text>
+                                <input-text labelInputText="N° Client" :valueInputText="recoveryActivityCard['Customer No_']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Nom client" :valueInputText="recoveryActivityCard['Name']" :is_disabled="readOnlyMode"></input-text>  
+                                <input-text labelInputText="Type" :valueInputText="recoveryActivityCard['Activity Type']==0 ? 'Webmaster' : 'IA developer'" :is_disabled="readOnlyMode" ></input-text>
+                                <input-text labelInputText="Objet" :valueInputText="recoveryActivityCard['Subject']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Description" :valueInputText="recoveryActivityCard['Description']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Crée le" :valueInputText="formatDate(recoveryActivityCard['Created on'])" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Crée par" :valueInputText="recoveryActivityCard['Created by']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Date et heure début prévue" :valueInputText="formatDate(recoveryActivityCard['Scheduled Start Date'])" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Date et heure fin prévue" :valueInputText="formatDate(recoveryActivityCard['Scheduled End Date'])" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Date et heure début réelle" :valueInputText="formatDate(recoveryActivityCard['Actual Start Date'])" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Date et heure fin réelle" :valueInputText="formatDate(recoveryActivityCard['Actual End Date'])" :is_disabled="readOnlyMode"></input-text> 
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Date et heure relance" :valueInputText="formatDate(debtcollectionCard['Reminder Date'])" :is_disabled="readOnlyMode"></input-text> 
-                                <input-text labelInputText="Activité connexe" :valueInputText="debtcollectionCard['Linked Activity']" :is_disabled="readOnlyMode"></input-text> 
-                                <input-text labelInputText="Statut" :valueInputText="debtcollectionCard['Status']" :is_disabled="readOnlyMode"></input-text> 
-                                <input-text labelInputText="Observation" :valueInputText="debtcollectionCard['Comment']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="N° ligne" :valueInputText="debtcollectionCard['Line No_']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="N° Document" :valueInputText="debtcollectionCard['Document No_']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Date comptabilisation" :valueInputText="formatDate(debtcollectionCard['Posting Date'])" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Date document" :valueInputText="formatDate(debtcollectionCard['Document Date'])" :is_disabled="readOnlyMode"></input-text> 
-                                <input-text labelInputText="Description" :valueInputText="debtcollectionCard['Description']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Montant initial" :valueInputText="debtcollectionCard['Original Amount']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Montant ouvert" :valueInputText="debtcollectionCard['Remaining Amount']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Statut échéance" :valueInputText="debtcollectionCard['Debt Status']" :is_disabled="readOnlyMode" ></input-text>
+                                <input-text labelInputText="Date et heure relance" :valueInputText="formatDate(recoveryActivityCard['Reminder Date'])" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Activité connexe" :valueInputText="recoveryActivityCard['Linked Activity']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Statut" :valueInputText="recoveryActivityCard['Status']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Observation" :valueInputText="recoveryActivityCard['Comment']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="N° ligne" :valueInputText="recoveryActivityCard['Line No_']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="N° Document" :valueInputText="recoveryActivityCard['Document No_']" :is_disabled="readOnlyMode" ></input-text>
+                                <input-text labelInputText="Date comptabilisation" :valueInputText="formatDate(recoveryActivityCard['Posting Date'])" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Date document" :valueInputText="formatDate(recoveryActivityCard['Document Date'])" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Description" :valueInputText="recoveryActivityCard['Description']" :is_disabled="readOnlyMode" ></input-text>
+                                <input-text labelInputText="Montant initial" :valueInputText="recoveryActivityCard['Original Amount']" :is_disabled="readOnlyMode" ></input-text>
+                                <input-text labelInputText="Montant ouvert" :valueInputText="recoveryActivityCard['Remaining Amount']" :is_disabled="readOnlyMode" ></input-text>
+                                <input-text labelInputText="Statut échéance" :valueInputText="recoveryActivityCard['Debt Status']" :is_disabled="readOnlyMode" ></input-text>
                             </div>
                         </div>                    
                     </div>
@@ -97,11 +97,11 @@ export default {
         CustomerCardHeader,CustomerInfo,inputText,CustomerCardRibbon
     },
     setup(){
-        const debtcollectionCard = ref({})
+        const recoveryActivityCard = ref({})
         const readOnlyMode = ref(true)
         // expose to template and other options API hooks
         return {
-            debtcollectionCard,readOnlyMode
+            recoveryActivityCard,readOnlyMode
         }
     },
     data(){
@@ -110,7 +110,7 @@ export default {
             customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerCardRightInfoMaxWidth,
 
             //indique la route active
-            debtCardId:this.$route.params.id,
+            recoveryActivityCardId:this.$route.params.id,
 
             //indique si les onglets sont réduits ou non
             onglet1_expanded:true,
@@ -157,10 +157,10 @@ export default {
         }
     },
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getRACard/${this.debtCardId}`)
+        axios.get(`http://${this.hostname}:3000/app/getRACard/${this.recoveryActivityCardId}`)
         .then(result => {
             console.log(result.data)
-            this.debtcollectionCard = result.data.recordset[0]
+            this.recoveryActivityCard = result.data.recordset[0]
         }).catch(err=>console.log(err))
 
     },

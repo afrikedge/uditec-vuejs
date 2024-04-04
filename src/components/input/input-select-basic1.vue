@@ -9,8 +9,7 @@
                 <div class="control is-expanded is-fullwidth">
                     <div class="select is-expanded is-fullwidth">
                       <select  v-model="model" class="control is-expanded is-fullwidth">
-                        <option class="has-text-left" value="2">Article</option>
-                        <option class="has-text-left" value="0">Commentaire</option>
+                        <option class="has-text-left" :value="option['Value']" v-for="(option) of optionList" :key="option['Value']"> {{ option['Description'] }}</option>
                       </select>
                     </div>
                     
@@ -22,7 +21,7 @@
 
 <script setup>
 import { defineProps, defineModel } from 'vue';
-const props = defineProps(['labelInputText','valueInputText','is_disabled','inputTextColor','inputTextWeight'])
+const props = defineProps(['labelInputText','valueInputText','is_disabled','inputTextColor','inputTextWeight','optionList'])
 const model = defineModel()
 
 </script>

@@ -24,9 +24,9 @@
     import releaseRequests from './ReleaseRequestList.vue'
     import creditRequests from './CreditRequestList.vue'
     import repossessionRequests from "./RepossessionRequestList.vue"
-    import assignedDebt from './AssignedDebtList.vue'
-    import paymentPromise from "./PaymentPromiseList.vue"
-    import recoveryActivity from "./RecoveryActivityList.vue"
+    import assignedDebts from './AssignedDebtList.vue'
+    import paymentPromises from "./PaymentPromiseList.vue"
+    import recoveryActivities from "./RecoveryActivityList.vue"
 
 
     import axios from 'axios'
@@ -45,9 +45,9 @@
             saleQuotes,
             saleOrders,
             repossessionRequests,
-            assignedDebt,
-            paymentPromise,
-            recoveryActivity,
+            assignedDebts,
+            paymentPromises,
+            recoveryActivities,
             creditRequests,
             revisionRequests,
             discountRequests,

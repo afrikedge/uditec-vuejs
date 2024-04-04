@@ -1,12 +1,15 @@
 <template>
     <div :class="{'modal':true , 'is-active': true }" v-if="isActive">
         <div class="modal-background has-background-dark" style="opacity:0.2" @click.prevent="$emit('closeModal')"></div>
-        <div class="modal-content box w-auto shadow" style=" background-color: rgba(255,255,255,1);border: none;">
+        <div class="modal-content box w-75 h-75 has-background-light shadow" style=" background-color: rgba(255,255,255,1);border: none;">
 
-            <div class="has-text-left mb-5">
-                <h6 class="subtitle is-6 has-text-left is-flex-wrap-wrap">
-                    Articles |
-                </h6>
+            <div class="has-text-left columns mb-5">
+                <div>
+                    <span class="subtitle  has-text-left column is-narrow">
+                        Articles |
+                    </span>
+                </div>
+                <input-search class="column is-narrow" v-model="eltToSearch"></input-search>
             </div>
 
             <div class="has-background-light columns" style="max-height: 650px;">
@@ -26,7 +29,7 @@
                     </thead>
                     <tbody style="">
 
-                            <tr id="" v-for="(elt,index) of elementList" :key="index">
+                            <tr id="" v-for="(elt,index) of filteredItemList" :key="index" @click="$emit('onGettingLineFromSelectableItemListModal',elt);$emit('closeModal')"> 
                                 <td class="has-text-left has-background-light"> 
                                     <router-link :to="`/ItemCard/${ elt['No_'] }`">
                                         <a href="#" class="has-text-orange">
@@ -54,18 +57,38 @@
 <script>
 import axios from 'axios'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
+import inputSearch from './input/input-search.vue'
+import { computed, ref } from 'vue'
 
 export default{
     name:'modal-for-selectable-item-list',
+    components:{
+        inputSearch
+    },
     props:['isActive'],
     data(){
     return{
-            ModalForSelectableItemListShowned:true,
-            elementList:[],
             hostname:window.location.hostname
         }
     },
-    Mounted(){
+    setup(){
+        const eltToSearch = ref('')
+        const elementList = ref([])
+
+        const filteredItemList = computed(()=>
+            elementList.value
+            .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Description']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Item Category Code']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+            )
+      
+        )
+        
+        return {
+            eltToSearch,elementList,filteredItemList
+        }
+    },
+    beforeMount(){
         axios.get(`http://${this.hostname}:3000/app/getItemList?respCenter=${useWebUserInfoStore().responsibilityCenter}`)
         .then(result => {
             console.log(result)

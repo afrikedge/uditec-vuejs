@@ -11,7 +11,6 @@
         routeForNewCard="NewCustomer"
         ></customer-list-ribbon>
 
-
         <div class="has-background-light columns" style="height: 750px;">
             <div class="column mt-5" id="customer-column" style="overflow: scroll;" v-if="presentationView=='list'">
                 <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
@@ -44,44 +43,44 @@
                         </tr>   
                     </thead>
                     <tbody>
-                        <tr id="" v-for="debtcollection of filteredDebtcollectionList" :key="debtcollection['No_']" class="is-narrow">
+                        <tr id="" v-for="recoveryActivity of filteredrecoveryActivityList" :key="recoveryActivity['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/DebtCollectionCard/${ debtcollection['No_'] }`">
+                                <router-link :to="`/recoveryActivityCard/${ recoveryActivity['No_'] }`">
                                     <a href="#" class="has-text-orange">
-                                        {{ debtcollection['No_'] }} 
+                                        {{ recoveryActivity['No_'] }} 
                                     </a>
                                 </router-link>
                             </td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Customer No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Name'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Activity Type']==0 ? 'webmaster' : 'AI developper' }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Subject'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Description'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Created on'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Created by'] }}</td>                    
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Scheduled Start Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Scheduled End Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Actual Start Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Actual End Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Reminder Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Linked Activity'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Status']==0 ? 'Actif' : 'Non actif' }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Comment'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Line No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Document No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Posting Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Document Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Description'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Original Amount'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Remaining Amount'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Debt Status'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Customer No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Name'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Activity Type']==0 ? 'webmaster' : 'AI developper' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Subject'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Description'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Created on'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Created by'] }}</td>                    
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Scheduled Start Date'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Scheduled End Date'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Actual Start Date'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Actual End Date'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Reminder Date'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Linked Activity'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Status']==0 ? 'Actif' : 'Non actif' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Comment'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Line No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Document No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Posting Date'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Document Date'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Description'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Original Amount'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Remaining Amount'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Debt Status'] }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="column" style="overflow-y: scroll;" v-if="presentationView=='mosaique'">
                 <div class="columns is-multiline">
-                    <div :class="{'column':true, 'is-3':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="debtcollection of filteredDebtcollectionList" :key="debtcollection['No_']">
+                    <div :class="{'column':true, 'is-3':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="recoveryActivity of filteredrecoveryActivityList" :key="recoveryActivity['No_']">
                         <div class=" columns p-1 card-is-hoverable">
                             <div class="column is-narrow has-background-white">
                                 <figure class="image is-64x64">
@@ -92,9 +91,9 @@
                                 <p class="has-text-left ">
                                     <span class="is-size-7 has-text-grey has-background-light">
                                         
-                                        <router-link :to="`/DebtCollectionCard/${ debtcollection['No_'] }`">
+                                        <router-link :to="`/recoveryActivityCard/${ recoveryActivity['No_'] }`">
                                             <a href="#" class="has-text-orange">
-                                                {{ debtcollection['No_'] }} 
+                                                {{ recoveryActivity['No_'] }} 
                                             </a>
                                         </router-link>
                             
@@ -102,18 +101,18 @@
                                 </p>
                                 <div class="has-text-left columns">
                                     <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                        <span class="is-size-7 is-underlined">{{ debtcollection['Name'] }}</span>
+                                        <span class="is-size-7 is-underlined">{{ recoveryActivity['Name'] }}</span>
                                     </div>
                                     <div class="column has-text-right is-narrow py-0 mt-1">
-                                        <span class="is-size-7">{{ debtcollection['Customer No_'] }}</span>
+                                        <span class="is-size-7">{{ recoveryActivity['Customer No_'] }}</span>
                                     </div>
                                 </div>
                                 <div class="has-text-left columns">
                                     <div class="column has-text-left py-0" >
-                                        <span class="is-size-7">{{ debtcollection['Activity Type']==0 ? 'webmaster' : 'AI developper' }}</span>
+                                        <span class="is-size-7">{{ recoveryActivity['Activity Type']==0 ? 'webmaster' : 'AI developper' }}</span>
                                     </div>
                                     <div class="column has-text-right is-narrow py-0">
-                                        <span class="is-size-7">{{ debtcollection['Status']==0 ? 'Actif' : 'Non actif' }}</span>
+                                        <span class="is-size-7">{{ recoveryActivity['Status']==0 ? 'Actif' : 'Non actif' }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +126,7 @@
             </div>
             <div class="column" style="overflow-y: scroll;" v-if="presentationView=='mosaique haute'">
                 <div class="columns is-multiline is-gapless">
-                    <div :class="{'column':true, 'is-2':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="debtcollection of filteredDebtcollectionList" :key="debtcollection['No_']">
+                    <div :class="{'column':true, 'is-2':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="recoveryActivity of filteredrecoveryActivityList" :key="recoveryActivity['No_']">
                         <div class="has-background-white m-1">
                             <div class="card-is-hoverable box">
                                 <div class="">
@@ -146,9 +145,9 @@
                                         <p class="has-text-left ">
                                             <span class="is-size-7 has-text-grey has-background-light">
                                         
-                                                <router-link :to="`/DebtCollectionCard/${ debtcollection['No_'] }`">
+                                                <router-link :to="`/recoveryActivityCard/${ recoveryActivity['No_'] }`">
                                                     <a href="#" class="has-text-orange">
-                                                        {{ debtcollection['No_'] }} 
+                                                        {{ recoveryActivity['No_'] }} 
                                                     </a>
                                                 </router-link>
                             
@@ -156,18 +155,18 @@
                                         </p>
                                         <div class="has-text-left columns">
                                             <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                                <span class="is-size-7 is-underlined">{{ debtcollection['Name'] }}</span>
+                                                <span class="is-size-7 is-underlined">{{ recoveryActivity['Name'] }}</span>
                                             </div>
                                             <div class="column has-text-right is-narrow py-0 mt-1">
-                                                <span class="is-size-7">{{ debtcollection['Customer No_'] }}</span>
+                                                <span class="is-size-7">{{ recoveryActivity['Customer No_'] }}</span>
                                             </div>
                                         </div>
                                         <div class="has-text-left columns">
                                             <div class="column has-text-left py-0" >
-                                                <span class="is-size-7">{{debtcollection['Activity Type']==0 ? 'webmaster' : 'AI developper'}}</span>
+                                                <span class="is-size-7">{{recoveryActivity['Activity Type']==0 ? 'webmaster' : 'AI developper'}}</span>
                                             </div>
                                             <div class="column has-text-right is-narrow py-0">
-                                                <span class="is-size-7">{{ debtcollection['Status']==0 ? 'Actif' : 'Non actif' }}</span>
+                                                <span class="is-size-7">{{ recoveryActivity['Status']==0 ? 'Actif' : 'Non actif' }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -194,7 +193,7 @@ import { useNavigationTabStore } from '@/Stores/NavigationTab'
 
 export default {
 
-    name:'debtcollection-list',
+    name:'recoveryActivity-list',
     components:{
         CustomerInfo,CustomerListRibbon
     },
@@ -204,10 +203,10 @@ export default {
         }
     },
     setup() {
-        const debtcollectionList = ref([])
+        const recoveryActivityList = ref([])
         const eltToSearch = ref('')
-        const filteredDebtcollectionList = computed(()=>
-        debtcollectionList.value
+        const filteredrecoveryActivityList = computed(()=>
+        recoveryActivityList.value
         .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
                 || new String(row['Customer No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
                 || new String(row['Name']).toLowerCase().includes(eltToSearch.value.toLowerCase())
@@ -216,9 +215,9 @@ export default {
      )
         // expose to template and other options API hooks
         return {
-            debtcollectionList,
+            recoveryActivityList,
             eltToSearch,
-            filteredDebtcollectionList
+            filteredrecoveryActivityList
         }
     },
     data(){
@@ -248,7 +247,7 @@ export default {
     mounted(){
         axios.get(`http://${this.hostname}:3000/app/getRAList`)
         .then((result) => {
-          this.debtcollectionList = result.data;
+            this.recoveryActivityList = result.data;
         })
         .catch(err=>console.log(err));
       

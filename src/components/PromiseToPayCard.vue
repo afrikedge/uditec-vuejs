@@ -4,26 +4,32 @@
         </div>
         <div id="scrollBlock"  class="modal-card box  shadow is-rounded h-100" style="width:96%;">
  
-<!---------Composant entête carte----------------------->      
+<!---------Composant entête Fiche----------------------->      
             <div id="card-header-comp">
-                <Customer-Card-Header   :soNo="promiseCardId" :soDesc="PromiseCard.Name" pageTitle="Fiche client" 
+                <Customer-Card-Header   :soNo="promiseCardId" :soDesc="PromiseCard.Name" pageTitle="Fiche Promesse de règlement" 
                 @onGoingBackToList='goBackToList'
                 />
             </div>
             
-<!---------Composant rubban carte client----------------------->      
+<!---------Composant rubban Fiche Promesse de règlement----------------------->      
             <Customer-card-ribbon
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
             componentWithCompInfo="customerCardRightInfoMaxWidth"
             :newContactBtnIsDisabled="false"
             :newShipToAddressBtnIsDisabled="false"
+            @onDisablingReadOnlyMode="setReadOnlyModeIsDisabled"
+            @onCancellingUpdate="setReadWriteModeIsDisabled"
+            :newCardBtnIsDisabled="false"
+            :editCardBtnIsDisabled="false"
+            :cancelEditCardBtnIsDisabled="true"
+            :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
             ></Customer-card-ribbon>
 
-<!---------Section formulaire carte client----------------------->      
+<!---------Section formulaire Fiche Promesse de règlement----------------------->      
             <div id="content-comp" class="columns mt-2" style="overflow-y: scroll;">
                 <div class="column" style="overflow-y: scroll;">
 
-                    <!---------sous-Section ongle 1 formulaire carte client----------------------->                         
+                    <!---------sous-Section ongle 1 formulaire Fiche Promesse de règlement----------------------->                         
                     <div id="general">
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
@@ -41,24 +47,37 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="N°" :valueInputText="PromiseCard['No_']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Objet" :valueInputText="PromiseCard['Subject']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="N° Client" :valueInputText="PromiseCard['Customer No_']" :is_disabled="readOnlyMode"></input-text>  
-                                <input-text labelInputText="N° Contact" :valueInputText="PromiseCard['Contact No_']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Description" :valueInputText="PromiseCard['Description']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Crée le" :valueInputText="formatDate(PromiseCard['Created on'])" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Crée par" :valueInputText="PromiseCard['Created by']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Date promesse" :valueInputText="formatDate(PromiseCard['Promise Date'])" :is_disabled="readOnlyMode"></input-text>  
+                                <input-text labelInputText="N°" :valueInputText="PromiseCard['No_']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Objet" :valueInputText="PromiseCard['Subject']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="N° Client" :valueInputText="PromiseCard['Customer No_']" :is_disabled="readOnlyModeIsDisabled" v-if="readOnlyModeIsDisabled"></input-text>  
+                               <!--  <input-select labelInputText="N° Client" v-model="PromiseCard['Customer No_']" @openModal="activeModalForSelectableElementList='contactList';" v-else></input-select>  
+                                <input-text labelInputText="N° Contact" :valueInputText="PromiseCard['Contact No_']" :is_disabled="readOnlyModeIsDisabled" v-if="readOnlyModeIsDisabled" ></input-text>
+                                <input-select labelInputText="N° Contact" v-model="PromiseCard['Contact No_']" @openModal="activeModalForSelectableElementList='contactList';" v-else></input-select>
+                                <input-text labelInputText="Description" v-model="PromiseCard['Description']" :valueInputText="PromiseCard['Description']" :is_disabled="!readOnlyModeIsDisabled" :is_readOnly="true"></input-text>
+                                <input-text labelInputText="Crée le" :valueInputText="PromiseCard['Description']" :is_disabled="true"></input-text>
+                                <input-select labelInputText="Crée le" :valueInputText="formatDate(PromiseCard['Created on'])" :is_disabled="readOnlyMode"></input-select>
+                                <input-text labelInputText="Crée par" :valueInputText="PromiseCard['Created by']" :is_disabled="readOnlyModeIsDisabled" v-if="readOnlyModeIsDisabled"></input-text>
+                                <input-select labelInputText="Crée par" :valueInputText="PromiseCard['Created by']" :is_disabled="readOnlyMode"></input-select>
+                                <input-text labelInputText="Date promesse" :valueInputText="formatDate(PromiseCard['Promise Date'])" ></input-text>  
+                                <input-select labelInputText="Date promesse" :valueInputText="formatDate(PromiseCard['Promise Date'])" :is_disabled="readOnlyMode"></input-select>   -->
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Suivi par" :valueInputText="PromiseCard['Assigned to']" :is_disabled="readOnlyMode"></input-text> 
-                                <input-text labelInputText="Montant promis" :valueInputText="PromiseCard['Promised amount']" :is_disabled="readOnlyMode"></input-text> 
+                                 <input-text labelInputText="Suivi par" :valueInputText="PromiseCard['Assigned to']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-select labelInputText="Suivi par" :valueInputText="PromiseCard['Assigned to']" :is_disabled="readOnlyMode"></input-select> 
+                               <!--  <input-text labelInputText="Montant promis" :valueInputText="PromiseCard['Promised amount']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-select labelInputText="Montant promis" :valueInputText="PromiseCard['Promised amount']" :is_disabled="readOnlyMode"></input-select> 
                                 <input-text labelInputText="Montant honoré" :valueInputText="PromiseCard['Honored amount']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-select labelInputText="Montant honoré" :valueInputText="PromiseCard['Honored amount']" :is_disabled="readOnlyMode"></input-select> 
                                 <input-text labelInputText="Activité d'origine" :valueInputText="PromiseCard['Originated activity']" :is_disabled="readOnlyMode"></input-text>
+                                <input-select labelInputText="Activité d'origine" :valueInputText="PromiseCard['Originated activity']" :is_disabled="readOnlyMode"></input-select>
                                 <input-text labelInputText="Type Activité de rappel" :valueInputText="PromiseCard['Reminding Activity']" :is_disabled="readOnlyMode"></input-text>
+                                <input-select labelInputText="Type Activité de rappel" :valueInputText="PromiseCard['Reminding Activity']" :is_disabled="readOnlyMode"></input-select>
                                 <input-text labelInputText="Date rappel" :valueInputText="formatDate(PromiseCard['Riminding Date'])" :is_disabled="readOnlyMode" ></input-text>
+                                <input-select labelInputText="Date rappel" :valueInputText="formatDate(PromiseCard['Riminding Date'])" :is_disabled="readOnlyMode" ></input-select>
                                 <input-text labelInputText="Échéance rappel" :valueInputText="formatDate(PromiseCard['Reminding Due Date'])" :is_disabled="readOnlyMode"></input-text>
+                                <input-select labelInputText="Échéance rappel" :valueInputText="formatDate(PromiseCard['Reminding Due Date'])" :is_disabled="readOnlyMode"></input-select>
                                 <input-text labelInputText="Statut" :valueInputText="PromiseCard['Status']==0 ? 'Actif' : 'Non actif'" :is_disabled="readOnlyMode"></input-text> 
+                                <input-select labelInputText="Statut" :valueInputText="PromiseCard['Status']==0 ? 'Actif' : 'Non actif'" :is_disabled="readOnlyMode"></input-select>  -->
                             </div>
                         </div>                    
                     </div>
@@ -66,11 +85,26 @@
                     
 
                 </div>
-<!---------composant info client----------------------->
+<!---------composant info Promesse de règlement----------------------->
                 <customer-info class="customer-info"></customer-info>
 
             </div>
         </div>
+        <!----------------------------------------------------------->
+    <modal-for-selectable-customer-list 
+            v-if="activeModalForSelectableElementList=='customerList'"  
+            :isActive="activeModalForSelectableElementList=='customerList'" 
+            @closeModal="activeModalForSelectableElementList=''" 
+            @onGettingLineFromSelectableCustomerListModal="(elt)=>fillCustomerInfoField(elt)">
+    </modal-for-selectable-customer-list>
+
+    <modal-for-selectable-contact-list 
+    v-if="activeModalForSelectableElementList=='contactList'" 
+    :isActive="activeModalForSelectableElementList=='contactList'" 
+    @closeModal="activeModalForSelectableElementList=''"
+    :customerNo="ShipToAddressCard['Customer No_']" 
+    @onGettingLineFromSelectableContactListModal="(elt)=>fillContactInfoField(elt)">
+    </modal-for-selectable-contact-list>
 
     </div>    
 
@@ -80,21 +114,69 @@ import CustomerCardHeader from './HeaderForCard.vue'
 import CustomerInfo from './CustomerInfo.vue'
 import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
+import inputSelect from './input/input-select.vue'
 import axios from 'axios'
-import { ref } from 'vue'
+import { ref,watch } from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
+import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
+import ModalForSelectableContactList from './ModalForSelectableContactList.vue'
 
 export default {
     name:'customer-card',
     components:{
-        CustomerCardHeader,CustomerInfo,inputText,CustomerCardRibbon
+        CustomerCardHeader,inputSelect,CustomerInfo,
+        inputText,CustomerCardRibbon,ModalForSelectableCustomerList,
+        ModalForSelectableContactList
     },
     setup(){
         const PromiseCard = ref({})
+        const readOnlyModeIsDisabled = ref(false)
         const readOnlyMode = ref(true)
+
+
+        
+        //variable de success serveur
+        let success_message=ref('')
+        let is_convertSQ_success = ref(false)
+
+
+        function setReadOnlyModeIsDisabled(){
+            readOnlyModeIsDisabled.value=true
+        }
+
+      function setReadWriteModeIsDisabled(){
+          readOnlyModeIsDisabled.value=false
+      }
+      
+      function fillCustomerInfoField(shipto){
+                 PromiseCard.value["No_"]=shipto['No_']
+                 PromiseCard.value["Name"]=shipto['Name']
+                 PromiseCard.value["Lead Status"]=shipto['Lead Status']
+                 PromiseCard.value["City"]=shipto['City']
+                 PromiseCard.value["Item Category"]=shipto['Item Category']
+        }
+
+        function fillContactInfoField(shipto){
+            PromiseCard.value["Customer No_"]= shipto['No_']
+            }
+        
+        watch(success_message, () => {
+            if (is_convertSQ_success.value==false){
+                readOnlyModeIsDisabled.value=false
+            }
+        })
+
         // expose to template and other options API hooks
         return {
-            PromiseCard,readOnlyMode
+            PromiseCard,
+            readOnlyMode,
+            readOnlyModeIsDisabled,
+            success_message,
+            is_convertSQ_success,
+            setReadOnlyModeIsDisabled,
+            setReadWriteModeIsDisabled,
+            fillContactInfoField,
+            fillCustomerInfoField
         }
     },
     data(){
@@ -111,6 +193,10 @@ export default {
             onglet3_expanded:true,
             onglet4_expanded:true,
             onglet5_expanded:true,
+
+            
+            //élement pour le modal sélection des enregistrements
+            activeModalForSelectableElementList:'',
 
             //nom de l'hote dans l'url 
             hostname:window.location.hostname

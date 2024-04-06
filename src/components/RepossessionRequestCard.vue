@@ -6,18 +6,64 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <Customer-Card-Header   :soNo="repossessionCardId" :soDesc="repossessionCard.Motif" pageTitle="Fiche client" />
+                <Customer-Card-Header   :soNo="repossessionCardHeader['No_']" :soDesc="repossessionCardHeader['Motivation']" pageTitle="Fiche demande repossession" 
+                />
             </div>
             
-<!---------Composant rubban fiche client----------------------->      
+<!---------Composant rubban fiche demande repossession----------------------->      
             <Customer-card-ribbon
+            routeForNewCard="../NewRepossessionRequest"
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+            @onDisablingReadOnlyMode="setReadOnlyModeIsDisabled"
+            @onSubmittingForm="submitForm"
+            @onCancellingUpdate="setReadWriteModeIsDisabled"
             componentWithCompInfo="customerCardRightInfoMaxWidth"
-            :newContactBtnIsDisabled="false"
-            :newShipToAddressBtnIsDisabled="false"
+            :newCardBtnIsDisabled="false"
+            :editCardBtnIsDisabled="false"
+            :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
+            :cancelEditCardBtnIsDisabled="true"
             ></Customer-card-ribbon>
 
-<!---------Section formulaire fiche client----------------------->      
+
+<!---------Composant message d'enregistrement en cours ou d'erreur ou de success----------------------->      
+            <article v-if="submitting_message" class="" >
+                <span class="icon">
+                    <i class="fas fa-spinner fa-pulse"></i>
+                </span>
+                <span class="subtitle is-7"> {{ submitting_message }} </span>
+            </article>
+
+            <article v-if="error_message" class="message is-danger shadow" >
+                <div class="message-header">
+                    <p class="is-size-7">
+                        <span class="icon has-text-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                        Error Message
+                    </p>
+                    <button class="delete" aria-label="delete" @click="error_message='';error_message_code=''"></button>
+                </div>
+                <div class="message-body is-size-7">
+                    <span> {{ error_message }}</span><br>
+                    <span v-if="error_message_code"> Code erreur: {{ error_message_code }}</span>
+                </div>
+            </article>
+
+            <article v-if="success_message" class="message is-primary shadow">
+                <div class="message-header">
+                        <span class="subtitle is-7 m-0 has-text-white"> 
+                            <span class="icon ">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            {{ success_message }}
+                        </span>
+                    <button class="delete" aria-label="delete" @click="success_message=''"></button>
+                </div>
+            </article>
+
+
+
+<!---------Section formulaire fiche demande repossession----------------------->      
             <div id="content-comp" class="columns mt-2" style="overflow-y: scroll;">
                 <div class="column" style="overflow-y: scroll;">
 
@@ -39,223 +85,33 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="N° Demande" :valueInputText="repossessionCard['No_']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="N° Client" :valueInputText="repossessionCard['Customer No_']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="N° Document " :valueInputText="repossessionCard['Document No_']" :is_disabled="readOnlyMode"></input-text>  
-                                <input-text labelInputText="Article" :valueInputText="repossessionCard['Item No_']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Numéro Série" :valueInputText="repossessionCard['Serial No_']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Crée le" :valueInputText="formatDate(repossessionCard['Created on'])" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Crée par" :valueInputText="repossessionCard['Created by']" :is_disabled="readOnlyMode"></input-text> 
-                                
+                                <input-text labelInputText="N° Client" :valueInputText="repossessionCardHeader['Customer No_']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="N° Document" :valueInputText="repossessionCardHeader['Document No_']" :is_disabled="true"></input-text>  
+                                <input-text labelInputText="Code Article" :valueInputText="repossessionCardHeader['Item No_']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Numéro Série" v-model="repossessionCardHeader['Serial No_']" :valueInputText="repossessionCardHeader['Serial No_']" :is_disabled="!readOnlyModeIsDisabled"></input-text>
+                                <input-text labelInputText="Créé le" :valueInputText="formatDate(repossessionCardHeader['Created on'])" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Créé par" :valueInputText="repossessionCardHeader['Created by']" :is_disabled="true"></input-text> 
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Origine" :valueInputText="repossessionCard['Source']" ></input-text> 
-                                <input-text labelInputText="Motif" :valueInputText="repossessionCard['Motivation']"></input-text>
-                                <input-text labelInputText="Statut Acceptation" :valueInputText="repossessionCard['Acceptance Statusl']" ></input-text>
-                                <input-text labelInputText="Type" :valueInputText="repossessionCard['Type']" ></input-text>
-                                <input-text labelInputText="Statut Article" :valueInputText="repossessionCard['Item Status']" ></input-text>
+                                <input-text labelInputText="Origine" :valueInputText="tttt.Description" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text> 
+                                <input-select-basic-1 labelInputText="Origine" v-model="repossessionCardHeader['Source']" :option-list="optionLabelListForRepossSource" v-else></input-select-basic-1> 
+                                
+                                <input-text labelInputText="Motif" v-model="repossessionCardHeader['Motivation']" :valueInputText="repossessionCardHeader['Motivation']"  :is_disabled="!readOnlyModeIsDisabled"></input-text>
+                                
+                                <input-text labelInputText="Statut Acceptation" :valueInputText="repossessionCardHeader['Acceptance Status']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Statut Acceptation" v-model="repossessionCardHeader['Acceptance Status']" :option-list="optionLabelListForRepossStatus" v-else></input-select-basic-1> 
+
+                                <input-text labelInputText="Type" :valueInputText="repossessionCardHeader['Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Type" v-model="repossessionCardHeader['Type']" :option-list="optionLabelListForRepossType" v-else></input-select-basic-1> 
+
+                                <input-text labelInputText="Statut Article" :valueInputText="repossessionCardHeader['Item Status']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Statut Article" v-model="repossessionCardHeader['Item Status']" :option-list="optionLabelListForRepossItemStatus" v-else></input-select-basic-1> 
+
                             </div>
                         </div>                    
                     </div>
                     <br><br>
 
-                    <!-- <div id="risque">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('Risque_content');onglet2_expanded=!onglet2_expanded" v-if="!onglet2_expanded">
-                                    <span>Risque</span>
-                                </a>
-                                <a @click="expand('Risque_content');onglet2_expanded=!onglet2_expanded" v-if="onglet2_expanded">
-                                    <span>Risque</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
-                        </div>
-                        <div id="Risque_content" class="columns">
-                            <div class="column">
-                                <input-text labelInputText="Mode de vente" :valueInputText="CustomerCard['Sales Mode']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Conditions de paiement " :valueInputText="CustomerCard['Payment Terms Code']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Limite de crédit" :valueInputText="CustomerCard['Credit limit (LCY)']" :is_disabled="readOnlyMode"></input-text>  
-                                <input-text labelInputText="Mode de paiement" :valueInputText="CustomerCard['Payment Method Code']" :is_disabled="readOnlyMode" ></input-text>
-                            </div>
-                            <div class="column">
-                                <input-text labelInputText="Régime TVA" :valueInputText="CustomerCard['VAT Bus_ Posting Group']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="% Acompte exigé" :valueInputText="CustomerCard['[Prepayment _']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Niveau de risque" :valueInputText="CustomerCard['Risk Level']" :is_disabled="readOnlyMode"></input-text> 
-                                <input-text labelInputText="Note" 
-                                :valueInputText="CustomerCard['Score']" :is_disabled="readOnlyMode"></input-text> 
-                            </div>
-                        </div>                    
-                    </div>
-                    <br><br> -->
-
-                    <!-- <div id="requirement" v-if="!readOnlyModeIsDisabled">
-                        <div :class="{'has-background-light':onglet3_expanded}">
-                            <div :class="{'columns':!onglet3_expanded,'p-3':onglet3_expanded,'has-border-bottom-grey':onglet3_expanded,'has-border-bottom':!onglet3_expanded}">
-                                <div class="column p-0 has-text-left has-text-weight-bold">
-                                    <a @click="collapse('requirement_content');onglet3_expanded=!onglet3_expanded" v-if="onglet3_expanded">
-                                        <span>suivi</span>
-                                    </a>
-                                    <a @click="expand('requirement_content');onglet3_expanded=!onglet3_expanded" v-if="!onglet3_expanded">
-                                        <span>suivi</span>
-                                        <span class="icon">
-                                            <i class="fas fa-angle-right"></i>
-                                        </span>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div id="requirement_content" class="columns px-5 mt-5" style="max-height: 250px; overflow:scroll;">
-                                <table class="table  is-narrow  is-fullwidth">
-                                    <thead class=" my-2">
-                                        <tr > 
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code critère </th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description du critère </th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">ype Valeur</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Longueur valeur</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Valeur Alphanumérique</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Valeur Numérique</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type validité </th> 
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date validité  </th> 
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Document requis ?  </th> 
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Lien document </th> 
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Modifié le  </th> 
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Modifié par</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr :id="index" v-for="(elt,index) of saleOrderCardLines" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
-                                            <td class="has-text-left has-background-light">
-                                                <span class="icon">
-                                                    <i class="fas fa-arrow-right has-text-grey"></i>
-                                                </span>
-                                            </td>
-                                            <td class="has-text-left">{{ elt['Value Type'] }}</td>
-                                            <td class="has-text-left">{{ elt['Value Length']  }}</td>
-                                            <td class="has-text-left">{{ elt['Alpha Value'] }}</td>
-                                            <td class="has-text-left">{{ elt['Numeric Value'] }}</td>
-                                            <td class="has-text-left">{{ elt['Validity'] }}</td>
-                                            <td class="has-text-left">{{ elt['Validity Date'] }}</td>
-                                            <td class="has-text-left"> {{ elt['Document required'] }} </td>
-                                            <td class="has-text-left">{{ elt['Document Link'] }}</td>
-                                            <td class="has-text-left">{{ elt['Updated on'] }} </td>
-                                            <td class="has-text-left">  {{ elt['Updated by'] }}</td> 
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>     
-                        </div>
-                                       
-                    </div>  
-                    <br><br> -->
-
-                    <!-- <div id="Scoring" v-if="!readOnlyModeIsDisabled">
-                        <div :class="{'has-background-light':onglet4_expanded}">
-                            <div :class="{'columns':!onglet4_expanded,'p-3':onglet4_expanded,'has-border-bottom-grey':onglet4_expanded,'has-border-bottom':!onglet4_expanded}">
-                                <div class="column p-0 has-text-left has-text-weight-bold">
-                                    <a @click="collapse('Scoring_content');onglet4_expanded=!onglet4_expanded" v-if="onglet4_expanded">
-                                        <span>Scoring</span>
-                                    </a>
-                                    <a @click="expand('Scoring_content');onglet4_expanded=!onglet4_expanded" v-if="!onglet4_expanded">
-                                        <span>Scoring</span>
-                                        <span class="icon">
-                                            <i class="fas fa-angle-right"></i>
-                                        </span>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div id="Scoring_content" class="columns px-5 mt-5" style="max-height: 250px; overflow:scroll;">
-                                <table class="table  is-narrow  is-fullwidth">
-                                    <thead class=" my-2">
-                                        <tr > 
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Ligne  </th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description du critère </th>
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;"> Valeur</th>
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description de la valeur</th>
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type validité </th>
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date validité </th>
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Document requis ? </th> 
-
-
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Lien document  </th> 
-
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Valide ?  </th> 
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Point  </th> 
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Coefficient</th> 
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Point pondéré </th> 
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Modifié le</th> 
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Modifié par</th> 
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Total point </th> 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr :id="index" v-for="(elt,index) of saleOrderCardLines" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
-                                            <td class="has-text-left has-background-light">
-                                                <span class="icon">
-                                                    <i class="fas fa-arrow-right has-text-grey"></i>
-                                                </span>
-                                            </td>
-                                            <td class="has-text-left">
-                                                <span class="subtitle is-6 has-text-weight-bold"> <b>{{ elt['Criteria'] }}</b></span>
-                                             </td>
-                                             <td class="has-text-left">
-                                                <span class="subtitle is-6 has-text-weight-bold"> <b>{{ elt['Criteria Description'] }}</b></span>
-                                             </td>
-                                             <td class="has-text-left">
-                                                 {{ elt['List Value'] }}
-                                             </td>
-                                             <td class="has-text-left">
-                                                 {{ elt['Value Description'] }}
-                                             </td>
-                                             <td class="has-text-left">
-                                                 {{ elt['Validity'] }}
-                                             </td>
-                                             <td class="has-text-left">
-                                                 {{ elt['Validity Date'] }}
-                                             </td>
- 
- 
-                                             <td class="has-text-left">
-                                                 {{ elt['Document required'] }}
-                                             </td>
-                                             <td class="has-text-left">
-                                                 {{ elt['Document Link'] }}
-                                             </td>
-                                             <td class="has-text-left">
-                                                 {{ elt['Valid'] }}
-                                             </td>
-                                             <td class="has-text-left">
-                                                 {{ elt['Point'] }}
-                                             </td>
-                                             <td class="has-text-left">
-                                                 {{ elt['Coefficient'] }}
-                                             </td>
-                                             <td class="has-text-left">
-                                                 {{ elt['Weighed Point'] }}
-                                             </td> 
-                                         
-                                          <td class="has-text-left">
-                                                 {{ elt['Updated on'] }}
-                                             </td>
-                                              <td class="has-text-left">
-                                                 {{ elt['Updated by'] }}
-                                             </td>
-                                              <td class="has-text-left">
-                                                 {{ elt['Weighed Point Total'] }}
-                                             </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>     
-                        </div>
-                                       
-                    </div>  
-                    <br><br> -->
-   
                 </div>
 <!---------composant info client----------------------->
                 <customer-info class="customer-info"></customer-info>
@@ -271,22 +127,195 @@ import CustomerCardHeader from './HeaderForCard.vue'
 import CustomerInfo from './CustomerInfo.vue'
 import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
+import inputSelectBasic1 from './input/input-select-basic1.vue'
 import axios from 'axios'
-import { ref } from 'vue'
+import { onMounted,ref,computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
+import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
+
 
 export default {
-    name:'customer-card',
+    name:'repossession-request-card',
     components:{
-        CustomerCardHeader,CustomerInfo,inputText,CustomerCardRibbon
+        CustomerCardHeader,CustomerInfo,inputText,CustomerCardRibbon,inputSelectBasic1
     },
     setup(){
-        const repossessionCard = ref({})
-        const customerCardLine = ref([])
-        const readOnlyMode = ref(true)
+        const repossessionCardHeader = ref({})
+        const readOnlyModeIsDisabled = ref(false)
+        const hostname = window.location.hostname
+        const repossessionCardId = useRoute().params.id
+
+        //variable de soumission forme
+        const submitting_message=ref('') 
+
+        //variable d'erreur serveur
+        const error_message=ref('')
+        const error_message_code =ref('')
+
+        //variable de success serveur
+        const success_message=ref('')
+
+        const optionLabelListForRepossSource = ref([])
+        const optionLabelListForRepossStatus = ref([])
+        const optionLabelListForRepossType = ref([])
+        const optionLabelListForRepossItemStatus = ref([])
+
+        const getLabelForRepossSource = computed(()=> {
+            return optionLabelListForRepossSource.value.filter(row => row['Value']== repossessionCardHeader.value['Source'])
+        } )
+
+        const tttt = computed(()=>{
+            return getLabelForRepossSource.value
+        })
+
+        function getOptionLabelList(field){
+            axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
+            .then(result => {
+                if (field=='[Reposs Source]')
+                    optionLabelListForRepossSource.value=result.data.recordset
+                if (field=='[Reposs Status]')
+                    optionLabelListForRepossStatus.value=result.data.recordset
+                if (field=='[Reposs Type]')
+                    optionLabelListForRepossType.value=result.data.recordset
+                if (field=='[Reposs Item Status]')
+                    optionLabelListForRepossItemStatus.value=result.data.recordset
+    
+                    console.log(result.data.recordset)
+    
+            }).catch(err=>console.log(err))
+        }
+
+        let webUserInfo = {
+            name:ref(useWebUserInfoStore().name),
+            company:ref(useWebUserInfoStore().activeCompanyId),
+        }
+
+        function getRRCardInfo(){
+            axios.get(`http://${hostname}:3000/app/getRPRQCard/${repossessionCardId}`)
+            .then(result => {
+                console.log(result)
+                 repossessionCardHeader.value = result.data
+            }).catch(err=>console.log(err))
+        }
+
+        function setReadOnlyModeIsDisabled(){
+            readOnlyModeIsDisabled.value=true
+        }
+
+        function setReadWriteModeIsDisabled(){
+            readOnlyModeIsDisabled.value=false
+        }
+
+        function displayErrorMessage(errorObject){
+            if(errorObject.response && errorObject.response.status){
+                switch (errorObject.response.status){
+                    case 401: 
+                        submitting_message.value=''
+                        error_message.value= errorObject.response.data.message;break;
+                    case 400:
+                        submitting_message.value='' 
+                        error_message.value= errorObject.response.data.error.message
+                        error_message_code.value= errorObject.response.data.error.code;break;
+                    case 404:
+                        submitting_message.value=''
+                        error_message.value=errorObject.response.data.error.message
+                        error_message_code.value= errorObject.response.data.error.code;break;
+                    default:
+                        submitting_message.value=''
+                        error_message.value=errorObject.response
+                }
+            }
+            else{
+                error_message.value = errorObject.message
+                error_message_code.value = errorObject.code
+                console.log(errorObject)
+            }
+        }
+
+        function updateRepossessionRequest(rrData){
+            axios.post(`http://${hostname}:3000/app/getBCWSResponse?company=${webUserInfo.company.value}`,rrData)
+            .then(() => {
+                submitting_message.value=''
+                success_message.value='Enregistrement réussi'
+                error_message.value=''
+                setTimeout(()=>success_message.value='',5000)
+                readOnlyModeIsDisabled.value=false
+            })
+            .catch((err) => {
+                displayErrorMessage(err)
+            })
+        }
+        
+        function formatToBCJsonData(data){
+            const JSONFormatedData = JSON.stringify(data).split('"').join('\\"')
+            const JSONDataToSend = '{'+ '"inputJson":'+'"'+JSONFormatedData+'"' +'}'
+            return {data:JSONDataToSend}
+        }
+
+        function submitForm(){
+            submitting_message.value='Enregistrement en cours'
+            const JSData = {
+                Parameter:'repossessionRequests_modify',
+                webUserName:webUserInfo.name.value,
+                'No_':repossessionCardHeader.value['No_'],
+                'Customer No_':repossessionCardHeader.value['Customer No_'],
+                'Document No_':repossessionCardHeader.value['Document No_'],
+                'Item No_':repossessionCardHeader.value[ 'Item No_'],
+                'Serial No_':repossessionCardHeader.value['Serial No_'],
+                'Created on':repossessionCardHeader.value['Created on'],
+                'Created by':repossessionCardHeader.value['Created by'],
+                'Reposs Source':repossessionCardHeader.value['Reposs Source'],
+                'Motivation':repossessionCardHeader.value['Motivation'],
+                'Reposs Status':repossessionCardHeader.value['Reposs Status'], 
+                'Reposs Type':repossessionCardHeader.value['Reposs Type'],
+                'Reposs Item Status':repossessionCardHeader.value['Reposs Item Status'],
+            }
+            updateRepossessionRequest(formatToBCJsonData(JSData))
+        }
+
+        onMounted(() => {
+            if (webUserInfo.name.value){
+                getRRCardInfo()
+                getOptionLabelList('[Reposs Source]')
+                getOptionLabelList('[Reposs Status]')
+                getOptionLabelList('[Reposs Type]')
+                getOptionLabelList('[Reposs Item Status]')
+            }else{
+                axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
+                .then(res=>{
+                    useWebUserInfoStore().fillWebUserInfo(res.data.recordset[0])
+                    webUserInfo.name.value=useWebUserInfoStore().name
+                    webUserInfo.company.value=useWebUserInfoStore().activeCompanyId
+                    getRRCardInfo()
+                    getOptionLabelList('[Reposs Source]')
+                    getOptionLabelList('[Reposs Status]')
+                    getOptionLabelList('[Reposs Type]')
+                    getOptionLabelList('[Reposs Item Status]')
+                })
+                .catch(err=>console.log(err))
+            }
+        })
+
+
+
         // expose to template and other options API hooks
         return {
-            repossessionCard,readOnlyMode,customerCardLine
+            setReadOnlyModeIsDisabled,
+            setReadWriteModeIsDisabled,
+            submitForm,
+            readOnlyModeIsDisabled,
+            repossessionCardHeader,
+            submitting_message,
+            error_message,
+            error_message_code,
+            success_message,
+
+            optionLabelListForRepossSource,
+            optionLabelListForRepossStatus,
+            optionLabelListForRepossType,
+            optionLabelListForRepossItemStatus,
+            tttt
         }
     },
     data(){
@@ -294,29 +323,24 @@ export default {
             //taille (largeur) initiale du composant customerInfo
             customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerCardRightInfoMaxWidth,
 
-            //indique la route active
-            repossessionCardId:this.$route.params.id,
-
             //indique si les onglets sont réduits ou non
             onglet1_expanded:true,
-            onglet2_expanded:true,
-            onglet3_expanded:true,
-            onglet4_expanded:true,
-            onglet5_expanded:true,
-
-            //nom de l'hote dans l'url 
-            hostname:window.location.hostname
         }
     },
     methods:{
+        goBackToList(){
+            useNavigationTabStore().setActiveGroup('recovery')
+            useNavigationTabStore().setActiveTab('repossessionRequests')
+            this.$router.push('/')
+        },
         /////////////////////////methode pour masquer ou afficher le composant info à droite
      hideOrShowComponentInfo(){
             if(this.customerInfoCompMaxWidth=='0px') {
-                useNavigationTabStore().setMaxWidth('customerCardRightInfoMaxWidth','800px')
+                useNavigationTabStore().setMaxWidth('newrepossRightInfoMaxWidth','800px')
                 this.customerInfoCompMaxWidth='800px'
             }
             else {
-                useNavigationTabStore().setMaxWidth('customerCardRightInfoMaxWidth','0px')
+                useNavigationTabStore().setMaxWidth('newrepossRightInfoMaxWidth','0px')
                 this.customerInfoCompMaxWidth='0px'
             }
         },
@@ -336,14 +360,6 @@ export default {
             myElt.style.maxHeight="0px"
         }
     },
-    mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getRPRQCard/${this.repossessionCardId}`)
-        .then(result => {
-             this.repossessionCard = result.data[0]
-            console.log(result.data)
-        }).catch(err=>console.log(err))
-
-    },
 }
 
 </script>
@@ -353,7 +369,7 @@ export default {
     transition: max-width 0.5s;
 }
 
-#general_content,#address_content,#invoicing_content,#cash_content,#delivery_content,#Risque_content,#requirement_content ,#Scoringt_content{
+#general_content{
     max-height: 5000px;
     overflow: hidden;
     transition: max-height 0.5s

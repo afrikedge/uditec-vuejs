@@ -6,11 +6,18 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <revision-card-Header soNo="000001" soDesc="client Gérald" pageTitle="Fiche demande révision" />
+                <Customer-Card-Header   :soNo="paymentCardId" :soDesc="paymentCard.Subject" pageTitle="Fiche Demande revision" />
             </div>
             
 <!---------Composant rubban fiche client----------------------->      
-            <revision-card-ribbon></revision-card-ribbon>
+            <Customer-card-ribbon
+            @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+            componentWithCompInfo="customerCardRightInfoMaxWidth"
+            :newCardBtnIsDisabled="false"
+           
+            :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
+          
+            ></Customer-card-ribbon>
 
 <!---------Section formulaire fiche client----------------------->      
             <div id="content-comp" class="columns mt-2" style="overflow-y: scroll;">
@@ -20,10 +27,10 @@
                     <div id="general">
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('general_content');onglet1_expanded=!onglet1_expanded" v-if="onglet1_expanded">
+                                <a @click="collapse('general_content');onglet1_expanded=!onglet1_expanded" v-if="!onglet1_expanded">
                                     <span>Général</span>
                                 </a>
-                                <a @click="expand('general_content');onglet1_expanded=!onglet1_expanded" v-if="!onglet1_expanded">
+                                <a @click="expand('general_content');onglet1_expanded=!onglet1_expanded" v-if="onglet1_expanded">
                                     <span>Général</span>
                                     <span class="icon">
                                         <i class="fas fa-angle-right"></i>
@@ -34,216 +41,244 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="N° client" valueInputText="soHeader['Code client']" ></input-text>
-                                <input-text labelInputText="Nom du client" valueInputText="soHeader['Nom du client']" ></input-text>
-                                <input-text labelInputText="Contact" valueInputText="soHeader['Contact client']" ></input-text>
-                                <input-text labelInputText="Adresse" valueInputText="soHeader['Adresse du client']" ></input-text>
-                                <input-text labelInputText="Ville" valueInputText="soHeader['Ville du client']" ></input-text>
-                                <input-text labelInputText="Code postal" valueInputText="soHeader['Code postal client']" ></input-text>
-                                <input-text labelInputText="Code pays/région" valueInputText="soHeader['Code région client']" ></input-text>
-                                <input-text labelInputText="Code vendeur" valueInputText="soHeader['Code vendeur']" ></input-text>
+                                <input-text labelInputText="N° Demande" :valueInputText="paymentCard['[Revision No_']" :is_disabled="readOnlyMode" ></input-text>
+                                <input-text labelInputText="Statut" :valueInputText="paymentCard['Approval Status']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Code client" :valueInputText="paymentCard['Customer No']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Nom du client" :valueInputText="paymentCard['Name']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Mode de vente" :valueInputText="paymentCard['Sales Mode']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Conditions de paiement" :valueInputText="paymentCard['Payment Terms Code']" :is_disabled="readOnlyMode"></input-text>
+                                
+                                 
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Date commande" valueInputText="new Date(soHeader['Date de commande']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date comptabilisation " valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date document" valueInputText="new Date(soHeader['Date document']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date d'échéance" valueInputText="new Date(soHeader[`Date d'échéance`]).toDateString()" ></input-text>
-                                <input-text labelInputText="N° doc. externe" valueInputText="soHeader['N° doc. externe']" ></input-text>
-                                <input-text labelInputText="N° devis" valueInputText="soHeader['N° devis']" ></input-text>
-                                <input-text labelInputText="Utilisateur affecté" valueInputText="soHeader['Code utilisateur assigné']" ></input-text>
-                                <input-text labelInputText="Statut" valueInputText="soHeader['Statut']" ></input-text>
+                                <input-text labelInputText="Limite de crédit" :valueInputText="paymentCard['Credit limit (LCY)']" :is_disabled="readOnlyMode"></input-text>  
+                                <input-text labelInputText="Mode de paiement" :valueInputText="paymentCard['Payment Method Code']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Régime TVA" :valueInputText="paymentCard['VAT Bus_ Posting Group']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="% Acompte exigé" :valueInputText="paymentCard['Prepayment _']" :is_disabled="readOnlyMode" ></input-text>
+                                <input-text labelInputText="Niveau de risque" :valueInputText="paymentCard['Risk Level']" :is_disabled="readOnlyMode"></input-text> 
                             </div>
                         </div>                    
                     </div>
                     <br><br>
 
-<!---------sous-Section ongle 2 formulaire fiche client----------------------->                         
-                    <div id="adresse">
+                    <div id="revision">
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('address_content');onglet2_expanded=!onglet2_expanded" v-if="onglet2_expanded">
-                                    <span>Adresse et contact</span>
+                                <a @click="collapse('revision_content');onglet2_expanded=!onglet2_expanded" v-if="!onglet2_expanded">
+                                    <span>revision</span>
                                 </a>
-                                <a @click="expand('address_content');onglet2_expanded=!onglet2_expanded" v-if="!onglet2_expanded">
-                                    <span>Adresse et contact</span>
+                                <a @click="expand('revision_content');onglet2_expanded=!onglet2_expanded" v-if="onglet2_expanded">
+                                    <span>revision</span>
                                     <span class="icon">
                                         <i class="fas fa-angle-right"></i>
                                     </span>
                                 </a>
                             </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
+                            <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
                         </div>
-                        <div id="address_content" class="columns">
+                        <div id="revision_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="N° client" valueInputText="soHeader['Code client']" ></input-text>
-                                <input-text labelInputText="Nom du client" valueInputText="soHeader['Nom du client']" ></input-text>
-                                <input-text labelInputText="Contact" valueInputText="soHeader['Contact client']" ></input-text>
-                                <input-text labelInputText="Adresse" valueInputText="soHeader['Adresse du client']" ></input-text>
-                                <input-text labelInputText="Ville" valueInputText="soHeader['Ville du client']" ></input-text>
-                                <input-text labelInputText="Code postal" valueInputText="soHeader['Code postal client']" ></input-text>
-                                <input-text labelInputText="Code pays/région" valueInputText="soHeader['Code région client']" ></input-text>
-                                <input-text labelInputText="Code vendeur" valueInputText="soHeader['Code vendeur']" ></input-text>
+                                <input-text labelInputText="Conditions de paiement (Proposé" :valueInputText="paymentCard['[New Payment Terms Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-text labelInputText="Conditions de paiement (Proposé" :valueInputText="paymentCard['[New Payment Terms Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+
+                                <input-text labelInputText="Limite de crédit (Proposé)" :valueInputText="paymentCard['New Credit limit (LCY)']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-text labelInputText="Limite de crédit (Proposé)" :valueInputText="paymentCard['New Credit limit (LCY)']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+
+                                <input-text labelInputText="Mode de paiement (Proposé)" :valueInputText="paymentCard['New Payment Method Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
+                                <input-text labelInputText="Mode de paiement (Proposé)" :valueInputText="paymentCard['New Payment Method Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
+
+                                <input-text labelInputText="Régime TVA (Proposé)" :valueInputText="paymentCard['New VAT Bus_ Posting Group']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-text labelInputText="Régime TVA (Proposé)" :valueInputText="paymentCard['New VAT Bus_ Posting Group']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+
+                                <input-text labelInputText="% Acompte exigé (Proposé)" :valueInputText="paymentCard['New Prepayment _']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>   
+                                <input-text labelInputText="% Acompte exigé (Proposé)" :valueInputText="paymentCard['New Prepayment _']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>   
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Date commande" valueInputText="new Date(soHeader['Date de commande']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date comptabilisation " valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date document" valueInputText="new Date(soHeader['Date document']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date d'échéance" valueInputText="new Date(soHeader[`Date d'échéance`]).toDateString()" ></input-text>
-                                <input-text labelInputText="N° doc. externe" valueInputText="soHeader['N° doc. externe']" ></input-text>
-                                <input-text labelInputText="N° devis" valueInputText="soHeader['N° devis']" ></input-text>
-                                <input-text labelInputText="Utilisateur affecté" valueInputText="soHeader['Code utilisateur assigné']" ></input-text>
-                                <input-text labelInputText="Statut" valueInputText="soHeader['Statut']" ></input-text>
+                                <input-text labelInputText="Conditions de paiement (Validé)" :valueInputText="paymentCard['Approved Payment Terms Code']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Limite de crédit (Validé)" :valueInputText="paymentCard['Approved Credit limit (LCY)']" :is_disabled="readOnlyMode"></input-text>  
+                                <input-text labelInputText="Mode de paiement (Validé)" :valueInputText="paymentCard['Approved Payment Method Code']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Régime TVA (Validé)" :valueInputText="paymentCard['Approved VAT Bus_ Posting Group']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="% Acompte exigé (Validé)" :valueInputText="paymentCard['Approved Prepayment ']" :is_disabled="readOnlyMode" ></input-text>
                             </div>
                         </div>                    
                     </div>
                     <br><br>
 
-<!---------sous-Section ongle 3 formulaire fiche client----------------------->                         
-                    <div id="facturation">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('invoicing_content');onglet3_expanded=!onglet3_expanded" v-if="onglet3_expanded">
-                                    <span>Facturation</span>
-                                </a>
-                                <a @click="expand('invoicing_content');onglet3_expanded=!onglet3_expanded" v-if="!onglet3_expanded">
-                                    <span>Facturation</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
+                    <div id="Suivi" v-if="!readOnlyModeIsDisabled">
+                        <div :class="{'has-background-light':onglet3_expanded}">
+                            <div :class="{'columns':!onglet3_expanded,'p-3':onglet3_expanded,'has-border-bottom-grey':onglet3_expanded,'has-border-bottom':!onglet3_expanded}">
+                                <div class="column p-0 has-text-left has-text-weight-bold">
+                                    <a @click="collapse('Suivi_content');onglet3_expanded=!onglet3_expanded" v-if="onglet3_expanded">
+                                        <span>Suivi</span>
+                                    </a>
+                                    <a @click="expand('Suivi_content');onglet3_expanded=!onglet3_expanded" v-if="!onglet3_expanded">
+                                        <span>Suivi</span>
+                                        <span class="icon">
+                                            <i class="fas fa-angle-right"></i>
+                                        </span>
+                                    </a>
+                                </div>
                             </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
+
+                            <div id="Suivi_content" class="columns px-5 mt-5" style="max-height: 250px; overflow:scroll;">
+                                <table class="table  is-narrow  is-fullwidth">
+                                    <thead class=" my-2">
+                                        <tr > 
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Approuvé le</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Approuvé par</th>
+                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Approuvé en tant que</th>
+                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut actuel</th>
+                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut suivant </th>
+                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Commentaires</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr :id="index" v-for="(elt,index) of saleOrderCardLines" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
+                                            <td class="has-text-left has-background-light">
+                                                <span class="icon">
+                                                    <i class="fas fa-arrow-right has-text-grey"></i>
+                                                </span>
+                                            </td>
+                                             <td class="has-text-left">{{elt['Approved On'] }}</td>
+                                             <td class="has-text-left">{{elt['[Approved by'] }}</td>
+                                             <td class="has-text-left">{{elt['Approved as'] }}</td>
+                                             <td class="has-text-left">{{elt['Approval Status'] }}</td>
+                                             <td class="has-text-left">{{elt['Next Status'] }} </td>
+                                             <td class="has-text-left">{{elt['Comment'] }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>     
                         </div>
-                        <div id="invoicing_content" class="columns">
-                            <div class="column">
-                                <input-text labelInputText="N° client" valueInputText="soHeader['Code client']" ></input-text>
-                                <input-text labelInputText="Nom du client" valueInputText="soHeader['Nom du client']" ></input-text>
-                                <input-text labelInputText="Contact" valueInputText="soHeader['Contact client']" ></input-text>
-                                <input-text labelInputText="Adresse" valueInputText="soHeader['Adresse du client']" ></input-text>
-                                <input-text labelInputText="Ville" valueInputText="soHeader['Ville du client']" ></input-text>
-                                <input-text labelInputText="Code postal" valueInputText="soHeader['Code postal client']" ></input-text>
-                                <input-text labelInputText="Code pays/région" valueInputText="soHeader['Code région client']" ></input-text>
-                                <input-text labelInputText="Code vendeur" valueInputText="soHeader['Code vendeur']" ></input-text>
-                            </div>
-                            <div class="column">
-                                <input-text labelInputText="Date commande" valueInputText="new Date(soHeader['Date de commande']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date comptabilisation " valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date document" valueInputText="new Date(soHeader['Date document']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date d'échéance" valueInputText="new Date(soHeader[`Date d'échéance`]).toDateString()" ></input-text>
-                                <input-text labelInputText="N° doc. externe" valueInputText="soHeader['N° doc. externe']" ></input-text>
-                                <input-text labelInputText="N° devis" valueInputText="soHeader['N° devis']" ></input-text>
-                                <input-text labelInputText="Utilisateur affecté" valueInputText="soHeader['Code utilisateur assigné']" ></input-text>
-                                <input-text labelInputText="Statut" valueInputText="soHeader['Statut']" ></input-text>
-                            </div>
-                        </div>                    
-                    </div>
+                                       
+                    </div>  
                     <br><br>
 
-<!---------sous-Section ongle 4 formulaire fiche client----------------------->                         
-                    <div id="paiement">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('cash_content');onglet4_expanded=!onglet4_expanded" v-if="onglet4_expanded">
-                                    <span>Paiements</span>
-                                </a>
-                                <a @click="expand('cash_content');onglet4_expanded=!onglet4_expanded" v-if="!onglet4_expanded">
-                                    <span>Paiements</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
+                     <div id="historique" v-if="!readOnlyModeIsDisabled">
+                        <div :class="{'has-background-light':onglet4_expanded}">
+                            <div :class="{'columns':!onglet4_expanded,'p-3':onglet4_expanded,'has-border-bottom-grey':onglet4_expanded,'has-border-bottom':!onglet4_expanded}">
+                                <div class="column p-0 has-text-left has-text-weight-bold">
+                                    <a @click="collapse('historique_content');onglet4_expanded=!onglet4_expanded" v-if="onglet4_expanded">
+                                        <span>Historique</span>
+                                    </a>
+                                    <a @click="expand('historique_content');onglet4_expanded=!onglet4_expanded" v-if="!onglet4_expanded">
+                                        <span>Historique</span>
+                                        <span class="icon">
+                                            <i class="fas fa-angle-right"></i>
+                                        </span>
+                                    </a>
+                                </div>
                             </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
+
+                            <div id="historique_content" class="columns px-5 mt-5" style="max-height: 250px; overflow:scroll;">
+                                <table class="table  is-narrow  is-fullwidth">
+                                    <thead class=" my-2">
+                                        <tr > 
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode vente</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Document </th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date comptabilisation</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date document</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Paiement</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date paiement</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Jour(s) retard</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut échéance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr :id="index" v-for="(elt,index) of saleOrderCardLines" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
+                                            <td class="has-text-left has-background-light">
+                                                <span class="icon">
+                                                    <i class="fas fa-arrow-right has-text-grey"></i>
+                                                </span>
+                                            </td>
+                                            <td class="has-text-left">{{elt['Sales Mode']}}</td>
+                                            <td class="has-text-left">{{elt['Document No_'] }}</td>
+                                            <td class="has-text-left">{{formatDate(elt['Posting Date'])}}</td>
+                                            <td class="has-text-left">{{formatDate(elt['Due Date']) }}</td>
+                                            <td class="has-text-left">{{elt['Amount (LCY)']}}</td>
+                                            <td class="has-text-left">{{elt['Payment (LCY)'] }}</td>
+                                            <td class="has-text-left">{{formatDate(elt['Payment Date'])}}</td>
+                                            <td class="has-text-left">{{ elt['Days late'] }}</td>
+                                            <td class="has-text-left">{{ elt['Debt Status'] }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>     
                         </div>
-                        <div id="cash_content" class="columns">
-                            <div class="column">
-                                <input-text labelInputText="N° client" valueInputText="soHeader['Code client']" ></input-text>
-                                <input-text labelInputText="Nom du client" valueInputText="soHeader['Nom du client']" ></input-text>
-                                <input-text labelInputText="Contact" valueInputText="soHeader['Contact client']" ></input-text>
-                                <input-text labelInputText="Adresse" valueInputText="soHeader['Adresse du client']" ></input-text>
-                                <input-text labelInputText="Ville" valueInputText="soHeader['Ville du client']" ></input-text>
-                                <input-text labelInputText="Code postal" valueInputText="soHeader['Code postal client']" ></input-text>
-                                <input-text labelInputText="Code pays/région" valueInputText="soHeader['Code région client']" ></input-text>
-                                <input-text labelInputText="Code vendeur" valueInputText="soHeader['Code vendeur']" ></input-text>
-                            </div>
-                            <div class="column">
-                                <input-text labelInputText="Date commande" valueInputText="new Date(soHeader['Date de commande']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date comptabilisation " valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date document" valueInputText="new Date(soHeader['Date document']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date d'échéance" valueInputText="new Date(soHeader[`Date d'échéance`]).toDateString()" ></input-text>
-                                <input-text labelInputText="N° doc. externe" valueInputText="soHeader['N° doc. externe']" ></input-text>
-                                <input-text labelInputText="N° devis" valueInputText="soHeader['N° devis']" ></input-text>
-                                <input-text labelInputText="Utilisateur affecté" valueInputText="soHeader['Code utilisateur assigné']" ></input-text>
-                                <input-text labelInputText="Statut" valueInputText="soHeader['Statut']" ></input-text>
-                            </div>
-                        </div>                    
-                    </div>
+                                       
+                    </div>  
                     <br><br>
 
-<!---------sous-Section ongle 5 formulaire fiche client----------------------->                         
-                    <div id="Livraison">
-                        <div class="columns has-border-bottom">
-                            <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('delivery_content');onglet5_expanded=!onglet5_expanded" v-if="onglet5_expanded">
-                                    <span>Livraison</span>
-                                </a>
-                                <a @click="expand('delivery_content');onglet5_expanded=!onglet5_expanded" v-if="!onglet5_expanded">
-                                    <span>Livraison</span>
-                                    <span class="icon">
-                                        <i class="fas fa-angle-right"></i>
-                                    </span>
-                                </a>
-                            </div>
-                           <div class="column py-0 has-text-right is-size-7">Afficher plus</div>
-                        </div>
-                        <div id="delivery_content" class="columns">
-                            <div class="column">
-                                <input-text labelInputText="N° client" valueInputText="soHeader['Code client']" ></input-text>
-                                <input-text labelInputText="Nom du client" valueInputText="soHeader['Nom du client']" ></input-text>
-                                <input-text labelInputText="Contact" valueInputText="soHeader['Contact client']" ></input-text>
-                                <input-text labelInputText="Adresse" valueInputText="soHeader['Adresse du client']" ></input-text>
-                                <input-text labelInputText="Ville" valueInputText="soHeader['Ville du client']" ></input-text>
-                                <input-text labelInputText="Code postal" valueInputText="soHeader['Code postal client']" ></input-text>
-                                <input-text labelInputText="Code pays/région" valueInputText="soHeader['Code région client']" ></input-text>
-                                <input-text labelInputText="Code vendeur" valueInputText="soHeader['Code vendeur']" ></input-text>
-                            </div>
-                            <div class="column">
-                                <input-text labelInputText="Date commande" valueInputText="new Date(soHeader['Date de commande']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date comptabilisation " valueInputText="new Date(soHeader['Date comptabilisation']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date document" valueInputText="new Date(soHeader['Date document']).toDateString()" ></input-text>
-                                <input-text labelInputText="Date d'échéance" valueInputText="new Date(soHeader[`Date d'échéance`]).toDateString()" ></input-text>
-                                <input-text labelInputText="N° doc. externe" valueInputText="soHeader['N° doc. externe']" ></input-text>
-                                <input-text labelInputText="N° devis" valueInputText="soHeader['N° devis']" ></input-text>
-                                <input-text labelInputText="Utilisateur affecté" valueInputText="soHeader['Code utilisateur assigné']" ></input-text>
-                                <input-text labelInputText="Statut" valueInputText="soHeader['Statut']" ></input-text>
-                            </div>
-                        </div>                    
-                    </div>
-                    <br><br>
 
+
+                    
+   
                 </div>
-
 <!---------composant info client----------------------->
-                <customer-info id="customer-info"></customer-info>
+                <customer-info class="customer-info"></customer-info>
 
             </div>
         </div>
 
     </div>    
+
 </template>
 <script>
-import RevisionCardHeader from './HeaderForCard.vue'
+import CustomerCardHeader from './HeaderForCard.vue'
 import CustomerInfo from './CustomerInfo.vue'
-import RevisionCardRibbon from './RibbonForCard.vue'
+import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
+import axios from 'axios'
+import { ref,watch } from 'vue'
+import { useNavigationTabStore } from '@/Stores/NavigationTab'
 
 export default {
-    name:'release-request-card',
+    name:'customer-card',
     components:{
-        RevisionCardHeader,CustomerInfo,inputText,RevisionCardRibbon
+        CustomerCardHeader,CustomerInfo,inputText,CustomerCardRibbon
+    },
+    setup(){
+        const paymentCard = ref({})
+        const readOnlyModeIsDisabled = ref(false)
+        const readOnlyMode = ref(true)
+
+        
+        //variable de success serveur
+        let success_message=ref('')
+        let is_convertSQ_success = ref(false)
+
+        
+        function setReadOnlyModeIsDisabled(){
+            readOnlyModeIsDisabled.value=true
+        }
+
+      function setReadWriteModeIsDisabled(){
+          readOnlyModeIsDisabled.value=false
+      }
+      watch(success_message, () => {
+            if (is_convertSQ_success.value==false){
+                readOnlyModeIsDisabled.value=false
+            }
+        })
+
+        // expose to template and other options API hooks
+        return {
+            paymentCard,
+            readOnlyMode,
+            readOnlyModeIsDisabled,
+            setReadWriteModeIsDisabled,
+            setReadOnlyModeIsDisabled,
+            success_message
+        }
     },
     data(){
         return{
+            //taille (largeur) initiale du composant customerInfo
+            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerCardRightInfoMaxWidth,
+
+            //indique la route active
+            paymentCardId:this.$route.params.id,
 
             //indique si les onglets sont réduits ou non
             onglet1_expanded:true,
@@ -251,9 +286,28 @@ export default {
             onglet3_expanded:true,
             onglet4_expanded:true,
             onglet5_expanded:true,
+
+            //nom de l'hote dans l'url 
+            hostname:window.location.hostname
         }
     },
     methods:{
+        /////////////////////////methode pour masquer ou afficher le composant info à droite
+     hideOrShowComponentInfo(){
+            if(this.customerInfoCompMaxWidth=='0px') {
+                useNavigationTabStore().setMaxWidth('customerCardRightInfoMaxWidth','800px')
+                this.customerInfoCompMaxWidth='800px'
+            }
+            else {
+                useNavigationTabStore().setMaxWidth('customerCardRightInfoMaxWidth','0px')
+                this.customerInfoCompMaxWidth='0px'
+            }
+        },
+        formatDate(date){
+            const dateString = new String(date)
+            if (dateString.includes('1753-')) return ''
+            else return new Date(date).toLocaleDateString()
+        },
         expand(id){
             const myElt=document.getElementById(id);
             myElt.style.maxHeight='500px'
@@ -263,13 +317,27 @@ export default {
             const myElt=document.getElementById(id);
             console.log(myElt.style.maxHeight)
             myElt.style.maxHeight="0px"
-        }
-    }
+        },
+       
+    },
+    mounted(){
+        axios.get(`http://${this.hostname}:3000/app/getPVRQCard/${this.paymentCardId}`)
+        .then(result => {
+         this.paymentCard = result.data;
+         console.log(result)
+        }).catch(err=>console.log(err))
+
+    },
 }
 
 </script>
 <style scoped>
-#general_content,#address_content,#invoicing_content,#cash_content,#delivery_content{
+.customer-info{
+    max-width: v-bind(customerInfoCompMaxWidth);
+    transition: max-width 0.5s;
+}
+
+#general_content,#address_content,#historique_content,#cash_content,#delivery_content,#revision_content,#details_content ,#Suivi_content{
     max-height: 5000px;
     overflow: hidden;
     transition: max-height 0.5s

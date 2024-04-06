@@ -2,7 +2,7 @@
     <div class="my-5 mx-5">
         
         <customer-list-ribbon 
-        pageTitle="Clients"
+        pageTitle="Promesse de règlement"
         componentwithPresentationView="customerListPresentation"
         :hasAThirdPresentation="true"
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
@@ -18,21 +18,14 @@
                     <thead class=" my-2">
                         <tr> 
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N°</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Objet</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Client</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Contact</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Crée le</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Crée par</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date promesse</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Suivi par</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant promis</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant honoré</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Activité d'origine</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type Activité de rappel</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date rappel</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Échéance rappel</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Client</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Contact</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Description</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Montant promis</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Montant honoré</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Activité d'origine</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Type Activité de rappel</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Statut</th>
                         </tr>   
                     </thead>
                     <tbody>
@@ -44,124 +37,19 @@
                                     </a>
                                 </router-link>
                             </td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Subject'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Customer No_'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Contact No_'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Description'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Created on'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Created by'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Promise Date'] }}</td>                    
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Assigned to'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Promised amount']==0 ? '1.000.000.000 Fcfa' : '50 Fcfa'  }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Honored amount']==0 ? '1.000.000.000.000 Fcfa' : '150 Fcfa' }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Originated activity'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Reminding Activity']==0 ?  'IA developper' :'Webmaster' }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Riminding Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Reminding Due Date'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Status']==0 ? 'Actif' : 'Non actif' }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="column" style="overflow-y: scroll;" v-if="presentationView=='mosaique'">
-                <div class="columns is-multiline">
-                    <div :class="{'column':true, 'is-3':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="promise of filteredpromiseList" :key="promise['No_']">
-                        <div class=" columns p-1 card-is-hoverable">
-                            <div class="column is-narrow has-background-white">
-                                <figure class="image is-64x64">
-                                    <img class="is-rounded" :src="require(`@/assets/images/gerald1.jpg`)">
-                                </figure>
-                            </div>
-                            <div class="column has-background-white card-is-hoverable">
-                                <p class="has-text-left ">
-                                    <span class="is-size-7 has-text-grey has-background-light">
-                                        
-                                        <router-link :to="`/PromiseToPayCard/${ promise['No_'] }`">
-                                            <a href="#" class="has-text-orange">
-                                                {{ promise['No_'] }} 
-                                            </a>
-                                        </router-link>
-                            
-                                    </span>
-                                </p>
-                                <div class="has-text-left columns">
-                                    <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                        <span class="is-size-7 is-underlined">{{ promise['Reminding Activity']==0 ?  'IA developper' :'Webmaster' }}</span>
-                                    </div>
-                                    <div class="column has-text-right is-narrow py-0 mt-1">
-                                        <span class="is-size-7">{{ promise['Status']==0 ? 'Actif' : 'Non actif' }}</span>
-                                    </div>
-                                </div>
-                                <div class="has-text-left columns">
-                                    <div class="column has-text-left py-0" >
-                                        <span class="is-size-7">{{ promise['Promised amount']==0 ? '1.000.000.000 Fcfa' : '50 Fcfa' }}</span>
-                                    </div>
-                                    <div class="column has-text-right is-narrow py-0">
-                                        <span class="is-size-7">{{ promise['Honored amount']==0 ? '1.000.000.000.000 Fcfa' : '150 Fcfa' }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <a class="column is-narrow has-background-orange is-flex ">
-                                <span class="is-align-self-center has-text-white">...</span>
-
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="column" style="overflow-y: scroll;" v-if="presentationView=='mosaique haute'">
-                <div class="columns is-multiline is-gapless">
-                    <div :class="{'column':true, 'is-2':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="promise of filteredpromiseList" :key="promise['No_']">
-                        <div class="has-background-white m-1">
-                            <div class="card-is-hoverable box">
-                                <div class="">
-                                    <div class="has-text-left">
-                                        <a href="#">
-                                            <span class="py-0">...</span>
-                                        </a>
-                                    </div>
-                                    <div class="is-flex is-justify-content-center">
-                                        <figure class="image is-128x128">
-                                            <img class="is-rounded" :src="require(`@/assets/images/gerald1.jpg`)">
-                                        </figure>
-                                    </div>
-                                    <hr class="rounded">
-                                    <div class="">
-                                        <p class="has-text-left ">
-                                            <span class="is-size-7 has-text-grey has-background-light">
-                                        
-                                                <router-link :to="`/PromiseToPayCard/${ promise['No_'] }`">
-                                                    <a href="#" class="has-text-orange">
-                                                        {{ promise['No_'] }} 
-                                                    </a>
-                                                </router-link>
-                            
-                                            </span>
-                                        </p>
-                                        <div class="has-text-left columns">
-                                            <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                                <span class="is-size-7 is-underlined">{{ promise['Reminding Activity']==0 ?  'IA developper' :'Webmaster' }}</span>
-                                            </div>
-                                            <div class="column has-text-right is-narrow py-0 mt-1">
-                                                <span class="is-size-7">{{ promise['Status']==0 ? 'Actif' : 'Non actif' }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="has-text-left columns">
-                                            <div class="column has-text-left py-0" >
-                                                <span class="is-size-7">{{promise['Promised amount']==0 ? '1.000.000.000 Fcfa' : '50 Fcfa'}}</span>
-                                            </div>
-                                            <div class="column has-text-right is-narrow py-0">
-                                                <span class="is-size-7">{{  promise['Honored amount']==0 ? '1.000.000.000.000 Fcfa' : '150 Fcfa' }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
             
-                            </div>
-                        </div>
-                        </div>
-                </div>
-            </div>
             <customer-info class="customer-info"></customer-info>
         </div>
     </div>

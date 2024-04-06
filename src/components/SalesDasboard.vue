@@ -30,12 +30,6 @@
                                 <span class="subtitle is-6">Prospect</span>
                             </a>
                         </div>
-                        <div>
-                            <a href="#" class="has-text-orange">
-                                <span class="subtitle is-3 mr-1">+</span>
-                                <span class="subtitle is-6">Client</span>
-                            </a>
-                        </div>
                     </div>
                     <div class="column is-narrow">
                         <div>
@@ -44,28 +38,9 @@
                                 <span class="subtitle is-6">Contact</span>
                             </a>
                         </div>
-                        <div>
-                            <a href="#" class="has-text-orange">
-                                <span class="subtitle is-3 mr-1">+</span>
-                                <span class="subtitle is-6">Adresse</span>
-                            </a>
-                        </div>
+                       
                     </div>
-                    <div class="column is-narrow">
-                        <div>
-                            <a href="#" class="has-text-orange">
-                                <span class="subtitle is-3 mr-1">+</span>
-                                <span class="subtitle is-6">Demande revision</span>
-                            </a>
-                        </div>
-                        <div>
-                            <a href="#" class="has-text-orange">
-                                <span class="subtitle is-3 mr-1">+</span>
-                                <span class="subtitle is-6">Demande remise</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="column"></div>
+                    
 
                     
                 </div>

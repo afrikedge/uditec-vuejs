@@ -2,13 +2,13 @@
     <div class="my-5 mx-5">
         
         <customer-list-ribbon 
-        pageTitle="Clients"
+        pageTitle="Activité recouvrement"
         componentwithPresentationView="customerListPresentation"
         :hasAThirdPresentation="true"
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
         @onInputSearchData="(eltToSearch)=>this.eltToSearch=eltToSearch"
         componentWithCompInfo="customerListRightInfoMaxWidth"
-        routeForNewCard="NewCustomer"
+        routeForNewCard="NewDebtcollection"
         ></customer-list-ribbon>
 
 
@@ -19,69 +19,44 @@
                         <tr> 
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N°</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Client</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Nom client</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Objet</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Crée le</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Crée par</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date et heure début prévue</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date et heure fin prévue</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date et heure début réelle</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date et heure fin réelle</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date et heure relance</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Activité connexe</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Observation</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° ligne</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Document</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date comptabilisation</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date document</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant initial</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant ouvert</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut échéance</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Nom client</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Type</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Statut</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° ligne</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Document</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Date comptabilisation</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Date document</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Description</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Montant initial</th>
+
                         </tr>   
                     </thead>
                     <tbody>
-                        <tr id="" v-for="debtcollection of filteredDebtcollectionList" :key="debtcollection['No_']" class="is-narrow">
+                        <tr id="" v-for="collection of filteredcollectionList" :key="collection['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/DebtCollectionCard/${ debtcollection['No_'] }`">
+                                <router-link :to="`/DebtCollectionCard/${ collection['No_'] }`">
                                     <a href="#" class="has-text-orange">
-                                        {{ debtcollection['No_'] }} 
+                                        {{ collection['No_'] }} 
                                     </a>
                                 </router-link>
                             </td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Customer No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Name'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Activity Type']==0 ? 'webmaster' : 'AI developper' }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Subject'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Description'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Created on'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Created by'] }}</td>                    
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Scheduled Start Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Scheduled End Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Actual Start Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Actual End Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Reminder Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Linked Activity'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Status']==0 ? 'Actif' : 'Non actif' }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Comment'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Line No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Document No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Posting Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Document Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Description'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Original Amount'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Remaining Amount'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ debtcollection['Debt Status'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ collection['Customer No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ collection['Name'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ collection['Activity Type']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ collection['Status']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ collection['Line No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ collection['Document No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ collection['Posting Date'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ collection['Document Date'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ collection['Description'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ collection['Original Amount'] }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="column" style="overflow-y: scroll;" v-if="presentationView=='mosaique'">
                 <div class="columns is-multiline">
-                    <div :class="{'column':true, 'is-3':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="debtcollection of filteredDebtcollectionList" :key="debtcollection['No_']">
+                    <div :class="{'column':true, 'is-3':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="collection of filteredcollectionList" :key="collection['No_']">
                         <div class=" columns p-1 card-is-hoverable">
                             <div class="column is-narrow has-background-white">
                                 <figure class="image is-64x64">
@@ -92,9 +67,9 @@
                                 <p class="has-text-left ">
                                     <span class="is-size-7 has-text-grey has-background-light">
                                         
-                                        <router-link :to="`/DebtCollectionCard/${ debtcollection['No_'] }`">
+                                        <router-link :to="`/DebtCollectionCard/${ collection['No_'] }`">
                                             <a href="#" class="has-text-orange">
-                                                {{ debtcollection['No_'] }} 
+                                                {{ collection['No_'] }} 
                                             </a>
                                         </router-link>
                             
@@ -102,18 +77,18 @@
                                 </p>
                                 <div class="has-text-left columns">
                                     <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                        <span class="is-size-7 is-underlined">{{ debtcollection['Name'] }}</span>
+                                        <span class="is-size-7 is-underlined">{{ collection['Customer No'] }}</span>
                                     </div>
                                     <div class="column has-text-right is-narrow py-0 mt-1">
-                                        <span class="is-size-7">{{ debtcollection['Customer No_'] }}</span>
+                                        <span class="is-size-7">{{ collection['Activity Type'] }}</span>
                                     </div>
                                 </div>
                                 <div class="has-text-left columns">
                                     <div class="column has-text-left py-0" >
-                                        <span class="is-size-7">{{ debtcollection['Activity Type']==0 ? 'webmaster' : 'AI developper' }}</span>
+                                        <span class="is-size-7">{{ collection['Name'] }}</span>
                                     </div>
                                     <div class="column has-text-right is-narrow py-0">
-                                        <span class="is-size-7">{{ debtcollection['Status']==0 ? 'Actif' : 'Non actif' }}</span>
+                                        <span class="is-size-7">{{ collection['No_'] }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +102,7 @@
             </div>
             <div class="column" style="overflow-y: scroll;" v-if="presentationView=='mosaique haute'">
                 <div class="columns is-multiline is-gapless">
-                    <div :class="{'column':true, 'is-2':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="debtcollection of filteredDebtcollectionList" :key="debtcollection['No_']">
+                    <div :class="{'column':true, 'is-2':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="collection of filteredcollectionList" :key="collection['No_']">
                         <div class="has-background-white m-1">
                             <div class="card-is-hoverable box">
                                 <div class="">
@@ -146,9 +121,9 @@
                                         <p class="has-text-left ">
                                             <span class="is-size-7 has-text-grey has-background-light">
                                         
-                                                <router-link :to="`/DebtCollectionCard/${ debtcollection['No_'] }`">
+                                                <router-link :to="`/DebtCollectionCard/${ collection['No_'] }`">
                                                     <a href="#" class="has-text-orange">
-                                                        {{ debtcollection['No_'] }} 
+                                                        {{ collection['No_'] }} 
                                                     </a>
                                                 </router-link>
                             
@@ -156,18 +131,18 @@
                                         </p>
                                         <div class="has-text-left columns">
                                             <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                                <span class="is-size-7 is-underlined">{{ debtcollection['Name'] }}</span>
+                                                <span class="is-size-7 is-underlined">{{ collection['Customer No_]'] }}</span>
                                             </div>
                                             <div class="column has-text-right is-narrow py-0 mt-1">
-                                                <span class="is-size-7">{{ debtcollection['Customer No_'] }}</span>
+                                                <span class="is-size-7">{{ collection['Activity Type'] }}</span>
                                             </div>
                                         </div>
                                         <div class="has-text-left columns">
                                             <div class="column has-text-left py-0" >
-                                                <span class="is-size-7">{{debtcollection['Activity Type']==0 ? 'webmaster' : 'AI developper'}}</span>
+                                                <span class="is-size-7">{{collection['Name']}}</span>
                                             </div>
                                             <div class="column has-text-right is-narrow py-0">
-                                                <span class="is-size-7">{{ debtcollection['Status']==0 ? 'Actif' : 'Non actif' }}</span>
+                                                <span class="is--size-7">{{ collection['No_'] }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -206,19 +181,19 @@ export default {
     setup() {
         const debtcollectionList = ref([])
         const eltToSearch = ref('')
-        const filteredDebtcollectionList = computed(()=>
+        const filteredcollectionList = computed(()=>
         debtcollectionList.value
-        .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
-                || new String(row['Customer No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
-                || new String(row['Name']).toLowerCase().includes(eltToSearch.value.toLowerCase())
-                || new String(row['Activity Type']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+        .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value)
+                || new String(row['Customer No_']).toLowerCase().includes(eltToSearch.value)
+                || new String(row['Name']).toLowerCase().includes(eltToSearch.value)
+                || new String(row['Activity Type']).toLowerCase().includes(eltToSearch.value)
         ),
      )
         // expose to template and other options API hooks
         return {
             debtcollectionList,
             eltToSearch,
-            filteredDebtcollectionList
+            filteredcollectionList
         }
     },
     data(){
@@ -249,6 +224,7 @@ export default {
         axios.get(`http://${this.hostname}:3000/app/getRAList`)
         .then((result) => {
           this.debtcollectionList = result.data;
+          console.log(result.data)
         })
         .catch(err=>console.log(err));
       

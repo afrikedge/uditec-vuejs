@@ -4,26 +4,30 @@
         </div>
         <div id="scrollBlock"  class="modal-card box  shadow is-rounded h-100" style="width:96%;">
  
-<!---------Composant entête carte----------------------->      
+<!---------Composant entête Fiche----------------------->      
             <div id="card-header-comp">
-                <Customer-Card-Header   :soNo="receivableCardId" :soDesc="ReceivedCard.Name" pageTitle="Fiche client" 
+                <Customer-Card-Header   :soNo="receivableCardId" :soDesc="ReceivedCard.Name" pageTitle="Fiche Créances" 
                 @onGoingBackToList='goBackToList'
                 />
             </div>
             
-<!---------Composant rubban carte client----------------------->      
+<!---------Composant rubban Fiche créance----------------------->      
             <Customer-card-ribbon
+            @onDisablingReadOnlyMode="setReadOnlyModeIsDisabled"
+            @onCancellingUpdate="setReadWriteModeIsDisabled"
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
             componentWithCompInfo="customerCardRightInfoMaxWidth"
-            :newContactBtnIsDisabled="false"
+            :editCardBtnIsDisabled="false"
+            :cancelEditCardBtnIsDisabled="true"
+            :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
             :newShipToAddressBtnIsDisabled="false"
             ></Customer-card-ribbon>
 
-<!---------Section formulaire carte client----------------------->      
+<!---------Section formulaire Fiche créance----------------------->      
             <div id="content-comp" class="columns mt-2" style="overflow-y: scroll;">
                 <div class="column" style="overflow-y: scroll;">
 
-                    <!---------sous-Section ongle 1 formulaire carte client----------------------->                         
+                    <!---------sous-Section ongle 1 formulaire Fiche créance----------------------->                         
                     <div id="general">
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
@@ -52,15 +56,15 @@
                                 <input-text labelInputText="Description" :valueInputText="ReceivedCard['Description']" :is_disabled="readOnlyMode"></input-text> 
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Montant initial" :valueInputText="ReceivedCard['Original Amount']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Montant initial" :valueInputText="ReceivedCard['Original Amount']" :is_disabled="readOnlyMode"></input-text>  
                                 <input-text labelInputText="Montant ouvert" :valueInputText="ReceivedCard['Remaining Amount']" :is_disabled="readOnlyMode"></input-text> 
                                 <input-text labelInputText="Crée le" :valueInputText="formatDate(ReceivedCard['Assigned on'])" :is_disabled="readOnlyMode"></input-text>
                                 <input-text labelInputText="Crée par" :valueInputText="ReceivedCard['Assigned by']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Crée par" :valueInputText="ReceivedCard['Assigned to']" :is_disabled="readOnlyMode" ></input-text>
                                 <input-text labelInputText="Statut initial" :valueInputText="ReceivedCard['Initial Status']" :is_disabled="readOnlyMode"></input-text>
                                 <input-text labelInputText="Statut actuel" :valueInputText="ReceivedCard['Current Status']" :is_disabled="readOnlyMode"></input-text> 
                                 <input-text labelInputText="Activité requise" :valueInputText="ReceivedCard['Required Activity']" :is_disabled="readOnlyMode" ></input-text>
                                 <input-text labelInputText="Commentaire" :valueInputText="ReceivedCard['Comment']" :is_disabled="readOnlyMode" ></input-text>
+                                
                             </div>
                         </div>                    
                     </div>
@@ -68,12 +72,27 @@
 
 
                 </div>
-<!---------composant info client----------------------->
+<!---------composant info créance----------------------->
                 <customer-info class="customer-info"></customer-info>
 
             </div>
         </div>
 
+ <!----------------------------------------------------------->
+    <modal-for-selectable-customer-list 
+            v-if="activeModalForSelectableElementList=='customerList'"  
+            :isActive="activeModalForSelectableElementList=='customerList'" 
+            @closeModal="activeModalForSelectableElementList=''" 
+            @onGettingLineFromSelectableCustomerListModal="(elt)=>fillCustomerInfoField(elt)">
+    </modal-for-selectable-customer-list>
+
+    <modal-for-selectable-contact-list 
+    v-if="activeModalForSelectableElementList=='contactList'" 
+    :isActive="activeModalForSelectableElementList=='contactList'" 
+    @closeModal="activeModalForSelectableElementList=''"
+    :customerNo="ShipToAddressCard['Customer No_']" 
+    @onGettingLineFromSelectableContactListModal="(elt)=>fillContactInfoField(elt)">
+    </modal-for-selectable-contact-list>
     </div>    
 
 </template>
@@ -83,20 +102,64 @@ import CustomerInfo from './CustomerInfo.vue'
 import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import axios from 'axios'
-import { ref } from 'vue'
+import { ref,watch } from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
+import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
+import ModalForSelectableContactList from './ModalForSelectableContactList.vue'
 
 export default {
-    name:'customer-card',
+    name:'receivables-card',
     components:{
         CustomerCardHeader,CustomerInfo,inputText,CustomerCardRibbon
     },
     setup(){
         const ReceivedCard = ref({})
+        const readOnlyModeIsDisabled = ref(false)
         const readOnlyMode = ref(true)
+
+        //variable de success serveur
+        let success_message=ref('')
+        let is_convertSQ_success = ref(false)
+
+
+        function setReadOnlyModeIsDisabled(){
+            readOnlyModeIsDisabled.value=true
+        }
+
+      function setReadWriteModeIsDisabled(){
+          readOnlyModeIsDisabled.value=false
+      }
+
+      function fillCustomerInfoField(receivable){
+                 ReceivedCard.value["No_"]=receivable['No_']
+                 ReceivedCard.value["Name"]=receivable['Name']
+                 ReceivedCard.value["Lead Status"]=receivable['Lead Status']
+                 ReceivedCard.value["City"]=receivable['City']
+                 ReceivedCard.value["Item Category"]=receivable['Item Category']
+        }
+
+        function fillContactInfoField(receivable){
+            ReceivedCard.value["Customer No_"]= receivable['No_']
+            }
+        
+        watch(success_message, () => {
+            if (is_convertSQ_success.value==false){
+                readOnlyModeIsDisabled.value=false
+            }
+        })
+
+
         // expose to template and other options API hooks
         return {
-            ReceivedCard,readOnlyMode
+            fillContactInfoField,
+            readOnlyModeIsDisabled,
+            ReceivedCard,readOnlyMode,
+            fillCustomerInfoField,
+            setReadOnlyModeIsDisabled,
+            setReadWriteModeIsDisabled,
+            ModalForSelectableCustomerList,
+            ModalForSelectableContactList,
+            success_message
         }
     },
     data(){
@@ -114,6 +177,9 @@ export default {
             onglet4_expanded:true,
             onglet5_expanded:true,
 
+            //élement pour le modal sélection des enregistrements
+            activeModalForSelectableElementList:'',
+
             //nom de l'hote dans l'url 
             hostname:window.location.hostname
         }
@@ -122,7 +188,7 @@ export default {
 
         goBackToList(){
             useNavigationTabStore().setActiveTab('customer')
-            this.$router.push('/CustomerList')
+            this.$router.push('/ReceivablesList')
         },
         /////////////////////////methode pour masquer ou afficher le composant info à droite
      hideOrShowComponentInfo(){
@@ -154,6 +220,7 @@ export default {
     mounted(){
         axios.get(`http://${this.hostname}:3000/app/getADCard/${this.receivableCardId}`)
         .then(result => {
+            console.log(result.data)
             this.ReceivedCard = result.data.recordset[0]
         }).catch(err=>console.log(err))
 

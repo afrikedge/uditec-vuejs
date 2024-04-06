@@ -11,7 +11,7 @@
                 ></s-q-card-Header>
             </div>
             
-<!---------Composant rubban fiche client----------------------->      
+<!---------Composant rubban fiche devis vente----------------------->      
             <s-q-card-ribbon
             routeForNewCard="../NewSaleQuote"
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"

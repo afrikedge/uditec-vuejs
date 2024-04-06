@@ -2,7 +2,7 @@
     <div class="my-5 mx-5">
         
         <customer-list-ribbon 
-        pageTitle="Clients"
+        pageTitle="Demande Repossession"
         componentwithPresentationView="customerListPresentation"
         :hasAThirdPresentation="true"
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
@@ -32,7 +32,7 @@
                         </tr>   
                     </thead>
                     <tbody>
-                        <tr id="" v-for="repossession of filteredrepossessionListrList" :key="repossession['No_']" class="is-narrow">
+                        <tr id="" v-for="repossession of filteredrepossessionList" :key="repossession['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
                                 <router-link :to="`/RepossessionRequestCard/${ repossession['No_'] }`">
                                     <a href="#" class="has-text-orange">
@@ -58,7 +58,7 @@
             </div>
             <div class="column" style="overflow-y: scroll;" v-if="presentationView=='mosaique'">
                 <div class="columns is-multiline">
-                    <div :class="{'column':true, 'is-3':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="repossession of filteredrepossessionListrList" :key="repossession['No_']">
+                    <div :class="{'column':true, 'is-3':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="repossession of filteredrepossessionList" :key="repossession['No_']">
                         <div class=" columns p-1 card-is-hoverable">
                             <div class="column is-narrow has-background-white">
                                 <figure class="image is-64x64">
@@ -104,7 +104,7 @@
             </div>
             <div class="column" style="overflow-y: scroll;" v-if="presentationView=='mosaique haute'">
                 <div class="columns is-multiline is-gapless">
-                    <div :class="{'column':true, 'is-2':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="repossession of filteredrepossessionListrList" :key="repossession['No_']">
+                    <div :class="{'column':true, 'is-2':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="repossession of filteredrepossessionList" :key="repossession['No_']">
                         <div class="has-background-white m-1">
                             <div class="card-is-hoverable box">
                                 <div class="">
@@ -183,7 +183,7 @@ export default {
     setup() {
         const repossessionList = ref([])
         const eltToSearch = ref('')
-        const filteredrepossessionListrList = computed(()=>
+        const filteredrepossessionList = computed(()=>
         repossessionList.value
         .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value)
                 || new String(row['Customer No_']).toLowerCase().includes(eltToSearch.value)
@@ -195,7 +195,7 @@ export default {
         return {
             repossessionList,
             eltToSearch,
-            filteredrepossessionListrList
+            filteredrepossessionList
         }
     },
     data(){

@@ -91,7 +91,7 @@
                                 <input-text labelInputText="N° Client" :valueInputText="collectionCardHeader['Customer No_']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select labelInputText="N° Client" v-model="collectionCardHeader['Customer No_']" v-else></input-select>
 
-                                <input-text labelInputText="Nom client" :valueInputText="collectionCardHeader['Name']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Nom client" :valueInputText="collectionCardHeader['Name']" :is_disabled="true"></input-text> 
 
                                 <input-text labelInputText="Type" :valueInputText="collectionCardHeader['Activity Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select-basic-1 labelInputText="Type" v-model="collectionCardHeader['Activity Type']" :option-list="`optionLabelListForRepossType`" v-else></input-select-basic-1> 
@@ -104,11 +104,12 @@
                                 <input-text labelInputText="Crée par" :valueInputText="collectionCardHeader['Created by']" :is_disabled="true"></input-text> 
                             </div>
                             <div class="column">
+
                                 <input-text labelInputText="Date et heure début prévue" :valueInputText="formatDate(collectionCardHeader['Scheduled Start Date'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
-                                <input-date labelInputText="Date et heure début prévue" v-model="scheduledStartDate" v-else></input-date>
+                                <input-date labelInputText="Date et heure début prévue" v-model="scheduledStartDate" v-else :is_disabled="false"></input-date>
 
                                 <input-text labelInputText="Date et heure fin prévue" :valueInputText="formatDate(collectionCardHeader['Scheduled End Date'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
-                                <input-date labelInputText="Date et heure fin prévue" v-model="scheduledEndDate" v-else></input-date>
+                                <input-date labelInputText="Date et heure fin prévue" v-model="scheduledEndDate" v-else :is_disabled="false"></input-date>
 
                                 <input-text labelInputText="Date et heure début réelle" :valueInputText="formatDate(collectionCardHeader['Actual Start Date'])" :is_disabled="true"></input-text> 
 
@@ -142,6 +143,7 @@ import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import inputSelect from './input/input-select.vue'
 import inputSelectBasic1 from './input/input-select-basic1.vue'
+import inputDate from './input/input-date.vue'
 import axios from 'axios'
 import { onMounted,ref,computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -154,7 +156,8 @@ export default {
     components:{
         CustomerCardHeader,CustomerInfo,
         inputText,inputSelectBasic1,
-        CustomerCardRibbon,inputSelect
+        CustomerCardRibbon,inputSelect,
+        inputDate
     },
     setup(){
         const collectionCardHeader = ref({})

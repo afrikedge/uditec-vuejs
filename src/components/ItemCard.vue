@@ -192,10 +192,10 @@
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
                                 <a @click="collapse('warranty_content');onglet4_expanded = !onglet4_expanded;" v-if="onglet4_expanded">
-                                    <span>Caractéristiques article</span>
+                                    <span>Plan de garantie</span>
                                 </a>
                                 <a @click="expand('warranty_content');onglet4_expanded = !onglet4_expanded;" v-if="!onglet4_expanded">
-                                    <span>Caractéristiques article</span>
+                                    <span>Plan de garantie</span>
                                     <span class="icon">
                                       <i class="fas fa-angle-right"></i>
                                     </span>
@@ -207,18 +207,22 @@
                                 <table class="table  is-narrow  is-fullwidth box">
                                     <thead class=" my-2">
                                         <tr> 
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-2" style="min-width: 300px;">Caractéristique</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-2" style="min-width: 300px;">Valeur</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;">Plan de garantie</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;">Description</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;">Durée (mois)</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;">Mode Tarification</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;">Pourcentage</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;">Montant</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr :id="index" v-for="(elt,index) of itemAttributeInfo" :key="index"  >
-                                            <td class="has-text-left">
-                                               <span class="subtitle is-6 has-text-weight-bold"> <b>{{ elt['Name'] }}</b></span>
-                                            </td>
-                                            <td class="has-text-left">
-                                                {{ elt['Value'] }}
-                                            </td>
+                                            <td class="has-text-left">{{ elt['Warranty Plan Code'] }}</td>
+                                            <td class="has-text-left">{{ elt['Name'] }}</td>
+                                            <td class="has-text-left">{{ elt['Duration (months)'] }}</td>
+                                            <td class="has-text-left">{{ elt['Pricing Mode'] }}</td>
+                                            <td class="has-text-left">{{ elt['Percentage'] }}</td>
+                                            <td class="has-text-left">{{ elt['Amount (LCY)'] }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

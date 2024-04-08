@@ -18,7 +18,7 @@
             @onDisablingReadOnlyMode="setReadOnlyModeIsDisabled"
             @onSubmittingForm="submitForm"
             @onCancellingUpdate="setReadWriteModeIsDisabled"
-            componentWithCompInfo="customerCardRightInfoMaxWidth"
+            componentWithCompInfo="newdebtRightInfoMaxWidth"
             :newCardBtnIsDisabled="false"
             :editCardBtnIsDisabled="false"
             :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
@@ -376,11 +376,11 @@ export default {
         /////////////////////////methode pour masquer ou afficher le composant info à droite
      hideOrShowComponentInfo(){
             if(this.customerInfoCompMaxWidth=='0px') {
-                useNavigationTabStore().setMaxWidth('newrepossRightInfoMaxWidth','800px')
+                useNavigationTabStore().setMaxWidth('newdebtRightInfoMaxWidth','800px')
                 this.customerInfoCompMaxWidth='800px'
             }
             else {
-                useNavigationTabStore().setMaxWidth('newrepossRightInfoMaxWidth','0px')
+                useNavigationTabStore().setMaxWidth('newdebtRightInfoMaxWidth','0px')
                 this.customerInfoCompMaxWidth='0px'
             }
         },

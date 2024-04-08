@@ -19,6 +19,7 @@
     import dashboard from './SalesDasboard.vue'
     import saleQuotes from './SaleQuoteList.vue'
     import saleOrders from './SaleOrderList.vue'
+    import receivables from './ReceivablesList.vue'
     import revisionRequests from './RevisionRequestList.vue'
     import discountRequests from './DiscountRequestList.vue'
     import releaseRequests from './ReleaseRequestList.vue'
@@ -45,6 +46,7 @@
             items,
             saleQuotes,
             saleOrders,
+            receivables,
             repossessionRequests,
             debtCollection,
             assignedDebt,

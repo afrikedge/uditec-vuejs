@@ -13,7 +13,6 @@
             
 <!---------Composant rubban fiche créance----------------------->      
             <Customer-card-ribbon
-            routeForNewCard="../NewDebtcollection"
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
             @onDisablingReadOnlyMode="setReadOnlyModeIsDisabled"
             @onSubmittingForm="submitForm"

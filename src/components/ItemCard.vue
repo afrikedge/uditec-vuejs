@@ -17,6 +17,7 @@
                 :printCardBtnDisabled="false"
                 :convertQuoteBtnDisabled="false"
                 :readOnlyModeDisabled="false"
+                :checkItemAvailabilityBtnIsDisabled="false"
             ></item-card-ribbon>
 
 <!---------Section formulaire fiche article----------------------->
@@ -203,20 +204,20 @@
                             </div>
                         </div>
                         <div id="warranty_content" class="columns mt-5">
-                            <div v-if="itemAttributeInfo.length>0">
+                            <div v-if="itemWarrantyInfo.length>=0">
                                 <table class="table  is-narrow  is-fullwidth box">
                                     <thead class=" my-2">
                                         <tr> 
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;">Plan de garantie</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;">Description</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;">Durée (mois)</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;">Mode Tarification</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;">Pourcentage</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;">Montant</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;"><b>Plan de garantie</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;"><b>Description</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;"><b>Durée (mois)</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;"><b>Mode Tarification</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;"><b>Pourcentage</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;"><b>Montant</b></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr :id="index" v-for="(elt,index) of itemAttributeInfo" :key="index"  >
+                                        <tr :id="index" v-for="(elt,index) of itemWarrantyInfo" :key="index"  >
                                             <td class="has-text-left">{{ elt['Warranty Plan Code'] }}</td>
                                             <td class="has-text-left">{{ elt['Name'] }}</td>
                                             <td class="has-text-left">{{ elt['Duration (months)'] }}</td>
@@ -273,6 +274,7 @@ export default {
       const itemCardId = useRoute().params.id
 
       const itemAttributeInfo = ref([])
+      const itemWarrantyInfo = ref([])
       const itemAvailabilityInfo = {
             itemInStockLocation:ref(0),
             itemOnSalesLocation:ref(0),
@@ -315,6 +317,19 @@ export default {
           })
       }
 
+      function getItemWarrantyInfo(){
+          axios.get(`http://${hostname}:3000/app/getitemwarrantyplan/${itemCardId}`)
+          .then(res =>{
+              if (new Array(res.data.recordset).length>=0){
+                  itemWarrantyInfo.value =  res.data.recordset
+                  
+              }
+          })
+          .catch((err) => {
+              console.log(err)
+          })
+      }
+
       function getItemCardInfo(){
           axios.get(`http://${hostname}:3000/app/getItemCard/${itemCardId}?respCenter=${userRespCenter.value}`)
           .then(result => {
@@ -324,6 +339,7 @@ export default {
                   getItemAvailabilityInfo()
               }
               getItemAttributeInfo()
+              getItemWarrantyInfo()
           }).catch(err=>console.log(err))
       }
 
@@ -349,7 +365,9 @@ export default {
           readOnlyMode,
           ...itemAvailabilityInfo,
           itemAttributeInfo,
-          getItemAvailabilityInfo
+          getItemAvailabilityInfo,
+          itemWarrantyInfo,
+          getItemWarrantyInfo
       };
     },
 

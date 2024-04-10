@@ -6,7 +6,7 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <r-r-card-Header :soNo="'Client N° : '+debtcollectionCustomerNo" :soDesc="debtcollectionDocumentNo" pageTitle="Activité recouvrement"
+                <r-r-card-Header :soNo="'Activité N° : '+debtcollectionCustomerNo" :soDesc="debtcollectionDocumentNo" pageTitle="Activité recouvrement"
                 @onGoingBackToList='goBackToList'
                 ></r-r-card-Header>
             </div>
@@ -211,15 +211,7 @@
                                 </div>
                                 <div v-if="debtCollectionCardLines.length==0">Il n'y'a rien à afficher</div>
                             </div>     
-                            <div class="columns mt-3" id="line_total" v-if="onglet2_expanded">
-                                <div class="column">
-                                    <input-text1 :is_disabled="true" :valueInputText="0" labelInputText="Montant TVA"></input-text1>
-                                </div>
-                                <div class="column">
-                                    <input-text1 :is_disabled="true" :valueInputText="0" labelInputText="Montant HT"></input-text1>
-                                    <input-text1 :is_disabled="true" :valueInputText="0" labelInputText="Montant TTC"></input-text1>
-                                </div>
-                            </div>   
+                              
                         </div>
                         
 <!---------sous-Section onglet 2 formulaire fiche client -----Modal d'ajout d'article----------------------->                         
@@ -239,7 +231,7 @@
                                             <div class="column">
                                                 <div>
                                                      <!---input-text  :valueInputText="itemLineNo" labelInputText="N° ligne" :is_disabled="true " ></input-text--->
-                                                     <input-select-basic  v-model="itemType" labelInputText="Type ligne"></input-select-basic>
+                                                    <input-select-basic  v-model="itemType" labelInputText="Type ligne"></input-select-basic>
                                                     <input-text v-show="itemType==2" v-model="itemCode" labelInputText="Code article" :is_disabled="false" :is_readOnly="itemType==0"></input-text>
                                                     <input-text v-model="itemDescription" labelInputText="Description" :is_disabled="false"></input-text>
                                                     <input-text v-show="itemType==0" v-model="itemDescription2" labelInputText="Description 2" :is_disabled="false"></input-text>
@@ -349,7 +341,6 @@ import RRCardHeader from './HeaderForCard.vue'
 import CustomerInfo from './CustomerInfo.vue'
 import RRCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
-import inputText1 from './input/input-text1.vue'
 import inputSelect from './input/input-select.vue'
 import inputSelectBasic from './input/input-select-basic.vue'
 import inputSelectBasic1 from './input/input-select-basic1.vue'
@@ -371,7 +362,6 @@ export default {
         RRCardRibbon,
         CustomerInfo,
         inputText,
-        inputText1,
         inputSelect,
         inputSelectBasic,
         inputSelectBasic1,
@@ -787,7 +777,7 @@ export default {
         //////////methode pour étendre un onglet de la page
         expand(id){
             const myElt=document.getElementById(id);
-            if (id=='deadline_content') myElt.style.maxHeight='1000px'
+            if (id=='deadline_content') myElt.style.maxHeight='250px'
             else myElt.style.maxHeight='500px'
         },
         ////////////methode pour reduire un onglet de la page
@@ -854,7 +844,7 @@ export default {
     transition: max-width 0.5s;
 }
 
-#general_content,#deadline{
+#general_content,#deadline_content{
     max-height: v-bind(height);
     overflow: hidden;
     transition: max-height 0.5s

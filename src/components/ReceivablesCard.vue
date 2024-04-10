@@ -12,7 +12,7 @@
             </div>
             
 <!---------Composant rubban fiche créance----------------------->      
-            <Customer-card-ribbon
+            <!-- <Customer-card-ribbon
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
             @onDisablingReadOnlyMode="setReadOnlyModeIsDisabled"
             @onSubmittingForm="submitForm"
@@ -22,7 +22,7 @@
             :editCardBtnIsDisabled="false"
             :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
             :cancelEditCardBtnIsDisabled="true"
-            ></Customer-card-ribbon>
+            ></Customer-card-ribbon> -->
 
 
 <!---------Composant message d'enregistrement en cours ou d'erreur ou de success----------------------->      
@@ -124,7 +124,7 @@
 <script>
 import CustomerCardHeader from './HeaderForCard.vue'
 import CustomerInfo from './CustomerInfo.vue'
-import CustomerCardRibbon from './RibbonForCard.vue'
+//import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import axios from 'axios'
 import { onMounted,ref,computed } from 'vue'
@@ -138,7 +138,7 @@ export default {
     components:{
         CustomerCardHeader,CustomerInfo,
         inputText,
-        CustomerCardRibbon
+       // CustomerCardRibbon
     },
     setup(){
         const receivablesCardHeader = ref({})

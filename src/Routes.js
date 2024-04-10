@@ -89,6 +89,9 @@ import PaymentValidationRequestCard from './components/PaymentValidationRequestC
 import NewRepossessionRequest from "./components/NewRepossessionRequest.vue"
 import NewDebtCollection from "./components/NewDebtCollection.vue"
 
+//11-----contrat d'achat groupé
+import GoupBuyContractList from "./components/GoupBuyContractList.vue"
+import GoupBuyContractCard from "./components/GoupBuyContractCard.vue"
 
 const routes = [
   ///////////////////1
@@ -170,6 +173,12 @@ const routes = [
   {path:'/PaymentValidationRequestList',component:PaymentValidationRequestList,name:'PaymentValidationRequestListPage'},
   {path:'/PaymentValidationRequestCard/:id',component:PaymentValidationRequestCard,name:'PaymentValidationRequestCardPage'},
   
+  
+   ///////////////////12
+  {path:'/GoupBuyContractList',component:GoupBuyContractList,name:'GoupBuyContractListPage'},
+  {path:'/GoupBuyContractCard/:id',component:GoupBuyContractCard,name:'GoupBuyContractCardPage'},
+  
+
 
 
 ];

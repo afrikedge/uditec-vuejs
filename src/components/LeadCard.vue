@@ -6,30 +6,76 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <prospect-card-Header :soNo="leadCardId" :soDesc="LeadCard['Search Name']" pageTitle="Fiche prospect" />
+                <Customer-Card-Header   :soNo="LeadCard['No_']" :soDesc="LeadCard['Name']" pageTitle="Fiche activité recouvrement" 
+                @onGoingBackToList='goBackToList'
+                />
             </div>
             
-<!---------Composant rubban fiche client----------------------->      
-            <prospect-card-ribbon
+<!---------Composant rubban fiche activité recouvrement----------------------->      
+            <Customer-card-ribbon
+            routeForNewCard="../NewLead"
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
-            componentWithCompInfo="leadCardRightInfoMaxWidth"
-            :newCardBtnDisabled="false"
-            :editCardBtnDisabled="true"
-            :readOnlyModeDisabled="true"
-            ></prospect-card-ribbon>
+            @onDisablingReadOnlyMode="setReadOnlyModeIsDisabled"
+            @onSubmittingForm="submitForm"
+            @onCancellingUpdate="setReadWriteModeIsDisabled"
+            componentWithCompInfo="newdebtRightInfoMaxWidth"
+            :newCardBtnIsDisabled="false"
+            :editCardBtnIsDisabled="false"
+            :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
+            :cancelEditCardBtnIsDisabled="true"
+            ></Customer-card-ribbon>
 
-<!---------Section formulaire fiche client----------------------->      
+
+<!---------Composant message d'enregistrement en cours ou d'erreur ou de success----------------------->      
+            <article v-if="submitting_message" class="" >
+                <span class="icon">
+                    <i class="fas fa-spinner fa-pulse"></i>
+                </span>
+                <span class="subtitle is-7"> {{ submitting_message }} </span>
+            </article>
+
+            <article v-if="error_message" class="message is-danger shadow" >
+                <div class="message-header">
+                    <p class="is-size-7">
+                        <span class="icon has-text-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                        Error Message
+                    </p>
+                    <button class="delete" aria-label="delete" @click="error_message='';error_message_code=''"></button>
+                </div>
+                <div class="message-body is-size-7">
+                    <span> {{ error_message }}</span><br>
+                    <span v-if="error_message_code"> Code erreur: {{ error_message_code }}</span>
+                </div>
+            </article>
+
+            <article v-if="success_message" class="message is-primary shadow">
+                <div class="message-header">
+                        <span class="subtitle is-7 m-0 has-text-white"> 
+                            <span class="icon ">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            {{ success_message }}
+                        </span>
+                    <button class="delete" aria-label="delete" @click="success_message=''"></button>
+                </div>
+            </article>
+
+
+
+<!---------Section formulaire fiche activité recouvrement----------------------->      
             <div id="content-comp" class="columns mt-2" style="overflow-y: scroll;">
                 <div class="column" style="overflow-y: scroll;">
 
-<!---------sous-Section ongle 1 formulaire fiche client----------------------->                         
+<!---------sous-Section ongle 1 formulaire fiche activité recouvrement----------------------->                         
                     <div id="general">
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
-                                <a @click="collapse('general_content');onglet1_expanded=!onglet1_expanded" v-if="onglet1_expanded">
+                                <a @click="collapse('general_content');onglet1_expanded=!onglet1_expanded" v-if="!onglet1_expanded">
                                     <span>Général</span>
                                 </a>
-                                <a @click="expand('general_content');onglet1_expanded=!onglet1_expanded" v-if="!onglet1_expanded">
+                                <a @click="expand('general_content');onglet1_expanded=!onglet1_expanded" v-if="onglet1_expanded">
                                     <span>Général</span>
                                     <span class="icon">
                                         <i class="fas fa-angle-right"></i>
@@ -40,86 +86,311 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="Nom" :valueInputText="LeadCard['Name']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Adresse" :valueInputText="LeadCard['Address']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Adresse (2ème ligne)" :valueInputText="LeadCard['Address 2']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Ville" :valueInputText="LeadCard['City']" :is_disabled="readOnlyMode"></input-text> 
-                                <input-text labelInputText="N° téléphone" :valueInputText="LeadCard['Phone No_']" :is_disabled="readOnlyMode"></input-text> 
-                                <input-text labelInputText="Code vendeur" :valueInputText="LeadCard['Salesperson Code']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Prospect" :valueInputText="LeadCard['No_']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Nom du prospect" v-model="LeadCard['Name']" :valueInputText="LeadCard['Name']" :is_disabled="!readOnlyModeIsDisabled" :is_readOnly="true"></input-text>
+
+                                <input-text labelInputText="Nom de recherche" :valueInputText="LeadCard['Search Name']" :is_disabled="readOnlyMode"></input-text>
+
+                                <input-text labelInputText="N° Client" :valueInputText="LeadCard['Customer No_']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select labelInputText="N° Client" v-model="LeadCard['Customer No_']" v-else></input-select>
+
+                                <input-text labelInputText="Nom client" :valueInputText="LeadCard['Name']" :is_disabled="true"></input-text> 
+
+                                <input-text labelInputText="Type" :valueInputText="LeadCard['Activity Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Type" v-model="LeadCard['Activity Type']" :option-list="`optionLabelListForRepossType`" v-else></input-select-basic-1> 
+
+                                <input-text labelInputText="Objet" :valueInputText="LeadCard['Subject']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select labelInputText="Objet" v-model="LeadCard['Subject']" v-else></input-select>
+
+                                <input-text labelInputText="Description" v-model="LeadCard['Description']" :valueInputText="LeadCard['Description']" :is_disabled="!readOnlyModeIsDisabled" :is_readOnly="true"></input-text>
+                                <input-text labelInputText="Crée le" :valueInputText="formatDate(LeadCard['Created on'])" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Crée par" :valueInputText="LeadCard['Created by']" :is_disabled="true"></input-text> 
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Adresse e-mail" :valueInputText="LeadCard['E-Mail']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Page d'accueil" :valueInputText="LeadCard['Home Page']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Pays/région" :valueInputText="LeadCard['County']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Code postal" :valueInputText="LeadCard['Post Code']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Type prospect" :valueInputText="LeadCard['Type']==0 ? 'valide' : 'Non valide'" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="N° téléphone mobile" :valueInputText="LeadCard['Mobile Phone No_']" :is_disabled="readOnlyMode"></input-text>
 
+                                <input-text labelInputText="Date et heure début prévue" :valueInputText="formatDate(LeadCard['Scheduled Start Date'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
+                                <input-date labelInputText="Date et heure début prévue" v-model="scheduledStartDate" v-else :is_disabled="false"></input-date>
+
+                                <input-text labelInputText="Date et heure fin prévue" :valueInputText="formatDate(LeadCard['Scheduled End Date'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
+                                <input-date labelInputText="Date et heure fin prévue" v-model="scheduledEndDate" v-else :is_disabled="false"></input-date>
+
+                                <input-text labelInputText="Date et heure début réelle" :valueInputText="formatDate(LeadCard['Actual Start Date'])" :is_disabled="true"></input-text> 
+
+                                <input-text labelInputText="Date et heure fin réelle" :valueInputText="formatDate(LeadCard['Actual End Date'])" :is_disabled="true"></input-text> 
+
+                                <input-text labelInputText="Date et heure relance" :valueInputText="formatDate(LeadCard['Reminder Date'])" :is_disabled="true"></input-text> 
+
+                                <input-text labelInputText="Activité connexe" v-model="LeadCard['Linked Activity']" :valueInputText="LeadCard['Linked Activity']" :is_disabled="!readOnlyModeIsDisabled" :is_readOnly="true"></input-text> 
+                                <input-text labelInputText="Statut" inputTextColor="has-text-primary" inputTextWeight="has-text-weight-bold" :valueInputText="LeadCard['Status']==0?'Ouvert':LeadCard['Status']==1?'Lancé':'Approbation en attente'" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Observation" v-model="LeadCard['Comment']" :valueInputText="LeadCard['Comment']" :is_disabled="!readOnlyModeIsDisabled" :is_readOnly="true"></input-text>
+                            
                             </div>
                         </div>                    
                     </div>
                     <br><br>
 
                 </div>
-
 <!---------composant info client----------------------->
-                <prospect-info class="prospect-info"></prospect-info>
+                <customer-info class="customer-info"></customer-info>
 
             </div>
         </div>
 
     </div>    
+
 </template>
 <script>
-import ProspectCardHeader from './HeaderForCard.vue'
-import ProspectInfo from './ProspectInfo.vue'
-import ProspectCardRibbon from './RibbonForCard.vue'
+import CustomerCardHeader from './HeaderForCard.vue'
+import CustomerInfo from './CustomerInfo.vue'
+import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
+import inputSelect from './input/input-select.vue'
+import inputSelectBasic1 from './input/input-select-basic1.vue'
+import inputDate from './input/input-date.vue'
 import axios from 'axios'
-import { ref } from 'vue'
+import { onMounted,ref,computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
+import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
+
+
 export default {
-    name:'lead-card',
+    name:'debtcollection-card',
     components:{
-        ProspectCardHeader,ProspectInfo,inputText,ProspectCardRibbon
+        CustomerCardHeader,CustomerInfo,
+        inputText,inputSelectBasic1,
+        CustomerCardRibbon,inputSelect,
+        inputDate
     },
     setup(){
         const LeadCard = ref({})
-        const readOnlyMode = ref(true)
+        const readOnlyModeIsDisabled = ref(false)
+        const hostname = window.location.hostname
+        const collectionCardId = useRoute().params.id
+
+        //variable de soumission forme
+        const submitting_message=ref('') 
+
+        //variable d'erreur serveur
+        const error_message=ref('')
+        const error_message_code =ref('')
+
+        //variable de success serveur
+        const success_message=ref('')
+
+        const optionLabelListForRepossSource = ref([])
+        const optionLabelListForRepossStatus = ref([])
+        const optionLabelListForRepossType = ref([])
+        const optionLabelListForRepossItemStatus = ref([])
+
+        const getLabelForRepossSource = computed(()=> {
+            return optionLabelListForRepossSource.value.filter(row => row['Value']== LeadCard.value['Source'])
+        } )
+
+        const tttt = computed(()=>{
+            return getLabelForRepossSource.value
+        })
+
+        const dateInfo = {
+            scheduledStartDate: ref(''),
+            scheduledEndDate:ref(''),
+            shipRequestedDate:ref(''),
+            promisedDeliveryDate:ref('')
+        }
+
+        function getOptionLabelList(field){
+            axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
+            .then(result => {
+                if (field=='[Reposs Source]')
+                    optionLabelListForRepossSource.value=result.data.recordset
+                if (field=='[Reposs Status]')
+                    optionLabelListForRepossStatus.value=result.data.recordset
+                if (field=='[Reposs Type]')
+                    optionLabelListForRepossType.value=result.data.recordset
+                if (field=='[Activity Type]')
+                    optionLabelListForRepossItemStatus.value=result.data.recordset
+    
+                    console.log(result.data.recordset)
+    
+            }).catch(err=>console.log(err))
+        }
+
+        let webUserInfo = {
+            name:ref(useWebUserInfoStore().name),
+            company:ref(useWebUserInfoStore().activeCompanyId),
+        }
+
+        function getRACardInfo(){
+            axios.get(`http://${hostname}:3000/app/getRACard/${collectionCardId}`)
+            .then(result => {
+                console.log(result)
+                LeadCard.value = result.data[0]
+                dateInfo.scheduledStartDate.value = getISODate(LeadCard.value["Scheduled Start Date"])
+                dateInfo.scheduledEndDate.value = getISODate(LeadCard.value["Scheduled End Date"])
+            }).catch(err=>console.log(err))
+        }
+
+        function getISODate(date){
+            if(new String(date).includes('1753')||new String(date).includes('1900'))
+                return ''
+            else
+                return new Date(date).toISOString().split('T')[0]
+        }
+
+        function setReadOnlyModeIsDisabled(){
+            readOnlyModeIsDisabled.value=true
+        }
+
+        function setReadWriteModeIsDisabled(){
+            readOnlyModeIsDisabled.value=false
+        }
+
+        function displayErrorMessage(errorObject){
+            if(errorObject.response && errorObject.response.status){
+                switch (errorObject.response.status){
+                    case 401: 
+                        submitting_message.value=''
+                        error_message.value= errorObject.response.data.message;break;
+                    case 400:
+                        submitting_message.value='' 
+                        error_message.value= errorObject.response.data.error.message
+                        error_message_code.value= errorObject.response.data.error.code;break;
+                    case 404:
+                        submitting_message.value=''
+                        error_message.value=errorObject.response.data.error.message
+                        error_message_code.value= errorObject.response.data.error.code;break;
+                    default:
+                        submitting_message.value=''
+                        error_message.value=errorObject.response
+                }
+            }
+            else{
+                error_message.value = errorObject.message
+                error_message_code.value = errorObject.code
+                console.log(errorObject)
+            }
+        }
+
+        function updateDebtCollection(rrData){
+            axios.post(`http://${hostname}:3000/app/getBCWSResponse?company=${webUserInfo.company.value}`,rrData)
+            .then(() => {
+                submitting_message.value=''
+                success_message.value='Enregistrement réussi'
+                error_message.value=''
+                setTimeout(()=>success_message.value='',5000)
+                readOnlyModeIsDisabled.value=false
+            })
+            .catch((err) => {
+                displayErrorMessage(err)
+            })
+        }
+        
+        function formatToBCJsonData(data){
+            const JSONFormatedData = JSON.stringify(data).split('"').join('\\"')
+            const JSONDataToSend = '{'+ '"inputJson":'+'"'+JSONFormatedData+'"' +'}'
+            return {data:JSONDataToSend}
+        }
+
+        function submitForm(){
+            submitting_message.value='Enregistrement en cours'
+            const JSData = {
+                Parameter:'debtcollection_modify',
+                webUserName:webUserInfo.name.value,
+                'No_':LeadCard.value['No_'],
+                'Customer No_':LeadCard.value['Customer No_'],
+                'Name':LeadCard.value['Name'],
+                'Activity Type':LeadCard.value[ 'Activity Type'],
+                'Subject':LeadCard.value['Subject'],
+                'Description':LeadCard.value['Description'],
+                'Created on':LeadCard.value['Created on'],
+                'Created by':LeadCard.value['Created by'],
+                'Scheduled Start Date':LeadCard.value['Scheduled Start Date'],
+                'Scheduled End Date':LeadCard.value['Scheduled End Date'],
+                'Actual Start Date':LeadCard.value['Actual Start Date'], 
+                'Actual End Date':LeadCard.value['Actual End Date'],
+                'Reminder Date':LeadCard.value['Reminder Date'],
+                'Linked Activity':LeadCard.value['Linked Activity'],
+                'Comment':LeadCard.value['Comment'],
+            }
+            updateDebtCollection(formatToBCJsonData(JSData))
+        }
+
+        onMounted(() => {
+            if (webUserInfo.name.value){
+                getRACardInfo()
+                getOptionLabelList('[Reposs Source]')
+                getOptionLabelList('[Reposs Status]')
+                getOptionLabelList('[Reposs Type]')
+                getOptionLabelList('[Reposs Item Status]')
+            }else{
+                axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
+                .then(res=>{
+                    useWebUserInfoStore().fillWebUserInfo(res.data.recordset[0])
+                    webUserInfo.name.value=useWebUserInfoStore().name
+                    webUserInfo.company.value=useWebUserInfoStore().activeCompanyId
+                    getRACardInfo()
+                    getOptionLabelList('[Reposs Source]')
+                    getOptionLabelList('[Reposs Status]')
+                    getOptionLabelList('[Reposs Type]')
+                    getOptionLabelList('[Reposs Item Status]')
+                })
+                .catch(err=>console.log(err))
+            }
+        })
+
+
+
         // expose to template and other options API hooks
         return {
-            LeadCard,readOnlyMode
+            setReadOnlyModeIsDisabled,
+            setReadWriteModeIsDisabled,
+            submitForm,
+            readOnlyModeIsDisabled,
+            LeadCard,
+            submitting_message,
+            error_message,
+            error_message_code,
+            success_message,
+
+            optionLabelListForRepossSource,
+            optionLabelListForRepossStatus,
+            optionLabelListForRepossType,
+            optionLabelListForRepossItemStatus,
+            tttt,
+            dateInfo,
+            getISODate
         }
     },
     data(){
         return{
-             //taille (largeur) initiale du composant customerInfo
-             leadInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.leadCardRightInfoMaxWidth,
-
-             //indique la route active
-             leadCardId:this.$route.params.id,
+            //taille (largeur) initiale du composant customerInfo
+            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerCardRightInfoMaxWidth,
 
             //indique si les onglets sont réduits ou non
             onglet1_expanded:true,
-            onglet2_expanded:true,
-            onglet3_expanded:true,
-            onglet4_expanded:true,
-            onglet5_expanded:true,
-
-            hostname:window.location.hostname
         }
     },
     methods:{
+        goBackToList(){
+            useNavigationTabStore().setActiveGroup('recovery')
+            useNavigationTabStore().setActiveTab('debtCollection')
+            this.$router.push('/')
+        },
         /////////////////////////methode pour masquer ou afficher le composant info à droite
-        hideOrShowComponentInfo(){
-            if(this.leadInfoCompMaxWidth=='0px') {
-                useNavigationTabStore().setMaxWidth('leadCardRightInfoMaxWidth','800px')
-                this.leadInfoCompMaxWidth='800px'
+     hideOrShowComponentInfo(){
+            if(this.customerInfoCompMaxWidth=='0px') {
+                useNavigationTabStore().setMaxWidth('newdebtRightInfoMaxWidth','800px')
+                this.customerInfoCompMaxWidth='800px'
             }
             else {
-                useNavigationTabStore().setMaxWidth('leadCardRightInfoMaxWidth','0px')
-                this.leadInfoCompMaxWidth='0px'
+                useNavigationTabStore().setMaxWidth('newdebtRightInfoMaxWidth','0px')
+                this.customerInfoCompMaxWidth='0px'
             }
+        },
+        formatDate(date){
+            const dateString = new String(date)
+            if (dateString.includes('1753-')) return ''
+            else return new Date(date).toLocaleDateString()
         },
         expand(id){
             const myElt=document.getElementById(id);
@@ -132,24 +403,16 @@ export default {
             myElt.style.maxHeight="0px"
         }
     },
-    mounted(){
-        axios.get(`http://${this.hostname}/app/getLeadCard/${this.leadCardId}`)
-        .then(result => {
-            this.LeadCard = result.data.recordset[0]
-        }).catch(err=>console.log(err))
-
-    }
 }
 
 </script>
 <style scoped>
-.prospect-info{
-    max-width: v-bind(leadInfoCompMaxWidth);
+.customer-info{
+    max-width: v-bind(customerInfoCompMaxWidth);
     transition: max-width 0.5s;
 }
 
-
-#general_content,#address_content,#invoicing_content,#cash_content,#delivery_content{
+#general_content{
     max-height: 5000px;
     overflow: hidden;
     transition: max-height 0.5s

@@ -8,7 +8,15 @@
                     {{ listTitle }} |
                 </h6>
             </div>
-
+              <!---------Composant rubban fiche contact----------------------->
+              <contact-card-ribbon
+                routeForNewCard="../NewContact"
+                @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+                componentWithCompInfo="contactCardRightInfoMaxWidth"
+                :newCardBtnIsDisabled="false"
+                :editCardBtnDisabled="true"
+                :readOnlyModeDisabled="true"
+                ></contact-card-ribbon>
             <div class="has-background-light columns" style="max-height: 650px; max-width: 850px;">
             <div class="column mt-5" id="customer-column" style="overflow-y: visible;overflow-x: scroll;">
                 <table class="table  is-narrow is-hoverable is-fullwidth">
@@ -58,6 +66,7 @@
 <script>
 import axios from 'axios'
 
+
 export default{
     name:'modal-for-selectable--list',
     props:['getAction','listTitle','cardTitle'],
@@ -67,6 +76,11 @@ export default{
             elementList:[]
         }
     },
+    components:{
+        
+    },
+    
+
     beforeMount(){
         console.log(this.getAction)
         console.log(this.listTitle)

@@ -11,6 +11,15 @@
                 </div>
                 <input-search class="column is-narrow" v-model="eltToSearch"> </input-search>
             </div>
+              <!---------Composant rubban fiche contact----------------------->
+              <contact-card-ribbon
+                routeForNewCard="../NewShipToAddress"
+                @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+                componentWithCompInfo="contactCardRightInfoMaxWidth"
+                :newCardBtnIsDisabled="false"
+                :editCardBtnDisabled="true"
+                :readOnlyModeDisabled="true"
+                ></contact-card-ribbon>
 
             <div class="columns" style="max-height: 650px;">
             <div class="column mt-5" id="customer-column" style="overflow-y: visible;overflow-x: scroll;">
@@ -56,6 +65,7 @@
 </template>
 <script>
 import axios from 'axios'
+import ContactCardRibbon from "./RibbonForCard.vue";
 import inputSearch from './input/input-search.vue'
 import { computed, ref } from 'vue'
 
@@ -70,7 +80,7 @@ export default{
         }
     },
     components:{
-        inputSearch
+        inputSearch, ContactCardRibbon
     },
     setup(){
         const eltToSearch = ref('')

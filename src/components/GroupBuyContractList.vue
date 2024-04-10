@@ -121,7 +121,7 @@ export default {
     },
     
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getPVRQList`)
+        axios.get(`http://${this.hostname}:3000/app/`)
         .then((result) => {
           this.paymentList = result.data;
          

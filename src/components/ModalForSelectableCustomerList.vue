@@ -11,7 +11,15 @@
                 </div>
                 <input-search class="column is-narrow" v-model="eltToSearch"></input-search>
             </div>
-
+              <!---------Composant rubban fiche contact----------------------->
+              <contact-card-ribbon
+                routeForNewCard="../NewCustomer"
+                @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+                componentWithCompInfo="contactCardRightInfoMaxWidth"
+                :newCardBtnIsDisabled="false"
+                :editCardBtnDisabled="true"
+                :readOnlyModeDisabled="true"
+                ></contact-card-ribbon>
             <div class=" columns" style="max-height: 650px; overflow-y: hidden;">
             <div class="column mt-5" id="customer-column" style="overflow-y: scroll;overflow-x: scroll;">
                 <table class="table is-narrow is-hoverable">
@@ -67,7 +75,7 @@ import { computed, ref } from 'vue'
 export default{
     name:'modal-for-selectable-customer-list',
     components:{
-        inputSearch
+        inputSearch, 
     },
     data(){
         return {
@@ -75,6 +83,7 @@ export default{
             hostname:window.location.hostname
         }
     },
+   
     setup(){
         const eltToSearch = ref('')
         const elementList = ref([])

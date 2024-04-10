@@ -20,7 +20,7 @@
     import saleQuotes from './SaleQuoteList.vue'
     import saleOrders from './SaleOrderList.vue'
     import revisionRequests from './RevisionRequestList.vue'
-    import discountRequests from './DiscoundRequestList.vue'
+    import discountRequests from './DiscountRequestList.vue'
     import releaseRequests from './ReleaseRequestList.vue'
     import creditRequests from './CreditRequestList.vue'
     import repossessionRequests from "./RepossessionRequestList.vue"

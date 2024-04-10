@@ -10,8 +10,17 @@
                     </span>
                 </div>
                 <input-search class="column is-narrow" v-model="eltToSearch"> </input-search>
-            </div>
 
+          </div>
+                <!---------Composant rubban fiche contact----------------------->
+                <contact-card-ribbon
+                routeForNewCard="../NewContact"
+                @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+                componentWithCompInfo="contactCardRightInfoMaxWidth"
+                :newCardBtnIsDisabled="false"
+                :editCardBtnDisabled="true"
+                :readOnlyModeDisabled="true"
+                ></contact-card-ribbon>
             <div class="columns" style="max-height: 650px;">
             <div class="column mt-5" id="customer-column" style="overflow-y: visible;overflow-x: scroll;">
                 <table class="table  is-narrow is-hoverable is-fullwidth">
@@ -29,7 +38,7 @@
 
                             <tr :id="elt['No_']" v-for="(elt,index) of filteredContactList" :key="index" @click="$emit('onGettingLineFromSelectableContactListModal',elt);$emit('closeModal')">
                                 <td class="has-text-left is-narrow"> 
-                                    <router-link :to="`/ContactCard/${customerName}/${ elt['No_'] }`">
+                                    <router-link :to="`/ContactCard/${customerNo}/${ elt['No_'] }`">
                                         <a href="#" class="has-text-orange">
                                             {{ elt['No_'] }} 
                                         </a>
@@ -52,6 +61,7 @@
 </template>
 <script>
 import axios from 'axios'
+import ContactCardRibbon from "./RibbonForCard.vue";
 import inputSearch from './input/input-search.vue'
 import { computed, ref } from 'vue'
 
@@ -65,7 +75,7 @@ export default{
         }
     },
     components:{
-        inputSearch
+        inputSearch,ContactCardRibbon
     },
     setup(){
         const eltToSearch = ref('')

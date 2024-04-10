@@ -8,6 +8,15 @@
                     {{ listTitle }} |
                 </h6>
             </div>
+              <!---------Composant rubban fiche contact----------------------->
+              <contact-card-ribbon
+                routeForNewCard="../NewContact"
+                @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+                componentWithCompInfo="contactCardRightInfoMaxWidth"
+                :newCardBtnIsDisabled="false"
+                :editCardBtnDisabled="true"
+                :readOnlyModeDisabled="true"
+                ></contact-card-ribbon>
 
             <div class="has-background-light columns" style="max-height: 650px; max-width: 850px;">
             <div class="column mt-5" id="customer-column" style="overflow-y: visible;overflow-x: scroll;">
@@ -57,7 +66,7 @@
 </template>
 <script>
 import axios from 'axios'
-
+import ContactCardRibbon from "./RibbonForCard.vue";
 export default{
     name:'modal-for-selectable--list',
     props:['getAction','listTitle','cardTitle'],
@@ -66,6 +75,9 @@ export default{
             ModalForSelectableElementListShowned:true,
             elementList:[]
         }
+    },
+    components:{
+        ContactCardRibbon
     },
     beforeMount(){
         console.log(this.getAction)

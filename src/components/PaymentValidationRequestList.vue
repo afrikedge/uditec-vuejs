@@ -2,7 +2,7 @@
     <div class="my-5 mx-5">
         
         <customer-list-ribbon 
-        pageTitle="Clients"
+        pageTitle="Demande validation paiement"
         componentwithPresentationView="customerListPresentation"
         :hasAThirdPresentation="true"
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
@@ -18,41 +18,34 @@
                     <thead class=" my-2">
                         <tr> 
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Demande</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Objet</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type document</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Document</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Crée le</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Crée par</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code client</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Nom du client</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode de vente</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Conditions de paiement</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Limite de crédit</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode de paiement</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">% Acompte exigé</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Niveau de risque</th>
                         </tr>   
                     </thead>
                     <tbody>
-                        <tr id="" v-for="payment of filteredpaymentList" :key="payment['Revision No']" class="is-narrow">
+                        <tr id="" v-for="payment of filteredpaymentList" :key="payment['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/PaymentValidationRequestCard/${ payment['Revision No'] }`">
+                                <router-link :to="`/PaymentValidationRequestCard/${ payment['No_'] }`">
                                     <a href="#" class="has-text-orange">
-                                        {{ payment['Revision No'] }} 
+                                        {{ payment['No_'] }} 
                                     </a>
                                 </router-link>
                             </td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Approval Status'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Customer No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Name'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Sale Mode'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Payment Terms Code'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Credit limit (LCY)'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Payment Method Code'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['VAT Bus_ Posting Group'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Prepayment _'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Risk Level'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Subject'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Document Type'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Document No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Created on'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Created by'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Status'] }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            
+           
             <customer-info class="customer-info"></customer-info>
         </div>
     </div>
@@ -83,10 +76,10 @@ export default {
         const eltToSearch = ref('')
         const filteredpaymentList = computed(()=>
         paymentList.value
-        .filter((row) => new String(row['Revision No_']).toLowerCase().includes(eltToSearch.value)
-                 || new String(row['Name']).toLowerCase().includes(eltToSearch.value)
-                 || new String(row['Customer No_']).toLowerCase().includes(eltToSearch.value)
-                 || new String(row['Sale Mode']).toLowerCase().includes(eltToSearch.value)
+        .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value)
+                 || new String(row['Subject']).toLowerCase().includes(eltToSearch.value)
+                 || new String(row['Created by']).toLowerCase().includes(eltToSearch.value)
+                 || new String(row['Document No_']).toLowerCase().includes(eltToSearch.value)
          ),
      )
         // expose to template and other options API hooks

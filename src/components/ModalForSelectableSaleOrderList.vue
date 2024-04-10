@@ -11,7 +11,15 @@
                 </div>
                 <input-search class="column is-narrow" v-model="eltToSearch"></input-search>
             </div>
-
+              <!---------Composant rubban fiche contact----------------------->
+              <contact-card-ribbon
+                routeForNewCard="../NewContact"
+                @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+                componentWithCompInfo="contactCardRightInfoMaxWidth"
+                :newCardBtnIsDisabled="false"
+                :editCardBtnDisabled="true"
+                :readOnlyModeDisabled="true"
+                ></contact-card-ribbon>
             <div class=" columns" style="max-height: 650px; overflow-y: hidden;">
             <div class="column mt-5" id="customer-column" style="overflow-y: scroll;overflow-x: scroll;">
                 <table class="table is-narrow is-hoverable">
@@ -63,7 +71,7 @@ import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 export default{
     name:'modal-for-selectable-sale-order-list',
     components:{
-        inputSearch
+        inputSearch,
     },
     data(){
         return {

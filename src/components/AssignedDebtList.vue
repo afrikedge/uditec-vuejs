@@ -1,6 +1,6 @@
 <template>
     <div class="my-5 mx-5">
-        
+        <!--  -->
         <customer-list-ribbon 
         pageTitle="Clients"
         componentwithPresentationView="customerListPresentation"
@@ -11,7 +11,7 @@
         routeForNewCard="NewCustomer"
         ></customer-list-ribbon>
 
-
+        <!--  -->
         <div class="has-background-light columns" style="height: 750px;">
             <div class="column mt-5" id="customer-column" style="overflow: scroll;" v-if="presentationView=='list'">
                 <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">

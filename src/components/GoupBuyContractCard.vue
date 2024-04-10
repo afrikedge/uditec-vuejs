@@ -19,6 +19,9 @@
             @onSubmittingForm="submitForm"
             @onCancellingUpdate="setReadWriteModeIsDisabled"
             componentWithCompInfo="newdebtRightInfoMaxWidth"
+            :newCardBtnIsDisabled="false"
+            :editCardBtnIsDisabled="false"
+            :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
             :cancelEditCardBtnIsDisabled="true"
             ></Customer-card-ribbon>
 
@@ -83,51 +86,34 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
+                                <input-text labelInputText="N° contrat" :valueInputText="groupbuyCardHeader['No_']" :is_disabled="true" ></input-text>
+                                
+                                <input-text labelInputText="Type de compte" :valueInputText="groupbuyCardHeader['Account Type']" :is_disabled="true" ></input-text>
 
-                                <input-text labelInputText="Code contact" valueInputText=""></input-text>
-                                <input-text labelInputText="Nom de l’adresse" valueInputText=""></input-text>
-                                <input-text labelInputText="ville" valueInputText=""></input-text> 
-                                <input-text labelInputText="Téléphone Mobile" valueInputText=""></input-text>
-                                <input-text labelInputText="Lieu" valueInputText=""></input-text> 
-                                <input-text labelInputText="Quartier" valueInputText="" ></input-text>
-                               
-                                <input-select-basic-1 labelInputText="Zone" :option-list="optionLabelListForRepossSource"></input-select-basic-1> 
-                               
-                                <input-select-basic-1 labelInputText="Créneau de préférence" :option-list="optionLabelListForRepossSource" ></input-select-basic-1> 
+                                <input-text labelInputText="N° Client" :valueInputText="groupbuyCardHeader['Customer No_']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select labelInputText="N° Client" v-model="groupbuyCardHeader['Customer No_']" v-else></input-select>
 
-                                 
-                                <input-select-basic-1 labelInputText="Créneau de préférence" :option-list="optionLabelListForRepossSource" ></input-select-basic-1> 
+                                <input-text labelInputText="Nom client" :valueInputText="groupbuyCardHeader['Name']" :is_disabled="true"></input-text> 
+
+                                <input-text labelInputText="Date de début opération" :valueInputText="formatDate(groupbuyCardHeader['OP Starting Date'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
+                                <input-date labelInputText="Date de début opération" v-model="OpStartingDate" v-else :is_disabled="false"></input-date>
+
+                                <input-number labelInputText="Durée de l'opération (mois)" :valueInputText="groupbuyCardHeader['OP Duration (Month)']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-number>
+                                <input-number labelInputText="Durée de l'opération (mois)" :valueInputText="groupbuyCardHeader['OP Duration (Month)']" v-else></input-number>
+
+                                <input-date labelInputText="Date de fin opération" :valueInputText="formatDate(groupbuyCardHeader['OP Starting Date'])" :is_disabled="true"></input-date> 
 
                                
                             </div>
                             <div class="column">
 
-                                
-                                <input-select-basic-1 labelInputText="Type de route" :option-list="optionLabelListForRepossSource"></input-select-basic-1> 
+                                <input-number labelInputText="Durée (mois)" :valueInputText="groupbuyCardHeader['Duration (Month)']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-number>
+                                <input-number labelInputText="Durée (mois)" :valueInputText="groupbuyCardHeader['Duration (Month)']" v-else></input-number>
 
-                                <input-text labelInputText="Autres préciser" valueInputText=""></input-text> 
+                                <input-text labelInputText="Type engagement" :valueInputText="groupbuyCardHeader['Commitment Type']" :is_disabled="true" ></input-text>
 
-                               
-                                <input-select-basic-1 labelInputText="Distance de transport à pied"  :option-list="optionLabelListForRepossSource"></input-select-basic-1> 
-
-                                <input-text labelInputText="Autres préciser" valueInputText=""></input-text> 
-
-                               
-                                <input-select-basic-1 labelInputText="Emplacement de livraison" :option-list="optionLabelListForRepossSource" ></input-select-basic-1> 
-
-                                <input-text labelInputText="Accès moto" valueInputText=""></input-text> 
-
-                                
-                                <input-select-basic-1 labelInputText="Plan d’accès" :option-list="optionLabelListForRepossSource"></input-select-basic-1> 
-
-                                
-                                <input-select-basic-1 labelInputText="Type d’accès" :option-list="optionLabelListForRepossSource"></input-select-basic-1> 
-
-                                
-                                <input-select-basic-1 labelInputText="Type de camion" :option-list="optionLabelListForRepossSource"></input-select-basic-1> 
-
-                               
-                                <input-select-basic-1 labelInputText="Parking Publique" :option-list="optionLabelListForRepossSource"></input-select-basic-1> 
+                                <input-text labelInputText="Mode de règlement" :valueInputText="groupbuyCardHeader['Payment Method Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select labelInputText="Mode de règlement" v-model="groupbuyCardHeader['Payment Method Code']" @openModal="activeModalForSelectableElementList='paymentMethodList'" v-else></input-select>
 
                             
                             </div>
@@ -150,7 +136,9 @@ import CustomerCardHeader from './HeaderForCard.vue'
 import CustomerInfo from './CustomerInfo.vue'
 import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
-import inputSelectBasic1 from './input/input-select-basic1.vue'
+import inputSelect from './input/input-select.vue'
+import inputDate from './input/input-date.vue'
+import inputNumber from './input/input-number.vue'
 import axios from 'axios'
 import { onMounted,ref,computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -163,15 +151,14 @@ export default {
     components:{
         CustomerCardHeader,CustomerInfo,
         inputText,
-        CustomerCardRibbon,
-        inputSelectBasic1
+        CustomerCardRibbon,inputSelect,
+        inputDate,inputNumber
     },
     setup(){
         const groupbuyCardHeader = ref({})
         const readOnlyModeIsDisabled = ref(false)
         const hostname = window.location.hostname
         const groupbuyCardId = useRoute().params.id
-        
 
         //variable de soumission forme
         const submitting_message=ref('') 

@@ -1,40 +1,159 @@
 <template>
     <div class="my-5 mx-5">
         
-        <release-list-ribbon pageTitle="Demandes de déblocage"></release-list-ribbon>
+        <customer-list-ribbon 
+        pageTitle="Demande de déblocage"
+        componentwithPresentationView="customerListPresentation"
+        :hasAThirdPresentation="true"
+        @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+        @onInputSearchData="(eltToSearch)=>this.eltToSearch=eltToSearch"
+        componentWithCompInfo="customerListRightInfoMaxWidth"
+        routeForNewCard="NewCustomer"
+        ></customer-list-ribbon>
 
 
         <div class="has-background-light columns" style="height: 750px;">
-            <div class="column mt-5" id="customer-column" style="overflow: scroll;">
-                <table class="table  is-narrow is-hoverable is-fullwidth">
+            <div class="column mt-5" id="customer-column" style="overflow: scroll;" v-if="presentationView=='list'">
+                <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
                     <thead class=" my-2">
                         <tr> 
-                           
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Demande</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Limite de crédit</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Encours</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Encours échue</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Exposition brute</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Dépassement</th>
+                            
                         </tr>   
                     </thead>
                     <tbody>
-                        <tr id="" v-for="elt of [1,2,3,4,5,6,7,8,9,11,10,12,13,14,145,14,1,1,1,4,4,4,44,4,7]" :key="elt">          
+                        <tr id="" v-for="release of  filteredreleaseList" :key="release['No_']" class="is-narrow">
+                            <td class="has-text-left has-background-light"> 
+                                <router-link :to="`/ReleaseRequestCard/${ release['Status'] }`">
+                                    <a href="#" class="has-text-orange">
+                                        {{release['Status']==0 ? 'Actif' : 'Non actif' }} 
+                                    </a>
+                                </router-link>
+                            </td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Credit Limit (LCY)']==0 ? 'pas de crédit' : 'créditer' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Balance Amount']==0 ? '2000Fcfa' : '1.000.000.000Fcfa' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Amount Due']==0 ? '2000Fcfa' : '1.000.000.000Fcfa' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Gross exposure'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Exceeding Amount']==0 ? 'Excessif' : 'Non excessif' }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-
-            <customer-info></customer-info>
+           
+            <customer-info class="customer-info"></customer-info>
         </div>
     </div>
     
 </template>
 
-<script>
+<script scoped>
 import CustomerInfo from './CustomerInfo.vue'
-import ReleaseListRibbon from './RibbonForLists.vue'
+import CustomerListRibbon from './RibbonForLists.vue'
+import axios from 'axios'
+import {computed ,ref } from 'vue'
+import { useNavigationTabStore } from '@/Stores/NavigationTab'
+
 
 export default {
-    name:'release-request-list',
+
+    name:'releaserequest-list',
     components:{
-        CustomerInfo,ReleaseListRibbon
+        CustomerInfo,CustomerListRibbon
     },
+    computed:{
+        presentationView(){
+            return useNavigationTabStore().presentationForPageList['customerListPresentation']
+        }
+    },
+    setup() {
+        const releaseList = ref([])
+        const eltToSearch = ref('')
+        const  filteredreleaseList = computed(()=>
+        releaseList.value
+        .filter((row) => new String(row['Status']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Customer No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Name']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Activity Type']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+        ),
+     )
+        // expose to template and other options API hooks
+        return {
+            releaseList,
+            eltToSearch,
+            filteredreleaseList
+        }
+    },
+    data(){
+        return {
+            //taille (largeur) initiale du composant customerInfo
+            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerListRightInfoMaxWidth,
+            
+            //nom de l'hote dans l'url 
+            hostname:window.location.hostname       
+        }
+    },
+    methods:{
+        /////////////////////////methode pour masquer ou afficher le composant info à droite
+        hideOrShowComponentInfo(){
+            if(this.customerInfoCompMaxWidth=='0px') {
+                useNavigationTabStore().setMaxWidth('customerListRightInfoMaxWidth','800px')
+                this.customerInfoCompMaxWidth='800px'
+            }
+            else {
+                useNavigationTabStore().setMaxWidth('customerListRightInfoMaxWidth','0px')
+                this.customerInfoCompMaxWidth='0px'
+            }
+        },
+
+    },
+    
+    mounted(){
+        axios.get(`http://${this.hostname}:3000/app/getRRQList`)
+        .then((result) => {
+            console.log(result.data)
+          this.releaseList = result.data;
+        })
+        .catch(err=>console.log(err));
+      
+    }
 }
 
 </script>
 
+<style scoped>
+.customer-info{
+    max-width: v-bind(customerInfoCompMaxWidth);
+    transition: max-width 0.5s;
+}
+.has-text-orange{
+    color: orange;
+}
+.has-text-orangered{
+    color: orangered;
+}
+.has-background-orange{
+    background-color: rgb(255, 155, 118);
+}
+.has-background-orange:hover {
+    background-color: rgb(255, 68, 0);
+}
+.card-is-hoverable:hover{
+    background-color: rgba(255, 68, 0, 0.068)
+}
+hr.rounded {
+  border-top: 8px solid #bbb;
+  border-radius: 5px;
+}
+.tableFixHead thead th {
+    position: sticky; /* make the table heads sticky */
+    top: -15px; /* table head will be placed from the top of the table and sticks to it */
+ }
+
+</style>

@@ -107,9 +107,14 @@
                         <div id="general_content" class="columns">
                             <div class="column">
                                 <input-text labelInputText="Code client" :valueInputText="saleQuoteCardHeader['Sell-to Customer No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select labelInputText="Code client" v-model="saleQuoteCardHeader['Sell-to Customer No_']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-select>
+                                <input-select labelInputText="Code client" v-model="saleQuoteCardHeader['Sell-to Customer No_']" @openModal="activeModalForSelectableElementList='';" v-else></input-select>
                                 
                                 <input-text labelInputText="Nom du client" v-model="saleQuoteCardHeader['Sell-to Customer Name']" :valueInputText="saleQuoteCardHeader['Sell-to Customer Name']" :is_disabled="!readOnlyModeIsDisabled" :is_readOnly="true"></input-text>
+
+                                <input-text labelInputText="Code prospect"  :valueInputText="saleQuoteCardHeader['Lead No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select labelInputText="Code prospect" v-model="saleQuoteCardHeader['Lead No_']" @openModal="activeModalForSelectableElementList='contactList'" v-else></input-select>
+
+
                                 
                                 <input-text labelInputText="Code Contact"  :valueInputText="saleQuoteCardHeader['Sell-to Contact No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select labelInputText="Code Contact" v-model="saleQuoteCardHeader['Sell-to Contact No_']" @openModal="activeModalForSelectableElementList='contactList'" v-else></input-select>

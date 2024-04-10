@@ -6,14 +6,13 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <Customer-Card-Header   :soNo="groupbuyCardHeader['No_']" :soDesc="groupbuyCardHeader['Name']" pageTitle="Fiche contrat achat groupé" 
+                <Customer-Card-Header   :soNo="groupbuyCardHeader['No_']" :soDesc="groupbuyCardHeader['Name']" pageTitle="Adresse de livraison" 
                 @onGoingBackToList='goBackToList'
                 />
             </div>
             
 <!---------Composant rubban fiche activité recouvrement----------------------->      
             <Customer-card-ribbon
-            routeForNewCard="../NewDebtcollection"
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
             @onDisablingReadOnlyMode="setReadOnlyModeIsDisabled"
             @onSubmittingForm="submitForm"
@@ -83,7 +82,7 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-
+                                <input-select v-model="contactCustomerNo" labelInputText="Code client" :is_disabled="false"  @openModal="activeModalForSelectableElementList='customerList';"></input-select>
                                 <input-text labelInputText="Code contact" valueInputText=""></input-text>
                                 <input-text labelInputText="Nom de l’adresse" valueInputText=""></input-text>
                                 <input-text labelInputText="ville" valueInputText=""></input-text> 
@@ -151,6 +150,7 @@ import CustomerInfo from './CustomerInfo.vue'
 import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import inputSelectBasic1 from './input/input-select-basic1.vue'
+import inputSelect from './input/input-select.vue'
 import axios from 'axios'
 import { onMounted,ref,computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -164,7 +164,7 @@ export default {
         CustomerCardHeader,CustomerInfo,
         inputText,
         CustomerCardRibbon,
-        inputSelectBasic1
+        inputSelectBasic1,inputSelect
     },
     setup(){
         const groupbuyCardHeader = ref({})

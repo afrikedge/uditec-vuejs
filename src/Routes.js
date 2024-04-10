@@ -92,6 +92,7 @@ import NewDebtCollection from "./components/NewDebtCollection.vue"
 //11-----contrat d'achat groupé
 import GoupBuyContractList from "./components/GoupBuyContractList.vue"
 import GoupBuyContractCard from "./components/GoupBuyContractCard.vue"
+import NewGoupBuyContract from "./components/NewGroupBuyContract.vue"
 
 const routes = [
   ///////////////////1
@@ -177,6 +178,7 @@ const routes = [
    ///////////////////12
   {path:'/GoupBuyContractList',component:GoupBuyContractList,name:'GoupBuyContractListPage'},
   {path:'/GoupBuyContractCard/:id',component:GoupBuyContractCard,name:'GoupBuyContractCardPage'},
+  {path:'/NewGoupBuyContract',component:NewGoupBuyContract,name:'NewGoupBuyContractPage'},
   
 
 

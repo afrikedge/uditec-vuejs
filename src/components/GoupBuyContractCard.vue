@@ -13,7 +13,7 @@
             
 <!---------Composant rubban fiche activité recouvrement----------------------->      
             <Customer-card-ribbon
-            routeForNewCard="../NewDebtcollection"
+            routeForNewCard="../NewGoupBuyContract"
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
             @onDisablingReadOnlyMode="setReadOnlyModeIsDisabled"
             @onSubmittingForm="submitForm"
@@ -172,10 +172,10 @@
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
                                 <a @click="collapse('historical_content');onglet3_expanded = !onglet3_expanded;" v-if="onglet3_expanded">
-                                    <span>Historique</span>
+                                    <span>Historique contrat</span>
                                 </a>
                                 <a @click="expand('historical_content');onglet3_expanded = !onglet3_expanded;" v-if="!onglet3_expanded">
-                                    <span>Historique</span>
+                                    <span>Historique contrat</span>
                                     <span class="icon">
                                       <i class="fas fa-angle-right"></i>
                                     </span>
@@ -226,10 +226,10 @@
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
                                 <a @click="collapse('history_content');onglet4_expanded = !onglet4_expanded;" v-if="onglet4_expanded">
-                                    <span>Historique</span>
+                                    <span>Historique client</span>
                                 </a>
                                 <a @click="expand('history_content');onglet4_expanded = !onglet4_expanded;" v-if="!onglet4_expanded">
-                                    <span>Historique</span>
+                                    <span>Historique client</span>
                                     <span class="icon">
                                       <i class="fas fa-angle-right"></i>
                                     </span>

@@ -176,7 +176,7 @@ const routes = [
   
   
    ///////////////////12
-  {path:'/GoupBuyContractList',component:GoupBuyContractList,name:'GoupBuyContractListPage'},
+  {path:'/GoupBuyContractList/:id',component:GoupBuyContractList,name:'GoupBuyContractListPage'},
   {path:'/GoupBuyContractCard/:id',component:GoupBuyContractCard,name:'GoupBuyContractCardPage'},
   {path:'/NewGoupBuyContract',component:NewGoupBuyContract,name:'NewGoupBuyContractPage'},
   

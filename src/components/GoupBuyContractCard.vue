@@ -309,7 +309,6 @@ import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue
 import ModalForSelectablePaymentMethodList from './ModalForSelectablePaymentMethodList.vue'
 import axios from 'axios'
 import { onMounted,ref,computed } from 'vue'
-import { useRoute } from 'vue-router'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 
@@ -328,7 +327,6 @@ export default {
         const groupbuyCardHeader = ref({})
         const readOnlyModeIsDisabled = ref(false)
         const hostname = window.location.hostname
-        const groupbuyCardId = useRoute().params.id
 
         //variable de soumission forme
         const submitting_message=ref('') 
@@ -358,7 +356,6 @@ export default {
 
         const dateInfo = {
             OpStartingDate: ref(''),
-            scheduledEndDate:ref(''),
             shipRequestedDate:ref(''),
             promisedDeliveryDate:ref('')
         }
@@ -385,12 +382,11 @@ export default {
             company:ref(useWebUserInfoStore().activeCompanyId),
         }
 
-        function getRACardInfo(){
-            axios.get(`http://${hostname}:3000/app/getRACard/${groupbuyCardId}`)
+        function getcontractCardInfo(){
+            axios.get(`http://${hostname}:3000/app/getCreditContractCard?contractNo=UDT/AGP/24-0001`)
             .then(result => {
                 console.log(result)
                 groupbuyCardHeader.value = result.data[0]
-                dateInfo.scheduledEndDate.value = getISODate(groupbuyCardHeader.value["Scheduled End Date"])
                 dateInfo.OpStartingDate.value = getISODate(groupbuyCardHeader.value["OP Starting Date"])
             }).catch(err=>console.log(err))
         }
@@ -500,7 +496,7 @@ export default {
 
         onMounted(() => {
             if (webUserInfo.name.value){
-                getRACardInfo()
+                getcontractCardInfo()
                 getOptionLabelList('[Reposs Source]')
                 getOptionLabelList('[Reposs Status]')
                 getOptionLabelList('[Reposs Type]')
@@ -511,7 +507,7 @@ export default {
                     useWebUserInfoStore().fillWebUserInfo(res.data.recordset[0])
                     webUserInfo.name.value=useWebUserInfoStore().name
                     webUserInfo.company.value=useWebUserInfoStore().activeCompanyId
-                    getRACardInfo()
+                    getcontractCardInfo()
                     getOptionLabelList('[Reposs Source]')
                     getOptionLabelList('[Reposs Status]')
                     getOptionLabelList('[Reposs Type]')
@@ -551,6 +547,7 @@ export default {
     },
     data(){
         return{
+
             //taille (largeur) initiale du composant customerInfo
             customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerCardRightInfoMaxWidth,
 

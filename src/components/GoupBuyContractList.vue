@@ -8,7 +8,7 @@
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
         @onInputSearchData="(eltToSearch)=>this.eltToSearch=eltToSearch"
         componentWithCompInfo="customerListRightInfoMaxWidth"
-        routeForNewCard="NewDebtcollection"
+        routeForNewCard="NewGroupBuyContract"
         ></customer-list-ribbon>
 
 
@@ -17,42 +17,34 @@
                 <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
                     <thead class=" my-2">
                         <tr> 
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° contrat</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Type de compte</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° client</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Date de début opération</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Durée de l'opération (mois)</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Date de fin opération</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° contrat</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Jour(s) retard</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Nom client</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Document</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Date comptabilisation</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Mode vente</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Durée (mois)</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Type engagement</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Conditions de paiement</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Date première échéance</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Mode de règlement</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Statut</th>
-
+                           
                         </tr>   
                     </thead>
                     <tbody>
-                        <tr id="" v-for="groupbuy of filteredgroupBuyList" :key="groupbuy['No_']" class="is-narrow">
+                        <tr id="" v-for="groupbuy of filteredgroupBuyList" :key="groupbuy['Customer No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/GoupBuyContractCard/${ groupbuy['No_'] }`">
+                                <router-link :to="`/GoupBuyContractCard/${ groupbuy['No_']}`">
                                     <a href="#" class="has-text-orange">
-                                        {{ groupbuy['No_'] }} 
+                                        {{ groupbuy['Customer No_'] }} 
                                     </a>
                                 </router-link>
                             </td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Account Type'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Customer No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Days late'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Customer Name']}}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['OP Starting Date']}}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['OP Duration (Month)'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['OP Ending Date'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Document No_']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDate(groupbuy['Posting Date']) }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Sales Mode'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Duration (Month)'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Commitment Type'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Payment Terms Code'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['First Terms Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Payment Method Code'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Approval Status'] }}</td>
+                           
                         </tr>
                     </tbody>
                 </table>
@@ -72,7 +64,7 @@
                                         
                                         <router-link :to="`/GoupBuyContractCard/${ groupbuy['No_'] }`">
                                             <a href="#" class="has-text-orange">
-                                                {{ groupbuy['No_'] }} 
+                                                {{ groupbuy['Customer No_'] }} 
                                             </a>
                                         </router-link>
                             
@@ -80,7 +72,7 @@
                                 </p>
                                 <div class="has-text-left columns">
                                     <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                        <span class="is-size-7 is-underlined">{{ groupbuy['Customer No'] }}</span>
+                                        <span class="is-size-7 is-underlined">{{ groupbuy['No'] }}</span>
                                     </div>
                                     <div class="column has-text-right is-narrow py-0 mt-1">
                                         <span class="is-size-7">{{ groupbuy['Activity Type'] }}</span>
@@ -126,7 +118,7 @@
                                         
                                                 <router-link :to="`/GoupBuyContractCard/${ groupbuy['No_'] }`">
                                                     <a href="#" class="has-text-orange">
-                                                        {{ groupbuy['No_'] }} 
+                                                        {{ groupbuy['Customer No_'] }} 
                                                     </a>
                                                 </router-link>
                             
@@ -134,7 +126,7 @@
                                         </p>
                                         <div class="has-text-left columns">
                                             <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                                <span class="is-size-7 is-underlined">{{ groupbuy['Customer No_]'] }}</span>
+                                                <span class="is-size-7 is-underlined">{{ groupbuy['No_]'] }}</span>
                                             </div>
                                             <div class="column has-text-right is-narrow py-0 mt-1">
                                                 <span class="is-size-7">{{ groupbuy['Activity Type'] }}</span>
@@ -172,7 +164,7 @@ import { useNavigationTabStore } from '@/Stores/NavigationTab'
 
 export default {
 
-    name:'groupbuy-list',
+    name:'groupbuy-contract-list',
     components:{
         CustomerInfo,CustomerListRibbon
     },
@@ -182,25 +174,26 @@ export default {
         }
     },
     setup() {
-        const debtbuyList = ref([])
+        const  groupbuyList = ref([])
         const eltToSearch = ref('')
         const filteredgroupBuyList = computed(()=>
-        debtbuyList.value
-        .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value)
-                || new String(row['Customer No_']).toLowerCase().includes(eltToSearch.value)
-                || new String(row['Name']).toLowerCase().includes(eltToSearch.value)
-                || new String(row['Activity Type']).toLowerCase().includes(eltToSearch.value)
-        ),
-     )
+            groupbuyList.value
+            .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                    || new String(row['Customer No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                    || new String(row['Customer Name']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+            )
+        )
         // expose to template and other options API hooks
         return {
-            debtbuyList,
+            groupbuyList,
             eltToSearch,
             filteredgroupBuyList
         }
     },
     data(){
         return {
+
+            
             //taille (largeur) initiale du composant customerInfo
             customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerListRightInfoMaxWidth,
             
@@ -221,13 +214,19 @@ export default {
             }
         },
 
+        formatDate(date){
+            if (new String(date).includes('1753-')) return ''
+            else return new Date(date).toLocaleDateString()
+        }
+
     },
     
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getRAList`)
+        axios.get(`http://${this.hostname}:3000/app/getCustomerHistory?customerNo=UDT00001`)
         .then((result) => {
-          //this.debtbuyList = result.data;
-          console.log(result.data)
+          console.log(result.data[0])
+          this.groupbuyList = result.data;
+          
         })
         .catch(err=>console.log(err));
       

@@ -44,29 +44,38 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="Code client" :valueInputText="ShipToAddressCard['Customer No_']" :is_disabled="readOnlyModeIsDisabled" v-if="readOnlyModeIsDisabled"></input-text>
-                                <input-select labelInputText="Code client"  v-model="ShipToAddressCard['Customer No_']" @openModal="activeModalForSelectableElementList='contactList';" v-else></input-select>
+                                <input-text labelInputText="Code client" :valueInputText="ShipToAddressCard['Customer No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select labelInputText="Code client"  v-model="ShipToAddressCard['Customer No_']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-select>
+                                
                                 <input-text labelInputText="Code contact" :valueInputText="ShipToAddressCard['Contact No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select labelInputText="Code contact" v-model="ShipToAddressCard['Contact No_']" @openModal="activeModalForSelectableElementList='contactList'" v-else></input-select>
-                                <input-text labelInputText="Code Adresse" :valueInputText="ShipToAddressCard['Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select labelInputText="Code Adresse" v-model="ShipToAddressCard['Code']" @openModal="activeModalForSelectableElementList='contactList';" v-else></input-select>
+                                
+                                <input-text labelInputText="Code Adresse" :valueInputText="ShipToAddressCard['Code']" :is_disabled="true" ></input-text>
+                               
                                 <input-text labelInputText="Nom de l’adresse" :valueInputText="ShipToAddressCard['Name']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-text labelInputText="Nom de l’adresse" v-model="ShipToAddressCard['Name']" @openModal="activeModalForSelectableElementList='contactList';" v-else></input-text>
+                                <input-text labelInputText="Nom de l’adresse" v-model="ShipToAddressCard['Name']"  v-else></input-text>
+                                
                                 <input-text labelInputText="Adresse:Ligne 1" :valueInputText="ShipToAddressCard['Address']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select labelInputText="Adresse:Ligne 1" v-model="ShipToAddressCard['Address']" @openModal="activeModalForSelectableElementList='contactList';" v-else></input-select>
+                                <input-text labelInputText="Adresse:Ligne 1" v-model="ShipToAddressCard['Address']"  v-else></input-text>
+                               
                                 <input-text labelInputText="Adresse:Ligne 2" :valueInputText="ShipToAddressCard['Address 2']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select labelInputText="Adresse:Ligne 2" v-model="ShipToAddressCard['Address 2']" @openModal="activeModalForSelectableElementList='contactList';" v-else></input-select>
+                                <input-text labelInputText="Adresse:Ligne 2" v-model="ShipToAddressCard['Address 2']"  v-else></input-text>
+                                
                                 
                             </div>
                             <div class="column">
                                 <input-text labelInputText="Ville" :valueInputText="ShipToAddressCard['City']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
                                 <input-text labelInputText="Ville" v-model="ShipToAddressCard['City']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-text> 
+                               
                                 <input-text labelInputText="Téléphone" :valueInputText="ShipToAddressCard['Phone No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
                                 <input-text labelInputText="Téléphone" v-model="ShipToAddressCard['Phone No_']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-text> 
+                               
                                 <input-text labelInputText="Téléphone Mobile" :valueInputText="ShipToAddressCard['Mobile Phone No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
                                 <input-text labelInputText="Téléphone Mobile" v-model="ShipToAddressCard['Mobile Phone No_']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-text> 
+                                
                                 <input-text labelInputText="Lieu" :valueInputText="ShipToAddressCard['Place']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-text labelInputText="Lieu" v-model="ShipToAddressCard['Place']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-text>
+                                
                                 <input-text labelInputText="Quartier" :valueInputText="ShipToAddressCard['Neighborhood']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-text labelInputText="Quartier" v-model="ShipToAddressCard['Neighborhood']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-text>
                             </div>
@@ -91,22 +100,52 @@
                         </div>
                         <div id="details_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="Zone" :valueInputText="ShipToAddressCard['Service Zone Code']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Créneau de préférence" :valueInputText="ShipToAddressCard['Time preference']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Type de route" :valueInputText="ShipToAddressCard['Road Type']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Autres préciser" :valueInputText="ShipToAddressCard['Road Type(Others)']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Distance de transport à pied" :valueInputText="ShipToAddressCard['Walking distance']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Autres préciser" :valueInputText="ShipToAddressCard['Walking distance(Others)']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Emplacement de livraison" :valueInputText="ShipToAddressCard['Delivery Location']==0 ? 'Residence Société' : 'Residence Client'" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Zone" :valueInputText="ShipToAddressCard['Service Zone Code']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Zone" v-model="ShipToAddressCard['Service Zone Code']" :option-list="`optionLabelListForServiceZoneCode`" v-else></input-select-basic-1> 
+                               
+                                <input-text labelInputText="Créneau de préférence" :valueInputText="ShipToAddressCard['Time preference']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Créneau de préférence" v-model="ShipToAddressCard['Time preference']" :option-list="`optionLabelListForTimePreference`" v-else></input-select-basic-1> 
+                               
+                                <input-text labelInputText="Type de route" :valueInputText="ShipToAddressCard['Road Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Type de route" v-model="ShipToAddressCard['Road Type']" :option-list="`optionLabelListForServiceRoadType`" v-else></input-select-basic-1> 
+
+                                
+                                <input-text labelInputText="Autres préciser" :valueInputText="ShipToAddressCard['Road Type(Others)']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-text labelInputText="Autres préciser" v-model="ShipToAddressCard['Road Type(Others)']"  v-else></input-text>
+                                
+                                <input-text labelInputText="Distance de transport à pied" :valueInputText="ShipToAddressCard['Walking distance']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Distance de transport à pied" v-model="ShipToAddressCard['Walking distance']" :option-list="`optionLabelListForServiceWalkingDistance`" v-else></input-select-basic-1> 
+                               
+                                 
+                                <input-text labelInputText="Autres préciser" :valueInputText="ShipToAddressCard['Walking distance(Others)']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-text labelInputText="Autres préciser" v-model="ShipToAddressCard['Walking distance(Others)']"  v-else></input-text>
+                               
+                                <input-text labelInputText="Emplacement de livraison" :valueInputText="ShipToAddressCard['Delivery Location']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Emplacement de livraison" v-model="ShipToAddressCard['Delivery Location']" :option-list="`optionLabelListForServiceDeliveryLocation`" v-else></input-select-basic-1> 
+                               
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Accès moto" :valueInputText="ShipToAddressCard['Motorcycle Access']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Plan d'accès" :valueInputText="ShipToAddressCard['Access Plan']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Type d'accès" :valueInputText="ShipToAddressCard['Access Type']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Type de camion" :valueInputText="ShipToAddressCard['Truck Type']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Parking Publique" :valueInputText="ShipToAddressCard['Public parking presence']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Remarques" :valueInputText="ShipToAddressCard['Remarks']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Plan de masse" :valueInputText="ShipToAddressCard['Ground plan']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Accès moto" :valueInputText="ShipToAddressCard['Motorcycle Access']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-text labelInputText="Accès moto" v-model="ShipToAddressCard['Motorcycle Access']"  v-else></input-text>
+                                
+                                <input-text labelInputText="Plan d'accès" :valueInputText="ShipToAddressCard['Access Plan']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Plan d'accès" v-model="ShipToAddressCard['Access Plan']" :option-list="`optionLabelListForServiceAccessPlan`" v-else></input-select-basic-1> 
+                             
+                                <input-text labelInputText="Type d'accès" :valueInputText="ShipToAddressCard['Access Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Type d'accès" v-model="ShipToAddressCard['Access Type']" :option-list="`optionLabelListForServiceAccessType`" v-else></input-select-basic-1>   
+                                
+                                <input-text labelInputText="Type de camion" :valueInputText="ShipToAddressCard['Truck Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Type de camion" v-model="ShipToAddressCard['Truck Type']" :option-list="`optionLabelListForServiceAccessTruckType`" v-else></input-select-basic-1> 
+                                
+                                <input-text labelInputText="Parking Publique" :valueInputText="ShipToAddressCard['Public parking presence']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Parking Publique" v-model="ShipToAddressCard['Public parking presence']" :option-list="`optionLabelListForServicePublicParkingPresence`" v-else></input-select-basic-1> 
+                             
+                                <input-text labelInputText="Remarques" :valueInputText="ShipToAddressCard['Remarks']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-text labelInputText="Remarques" v-model="ShipToAddressCard['Remarks']"  v-else></input-text>
+                                
+                                <input-text labelInputText="Plan de masse" :valueInputText="ShipToAddressCard['Ground plan']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-text labelInputText="Plan de masse" v-model="ShipToAddressCard['Ground plan']"  v-else></input-text>
+                                
                             </div>
                         </div>                    
                     </div>
@@ -137,30 +176,70 @@ import inputSelect from './input/input-select.vue'
 import shiptoaddressCardHeader from './HeaderForCard.vue'
 import shiptoaddressCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
+import inputSelectBasic1 from './input/input-select-basic1.vue'
 import axios from 'axios'
 import { ref, watch} from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
 import ModalForSelectableContactList from './ModalForSelectableContactList.vue'
+import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 export default {
     name:'ship-to-address-card',
     components:{
         shiptoaddressCardHeader,inputText,
         shiptoaddressCardRibbon,
         ModalForSelectableCustomerList,
-        inputSelect,
+        inputSelect,inputSelectBasic1,
         ModalForSelectableContactList 
     },
     setup(){
         const ShipToAddressCard = ref({})
         const readOnlyModeIsDisabled = ref(false)
         const readOnlyMode = ref(true)
-
+        const hostname = window.location.hostname
+        const optionLabelListForServiceZoneCode = ref([])
+        const optionLabelListForTimePreference = ref([])
+        const optionLabelListForServiceRoadType = ref([])
+        const optionLabelListForServiceWalkingDistance = ref([])
+        const optionLabelListForServiceDeliveryLocation = ref([])
+        const optionLabelListForServiceAccessPlan = ref([])
+        const optionLabelListForServiceAccessType = ref([])
+        const optionLabelListForServiceAccessTruckType = ref([])
+        const optionLabelListForServicePublicParkingPresence = ref([])
         //variable de success serveur
         let success_message=ref('')
         let is_convertSQ_success = ref(false)
 
 
+
+
+        
+        function getOptionLabelList(field){
+            axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
+            .then(result => {
+                if (field=='Service Zone Code')
+                optionLabelListForServiceZoneCode.value=result.data.recordset
+                if (field=='Time preference')
+                optionLabelListForTimePreference.value=result.data.recordset
+                if (field=='Road Type')
+                optionLabelListForServiceRoadType.value=result.data.recordset
+                if (field=='Walking distance')
+                optionLabelListForServiceWalkingDistance.value=result.data.recordset
+                if (field=='Delivery Location')
+                optionLabelListForServiceDeliveryLocation.value=result.data.recordset
+                if (field=='Access Plan')
+                optionLabelListForServiceAccessPlan.value=result.data.recordset
+                if (field=='Access Type')
+                optionLabelListForServiceAccessType.value=result.data.recordset
+                if (field=='Truck Type')
+                optionLabelListForServiceAccessTruckType.value=result.data.recordset
+                if (field=='Public parking presence')
+                optionLabelListForServicePublicParkingPresence.value=result.data.recordset
+    
+                    console.log(result.data.recordset)
+    
+            }).catch(err=>console.log(err))
+        }
         function setReadOnlyModeIsDisabled(){
             readOnlyModeIsDisabled.value=true
         }
@@ -195,7 +274,19 @@ export default {
             fillCustomerInfoField,
             fillContactInfoField,
             setReadOnlyModeIsDisabled,
-            success_message
+            success_message,
+            getOptionLabelList,
+
+
+            optionLabelListForServiceZoneCode,
+            optionLabelListForTimePreference,
+            optionLabelListForServiceRoadType,
+            optionLabelListForServiceWalkingDistance,
+            optionLabelListForServiceDeliveryLocation,
+            optionLabelListForServiceAccessPlan,
+            optionLabelListForServiceAccessType,
+            optionLabelListForServiceAccessTruckType,
+            optionLabelListForServicePublicParkingPresence
         }
     },
     data(){
@@ -212,7 +303,7 @@ export default {
             //élement pour le modal sélection des enregistrements
             activeModalForSelectableElementList:'',
 
-            hostname:window.location.hostname
+            
         }
     },
     methods:{

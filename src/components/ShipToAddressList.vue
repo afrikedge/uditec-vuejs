@@ -1,180 +1,216 @@
 <template>
-    <div :class="{'modal':true , 'is-active': true }" >
-        <div class="modal-background has-background-white" style="opacity:0.7">
-        </div>
-        <div id="scrollBlock"  class="modal-card box  shadow is-rounded h-100 has-background-light" style="width:96%;padding: 0;">
- 
-<!---------Composant entête liste shiptoaddress----------------------->      
-            <div id="card-header-comp" class="has-background-white py-5 ">
-                <shiptoaddressListHeader class="w-100 mx-2" pageTitle="01121212 . adresse de livraison gérald LTD" />
-            </div>
-            
-<!---------Composant rubban liste shiptoaddress----------------------->
-            <div id="card-ribbon-comp" class="mt-3 mx-5">
-                <shiptoaddress-list-ribbon class="mx-5" 
-                pageTitle="Adresse de livraison"
-                :newCardBtnDisabled="true"
-                :editCardBtnDisabled="true"
-                :readOnlyModeDisabled="true"
-                ></shiptoaddress-list-ribbon>
-            </div>
+    <div class="my-5 mx-5">
+        
+        <customer-list-ribbon 
+        pageTitle="Adresse de livraison"
+        componentwithPresentationView="customerListPresentation"
+        :hasAThirdPresentation="true"
+        @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+        @onInputSearchData="(eltToSearch)=>this.eltToSearch=eltToSearch"
+        componentWithCompInfo="customerListRightInfoMaxWidth"
+        routeForNewCard="NewShipToAddress"
+        ></customer-list-ribbon>
 
-<!---------Section liste des shiptoaddress----------------------->      
-            <div class="has-background-light mt-5" style="overflow-y: scroll;">
-                <div class="column mt-5" id="customer-column" style="overflow-y: scroll;" v-if="true">
-                    <table class="table  is-narrow is-hoverable is-fullwidth">
-                        <thead class=" my-2">
-                            <tr> 
-                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;" >Code adresse</th>
-                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Nom de l'adresse</th>
-                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Ville</th>
-                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code magasin</th>     
-                            </tr>   
-                        </thead>
-                        <tbody>
-                            <tr id="" v-for="shiptoaddress of shiptoaddressList" :key="shiptoaddress['Code']">
-                                <td class="has-text-left has-background-light"> 
-                                    <router-link :to="`/ShipToAddressCard/${ shiptoaddress['Customer No_'] }/${ shiptoaddress['Code'] }`">
-                                        <a href="#" class="has-text-orange">
-                                            {{shiptoaddress['Code'] }}
-                                        </a>
-                                    </router-link>
-                                </td>
-                                <td class="has-text-left has-background-light"> {{ shiptoaddress['Name'] }}</td>
-                                <td class="has-text-left has-background-light"> {{ shiptoaddress['City'] }}</td>
-                                <td class="has-text-left has-background-light"> {{ shiptoaddress['Location Code'] }}</td>               
-                                              
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="column"  v-if="false">
-                    <div class="columns is-multiline">
-                        <div class="column is-3" v-for="shiptoaddress of shiptoaddressList" :key="shiptoaddress['Code']">
-                            <div class=" columns p-1 card-is-hoverable">
-                                <div class="column is-narrow has-background-white">
-                                    <figure class="image is-64x64">
-                                        <img class="is-rounded" :src="require(`@/assets/images/gerald1.jpg`)">
-                                    </figure>
-                                </div>
-                                <div class="column has-background-white card-is-hoverable">
-                                    <p class="has-text-left ">
-                                        <span class="is-size-7 has-text-grey has-background-light">
-                                            
-                                            <router-link :to="`/ShipToAddressCard/${ shiptoaddress['Customer No_'] }/${ shiptoaddress['Code'] }`">
-                                                <a href="#" class="has-text-orange">
-                                                    {{ shiptoaddress['Code'] }} 
-                                                </a>
-                                            </router-link>
-                                        </span>
-                                    </p>
-                                    <div class="has-text-left columns">
-                                        <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                            <span class="is-size-7 is-underlined">{{ shiptoaddress['Name']  }}</span>
-                                        </div>
-                                        <div class="column has-text-right is-narrow py-0 mt-1">
-                                            <span class="is-size-7">{{ shiptoaddress['Road Type'] }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="has-text-left columns">
-                                        <div class="column has-text-left py-0" >
-                                            <span class="is-size-7">{{ shiptoaddress['Address 2']  }}</span>
-                                        </div>
-                                        <div class="column has-text-right is-narrow py-0">
-                                            <span class="is-size-7">{{ shiptoaddress['Walking distance'] }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a class="column is-narrow has-background-orange is-flex ">
-                                    <span class="is-align-self-center has-text-white">...</span>
 
-                                </a>
+        <div class="has-background-light columns" style="height: 750px;">
+            <div class="column mt-5" id="customer-column" style="overflow: scroll;" v-if="presentationView=='list'">
+                <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
+                    <thead class=" my-2">
+                        <tr> 
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Code adresse</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Code client</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Nom de l'adresse</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Ville</th>
+
+                        
+                        </tr>   
+                    </thead>
+                    <tbody>
+                        <tr id="" v-for="shipto of filteredshiptoList" :key="shipto['Code']" class="is-narrow">
+                            <td class="has-text-left has-background-light"> 
+                                <router-link :to="`/ShipToAddressCard/${ shipto['Customer No_'] }/${ shipto['Code'] }`">
+                                    <a href="#" class="has-text-orange">
+                                        {{ shipto['Code'] }} 
+                                    </a>
+                                </router-link>
+                            </td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ shipto['Name'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ shipto['Customer No_']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ shipto['City'] }}</td>
+                           
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="column" style="overflow-y: scroll;" v-if="presentationView=='mosaique'">
+                <div class="columns is-multiline">
+                    <div :class="{'column':true, 'is-3':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="shipto of filteredshiptoList" :key="shipto['Code']">
+                        <div class=" columns p-1 card-is-hoverable">
+                            <div class="column is-narrow has-background-white">
+                                <figure class="image is-64x64">
+                                    <img class="is-rounded" :src="require(`@/assets/images/gerald1.jpg`)">
+                                </figure>
                             </div>
+                            <div class="column has-background-white card-is-hoverable">
+                                <p class="has-text-left ">
+                                    <span class="is-size-7 has-text-grey has-background-light">
+                                        
+                                        <router-link :to="`/ShipToAddressCard/${ shipto['Customer No_'] }/${ shipto['Code'] }`">
+                                            <a href="#" class="has-text-orange">
+                                                {{ shipto['Code'] }} 
+                                            </a>
+                                        </router-link>
+                            
+                                    </span>
+                                </p>
+                                <div class="has-text-left columns">
+                                    <div class="column has-text-left has-text-orange py-0 mt-1" >
+                                        <span class="is-size-7 is-underlined">{{ shipto['Name'] }}</span>
+                                    </div>
+                                    <div class="column has-text-right is-narrow py-0 mt-1">
+                                        <span class="is-size-7">{{ shipto['Customer No_'] }}</span>
+                                    </div>
+                                </div>
+                                <div class="has-text-left columns">
+                                    <div class="column has-text-left py-0" >
+                                        <span class="is-size-7">{{ shipto['City'] }}</span>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                            <a class="column is-narrow has-background-orange is-flex ">
+                                <span class="is-align-self-center has-text-white">...</span>
+
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div class="column" v-if="false">
-                    <div class="columns is-multiline is-gapless">
-                        <div class="column is-2 p-2 " v-for="shiptoaddress of shiptoaddressList" :key="shiptoaddress['Code']">
-                            <div class="has-background-white m-1">
-                                <div class="card-is-hoverable box">
+            </div>
+            <div class="column" style="overflow-y: scroll;" v-if="presentationView=='mosaique haute'">
+                <div class="columns is-multiline is-gapless">
+                    <div :class="{'column':true, 'is-2':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="shipto of filteredshiptoList" :key="shipto['Code']">
+                        <div class="has-background-white m-1">
+                            <div class="card-is-hoverable box">
+                                <div class="">
+                                    <div class="has-text-left">
+                                        <a href="#">
+                                            <span class="py-0">...</span>
+                                        </a>
+                                    </div>
+                                    <div class="is-flex is-justify-content-center">
+                                        <figure class="image is-128x128">
+                                            <img class="is-rounded" :src="require(`@/assets/images/gerald1.jpg`)">
+                                        </figure>
+                                    </div>
+                                    <hr class="rounded">
                                     <div class="">
-                                        <div class="has-text-left">
-                                            <a href="#">
-                                                <span class="py-0">...</span>
-                                            </a>
-                                        </div>
-                                        <div class="is-flex is-justify-content-center">
-                                            <figure class="image is-128x128">
-                                                <img class="is-rounded" :src="require(`@/assets/images/gerald1.jpg`)">
-                                            </figure>
-                                        </div>
-                                        <hr class="rounded">
-                                        <div class="">
-                                            <p class="has-text-left ">
-                                                <span class="is-size-7 has-text-grey has-background-light">
-                                            
-                                                    <router-link :to="`/ShipToAddressCard/${ shiptoaddress['Customer No_'] }/${ shiptoaddress['Code'] }`">
-                                                        <a href="#" class="has-text-orange">
-                                                            {{ shiptoaddress['Code'] }} 
-                                                        </a>
-                                                    </router-link>
-                                                </span>
-                                            </p>
-                                            <div class="has-text-left columns">
-                                                <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                                    <span class="is-size-7 is-underlined">{{ shiptoaddress['Name']  }}</span>
-                                                </div>
-                                                <div class="column has-text-right is-narrow py-0 mt-1">
-                                                    <span class="is-size-7">{{ shiptoaddress['Road Type']  }}</span>
-                                                </div>
+                                        <p class="has-text-left ">
+                                            <span class="is-size-7 has-text-grey has-background-light">
+                                        
+                                                <router-link :to="`/ShipToAddressCard/${ shipto['Customer No_'] }/${ shipto['Code'] }`">
+                                                    <a href="#" class="has-text-orange">
+                                                        {{ shipto['Code'] }} 
+                                                    </a>
+                                                </router-link>
+                            
+                                            </span>
+                                        </p>
+                                        <div class="has-text-left columns">
+                                            <div class="column has-text-left has-text-orange py-0 mt-1" >
+                                                <span class="is-size-7 is-underlined">{{ shipto['Name]'] }}</span>
                                             </div>
-                                            <div class="has-text-left columns">
-                                                <div class="column has-text-left py-0" >
-                                                    <span class="is-size-7">{{ shiptoaddress['Address 2']  }}</span>
-                                                </div>
-                                                <div class="column has-text-right is-narrow py-0">
-                                                    <span class="is-size-7">{{ shiptoaddress['Walking distance']  }}</span>
-                                                </div>
+                                            <div class="column has-text-right is-narrow py-0 mt-1">
+                                                <span class="is-size-7">{{ shipto['Customer No_'] }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="has-text-left columns">
+                                            <div class="column has-text-left py-0" >
+                                                <span class="is-size-7">{{shipto['City']}}</span>
                                             </div>
                                         </div>
                                     </div>
-                
                                 </div>
+            
                             </div>
-                            </div>
-                    </div>
+                        </div>
+                        </div>
                 </div>
             </div>
+            <customer-info class="customer-info"></customer-info>
         </div>
-    </div> 
+    </div>
+    
 </template>
-<script>
-import shiptoaddressListRibbon from './RibbonForLists.vue'
-import shiptoaddressListHeader from './HeaderForList.vue'
-import axios from 'axios'
-import { ref } from 'vue'
-export default {
-    name:'ship-to-address-list',
-    components:{
-        shiptoaddressListRibbon,shiptoaddressListHeader
-    },
-    data(){
-        return {
-            //indique la route active
-            shipToAddressListId:this.$route.params.id,
 
-            hostname:window.location.hostname
+<script scoped>
+import CustomerInfo from './CustomerInfo.vue'
+import CustomerListRibbon from './RibbonForLists.vue'
+import axios from 'axios'
+import {computed ,ref } from 'vue'
+import { useNavigationTabStore } from '@/Stores/NavigationTab'
+
+
+export default {
+
+    name:'shipto-address-list',
+    components:{
+        CustomerInfo,CustomerListRibbon
+    },
+    computed:{
+        presentationView(){
+            return useNavigationTabStore().presentationForPageList['customerListPresentation']
         }
     },
     setup() {
-    const shiptoaddressList = ref([])
-
-    // expose to template and other options API hooks
+        const  shiptoaddressList = ref([])
+        const eltToSearch = ref('')
+        const filteredshiptoList = computed(()=>
+            shiptoaddressList.value
+            .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                    || new String(row['Customer No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                    || new String(row['Customer Name']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+            )
+        )
+        // expose to template and other options API hooks
         return {
-            shiptoaddressList
+            shiptoaddressList,
+            eltToSearch,
+            filteredshiptoList
         }
     },
+    data(){
+        return {
+
+            //indique la route active
+            shipToAddressListId:this.$route.params.id,
+            
+            //taille (largeur) initiale du composant customerInfo
+            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerListRightInfoMaxWidth,
+            
+            //nom de l'hote dans l'url 
+            hostname:window.location.hostname       
+        }
+    },
+    methods:{
+        /////////////////////////methode pour masquer ou afficher le composant info à droite
+        hideOrShowComponentInfo(){
+            if(this.customerInfoCompMaxWidth=='0px') {
+                useNavigationTabStore().setMaxWidth('customerListRightInfoMaxWidth','800px')
+                this.customerInfoCompMaxWidth='800px'
+            }
+            else {
+                useNavigationTabStore().setMaxWidth('customerListRightInfoMaxWidth','0px')
+                this.customerInfoCompMaxWidth='0px'
+            }
+        },
+
+        formatDate(date){
+            if (new String(date).includes('1753-')) return ''
+            else return new Date(date).toLocaleDateString()
+        }
+
+    },
+    
     mounted(){
         axios.get(`http://${this.hostname}:3000/app/getShipToAddressList/${this.shipToAddressListId}`)
         .then((result) => {
@@ -186,3 +222,34 @@ export default {
 }
 
 </script>
+
+<style scoped>
+.customer-info{
+    max-width: v-bind(customerInfoCompMaxWidth);
+    transition: max-width 0.5s;
+}
+.has-text-orange{
+    color: orange;
+}
+.has-text-orangered{
+    color: orangered;
+}
+.has-background-orange{
+    background-color: rgb(255, 155, 118);
+}
+.has-background-orange:hover {
+    background-color: rgb(255, 68, 0);
+}
+.card-is-hoverable:hover{
+    background-color: rgba(255, 68, 0, 0.068)
+}
+hr.rounded {
+  border-top: 8px solid #bbb;
+  border-radius: 5px;
+}
+.tableFixHead thead th {
+    position: sticky; /* make the table heads sticky */
+    top: -15px; /* table head will be placed from the top of the table and sticks to it */
+ }
+
+</style>

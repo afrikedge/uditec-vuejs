@@ -6,7 +6,7 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <prospect-card-Header soNo="lead 1" soDesc="New Lead" pageTitle="Nouveau prospect" />
+                <prospect-card-Header soNo="lead 1" soDesc="New Lead" pageTitle=" prospect" />
             </div>
             
 <!---------Composant rubban fiche nouveau prospect----------------------->      

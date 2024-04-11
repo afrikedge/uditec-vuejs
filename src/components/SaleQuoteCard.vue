@@ -112,7 +112,7 @@
                                 <input-text labelInputText="Nom du client" v-model="saleQuoteCardHeader['Sell-to Customer Name']" :valueInputText="saleQuoteCardHeader['Sell-to Customer Name']" :is_disabled="!readOnlyModeIsDisabled" :is_readOnly="true"></input-text>
 
                                 <input-text labelInputText="Code prospect"  :valueInputText="saleQuoteCardHeader['Lead No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select labelInputText="Code prospect" v-model="saleQuoteCardHeader['Lead No_']" @openModal="activeModalForSelectableElementList='contactList'" v-else></input-select>
+                                <input-select labelInputText="Code prospect" v-model="saleQuoteCardHeader['Lead No_']" @openModal="activeModalForSelectableElementList='leadList'" v-else></input-select>
 
 
                                 
@@ -612,6 +612,13 @@
             @closeModal="activeModalForSelectableElementList=''" 
             @onGettingLineFromSelectableShipmentMethodListModal="(elt)=>fillShipmentMethodInfoField(elt)">
         </modal-for-selectable-shipment-method-list>
+        
+        <modal-ForselectableLeadList
+        v-if="activeModalForSelectableElementList=='leadList'" 
+        :isActive="activeModalForSelectableElementList=='leadList'" 
+        @closeModal="activeModalForSelectableElementList=''" 
+        @onGettingLineFromSelectableLeadMethodListModal="(elt)=>fillLeadInfoField(elt)">
+        </modal-ForselectableLeadList>
 
     </div>    
 </template>
@@ -634,6 +641,7 @@ import ModalForSelectableLocationList from './ModalForSelectableLocationList.vue
 import ModalForSelectableContactList from './ModalForSelectableContactList.vue'
 import ModalForSelectableAddressList from './ModalForSelectableAddressList.vue'
 import SelectableItemListForSale from './SelectableItemListForSale.vue'
+import ModalForselectableLeadList from './ModalForSelectableLeadList.vue'
 import ReportViewer from './ReportViewer.vue'
 import axios from 'axios'
 import { onMounted, ref, watch } from 'vue'
@@ -666,6 +674,7 @@ export default {
         ModalForSelectableLocationList,
         ModalForSelectableContactList,
         ModalForSelectableAddressList,
+        ModalForselectableLeadList,
         SelectableItemListForSale 
     },
     setup(){
@@ -955,6 +964,9 @@ export default {
             function fillContactInfoField(contact){
                 saleQuoteCardHeader.value["Sell-to Contact No_"]= contact['No_']
             }
+            function fillLeadInfoField(lead){
+                saleQuoteCardHeader.value["Lead No_"]= lead['No_']
+            }
 
             function fillLocationInfoField(location){
                 if(isItemInfoToFill.value){
@@ -1188,6 +1200,7 @@ export default {
             ...itemAvailabilityInfo,
             fillCustomerInfoField,
             fillContactInfoField,
+            fillLeadInfoField,
             fillLocationInfoField,
             fillAddressInfoField,
             fillCampaignInfoField,

@@ -36,7 +36,6 @@
                                   </a>
                               </router-link>
                           </td>
-                          <td class="has-text-left has-background-light is-narrow"> {{ contact['Customer No_'] }}</td>
                           <td class="has-text-left has-background-light is-narrow"> {{ contact['Salutation Code'] }}</td>
                           <td class="has-text-left has-background-light is-narrow"> {{ contact['No_']}}</td>
                           <td class="has-text-left has-background-light is-narrow"> {{ contact['First Name']}}</td>

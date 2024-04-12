@@ -29,7 +29,7 @@
                     <tbody>
                         <tr id="" v-for="groupbuy of filteredgroupBuyList" :key="groupbuy['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/CreditContractCard/${ groupbuy['No_']}`">
+                                <router-link :to="`/CreditContractCard?contractNo=UDT/AGP/24-0002`">
                                     <a href="#" class="has-text-orange">
                                         {{ groupbuy['No_'] }} 
                                     </a>
@@ -189,7 +189,8 @@ export default {
     data(){
         return {
 
-            
+            //indique la route active
+            CreditCardContractNo:this.$route.query.contractNo,
             //taille (largeur) initiale du composant customerInfo
             customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerListRightInfoMaxWidth,
             
@@ -218,7 +219,7 @@ export default {
     },
     
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getCreditContractList?contractNo=UDT/AGP/24-0001`)
+        axios.get(`http://${this.hostname}:3000/app/getCreditContractList`)
         .then((result) => {
           console.log(result.data[0])
           this.groupbuyList = result.data;

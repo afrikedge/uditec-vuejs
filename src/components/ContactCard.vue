@@ -27,7 +27,7 @@
               <div class="column" style="overflow-y: scroll;">
 
 <!---------sous-Section ongle 1 formulaire Fiche contact----------------------->                         
-                  <div id="general">
+                   <div id="general">
                       <div class="columns has-border-bottom">
                           <div class="column p-0 has-text-left has-text-weight-bold">
                               <a @click="collapse('general_content');onglet1_expanded=!onglet1_expanded" v-if="onglet1_expanded">
@@ -48,7 +48,7 @@
                               <input-select labelInputText="N° client"  v-model="ContactCard['Customer No_']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-select>
                               
                               <input-text labelInputText="Titre" :valueInputText="ContactCard['Salutation Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-                              <input-select labelInputText="Titre" v-model="ContactCard['Salutation Code']" @openModal="activeModalForSelectableElementList='contactList'" v-else></input-select>
+                              <input-select labelInputText="Titre" v-model="ContactCard['Salutation Code']" @openModal="activeModalForSelectableElementList='customerList'" v-else></input-select>
                               
                               <input-text labelInputText="Code contact" :valueInputText="ContactCard['No_']" :is_disabled="true" ></input-text>
                               

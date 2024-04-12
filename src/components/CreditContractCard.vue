@@ -256,11 +256,11 @@
                                         <tr :id="index" v-for="(elt,index) of buyHistoryInfo" :key="index"  >
                                             <td class="has-text-left">{{ elt['Sales Mode'] }}</td>
                                             <td class="has-text-left">{{ elt['Document No_'] }}</td>
-                                            <td class="has-text-left">{{ elt['Posting Date'] }}</td>
-                                            <td class="has-text-left">{{ elt['Due Date'] }}</td>
+                                            <td class="has-text-left">{{ formatDate(elt['Posting Date']) }}</td>
+                                            <td class="has-text-left">{{ formatDate(elt['Due Date']) }}</td>
                                             <td class="has-text-left">{{ elt['Amount (LCY)'] }}</td>
                                             <td class="has-text-left">{{ elt['Payment (LCY)'] }}</td>
-                                            <td class="has-text-left">{{ elt['Payment Date'] }}</td>
+                                            <td class="has-text-left">{{ formatDate(elt['Payment Date']) }}</td>
                                             <td class="has-text-left">{{ elt['Days late'] }}</td>
                                             <td class="has-text-left">{{ elt['Debt Status'] }}</td>
                                         </tr>
@@ -327,7 +327,7 @@ export default {
         const groupbuyCardHeader = ref({})
         const readOnlyModeIsDisabled = ref(false)
         const hostname = window.location.hostname
-
+        
         //variable de soumission forme
         const submitting_message=ref('') 
 
@@ -341,6 +341,8 @@ export default {
         const buyEmployedInfo = ref([])
         const buyHistoricalInfo = ref([])
         const buyHistoryInfo = ref([])
+        
+
         const optionLabelListForRepossSource = ref([])
         const optionLabelListForRepossStatus = ref([])
         const optionLabelListForRepossType = ref([])
@@ -381,15 +383,33 @@ export default {
             name:ref(useWebUserInfoStore().name),
             company:ref(useWebUserInfoStore().activeCompanyId),
         }
+       
+        // //indique la route active
+        // let CreditCardContractNo = this.$route.query.contractNo
 
         function getcontractCardInfo(){
-            axios.get(`http://${hostname}:3000/app/getCreditContractCard?contractNo=UDT/AGP/24-0001`)
+            axios.get(`http://${hostname}:3000/app/getCreditContractCard?contractNo=UDT/AGP/24-0002`)
             .then(result => {
-                console.log(result)
                 groupbuyCardHeader.value = result.data[0]
                 dateInfo.OpStartingDate.value = getISODate(groupbuyCardHeader.value["OP Starting Date"])
+                getCreditContractInfo()
             }).catch(err=>console.log(err))
         }
+
+        
+      function getCreditContractInfo(){
+          axios.get(`http://localhost:3000/app/getCustomerHistory?customerNo=UDT00001`)
+          .then(res =>{
+              console.log(res.data[0])
+              if (new Array(res.data[0]).length>=0){
+                buyHistoryInfo.value =  res.data
+                  
+              }
+          })
+          .catch((err) => {
+              console.log(err)
+          })
+      }
 
         function getISODate(date){
             if(new String(date).includes('1753')||new String(date).includes('1900'))
@@ -535,19 +555,21 @@ export default {
             buyHistoricalInfo,
             buyHistoryInfo,
             fillCustomerInfoField,
-
             optionLabelListForRepossSource,
             optionLabelListForRepossStatus,
             optionLabelListForRepossType,
             optionLabelListForRepossItemStatus,
             tttt,
             dateInfo,
-            getISODate
+            getISODate,
+            getCreditContractInfo,
+            
         }
     },
     data(){
         return{
-
+            //indique la route active
+            CreditCardContractNo:this.$route.query.contractNo,
             //taille (largeur) initiale du composant customerInfo
             customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerCardRightInfoMaxWidth,
 

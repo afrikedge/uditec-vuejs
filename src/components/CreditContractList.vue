@@ -17,34 +17,30 @@
                 <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
                     <thead class=" my-2">
                         <tr> 
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° client</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° contrat</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Jour(s) retard</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Type de compte</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° client</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Nom client</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Document</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Date comptabilisation</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Mode vente</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Durée (mois)</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Durée de l'opération (mois)</th>
                            
                         </tr>   
                     </thead>
                     <tbody>
-                        <tr id="" v-for="groupbuy of filteredgroupBuyList" :key="groupbuy['Customer No_']" class="is-narrow">
+                        <tr id="" v-for="groupbuy of filteredgroupBuyList" :key="groupbuy['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/GoupBuyContractCard/${ groupbuy['No_']}`">
+                                <router-link :to="`/CreditContractCard/${ groupbuy['No_']}`">
                                     <a href="#" class="has-text-orange">
-                                        {{ groupbuy['Customer No_'] }} 
+                                        {{ groupbuy['No_'] }} 
                                     </a>
                                 </router-link>
                             </td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Days late'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Customer No'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Customer Name']}}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Document No_']}}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ formatDate(groupbuy['Posting Date']) }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Sales Mode'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Duration (Month)'] }}</td>
-                           
+                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Days late'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDate(groupbuy['OP Starting Date'])}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDate(groupbuy['OP Duration (Month)']) }}</td>
+                            
                         </tr>
                     </tbody>
                 </table>
@@ -62,9 +58,9 @@
                                 <p class="has-text-left ">
                                     <span class="is-size-7 has-text-grey has-background-light">
                                         
-                                        <router-link :to="`/GoupBuyContractCard/${ groupbuy['No_'] }`">
+                                        <router-link :to="`/CreditContractCard/${ groupbuy['No_'] }`">
                                             <a href="#" class="has-text-orange">
-                                                {{ groupbuy['Customer No_'] }} 
+                                                {{ groupbuy['No_'] }} 
                                             </a>
                                         </router-link>
                             
@@ -72,18 +68,18 @@
                                 </p>
                                 <div class="has-text-left columns">
                                     <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                        <span class="is-size-7 is-underlined">{{ groupbuy['No'] }}</span>
+                                        <span class="is-size-7 is-underlined">{{ groupbuy['Customer No'] }}</span>
                                     </div>
                                     <div class="column has-text-right is-narrow py-0 mt-1">
-                                        <span class="is-size-7">{{ groupbuy['Activity Type'] }}</span>
+                                        <span class="is-size-7">{{ groupbuy['Customer Name'] }}</span>
                                     </div>
                                 </div>
                                 <div class="has-text-left columns">
                                     <div class="column has-text-left py-0" >
-                                        <span class="is-size-7">{{ groupbuy['Name'] }}</span>
+                                        <span class="is-size-7">{{ formatDate(groupbuy['OP Starting Date']) }}</span>
                                     </div>
                                     <div class="column has-text-right is-narrow py-0">
-                                        <span class="is-size-7">{{groupbuy['No_'] }}</span>
+                                        <span class="is-size-7">{{groupbuy['Balance Due (LCY)'] }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -116,9 +112,9 @@
                                         <p class="has-text-left ">
                                             <span class="is-size-7 has-text-grey has-background-light">
                                         
-                                                <router-link :to="`/GoupBuyContractCard/${ groupbuy['No_'] }`">
+                                                <router-link :to="`/CreditContractCard/${ groupbuy['No_'] }`">
                                                     <a href="#" class="has-text-orange">
-                                                        {{ groupbuy['Customer No_'] }} 
+                                                        {{ groupbuy['No_'] }} 
                                                     </a>
                                                 </router-link>
                             
@@ -126,18 +122,18 @@
                                         </p>
                                         <div class="has-text-left columns">
                                             <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                                <span class="is-size-7 is-underlined">{{ groupbuy['No_]'] }}</span>
+                                                <span class="is-size-7 is-underlined">{{ groupbuy['Customer No]'] }}</span>
                                             </div>
                                             <div class="column has-text-right is-narrow py-0 mt-1">
-                                                <span class="is-size-7">{{ groupbuy['Activity Type'] }}</span>
+                                                <span class="is-size-7">{{ groupbuy['Customer Name'] }}</span>
                                             </div>
                                         </div>
                                         <div class="has-text-left columns">
                                             <div class="column has-text-left py-0" >
-                                                <span class="is-size-7">{{groupbuy['Name']}}</span>
+                                                <span class="is-size-7">{{formatDate(groupbuy['OP Starting Date'])}}</span>
                                             </div>
                                             <div class="column has-text-right is-narrow py-0">
-                                                <span class="is--size-7">{{ groupbuy['No_'] }}</span>
+                                                <span class="is--size-7">{{ groupbuy['Balance Due (LCY)'] }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -222,7 +218,7 @@ export default {
     },
     
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getCustomerHistory?customerNo=UDT00001`)
+        axios.get(`http://${this.hostname}:3000/app/getCreditContractList?contractNo=UDT/AGP/24-0001`)
         .then((result) => {
           console.log(result.data[0])
           this.groupbuyList = result.data;

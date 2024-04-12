@@ -6,7 +6,7 @@
  
 <!---------Composant entête carte----------------------->      
             <div id="card-header-comp">
-                <shiptoaddress-card-Header :soNo="ShiptoaddressCardId2" soDesc="ShipToAddressCard['Name']" pageTitle="Fiche adresse de livraison" 
+                <shiptoaddress-card-Header :soNo="ShiptoaddressCardId2" :soDesc="ShipToAddressCard['Name']" pageTitle="Fiche adresse de livraison" 
                 @onGoingBackToList='goBackToList'
                 />
             </div>
@@ -291,6 +291,9 @@ export default {
     },
     data(){
         return{
+
+            //nom de l'hote dans l'url 
+            hostname:window.location.hostname,
             //indique la route active
             ShiptoaddressCardId1:this.$route.params.id1,
             ShiptoaddressCardId2:this.$route.params.id2,
@@ -309,7 +312,7 @@ export default {
     methods:{
         goBackToList(){
             useNavigationTabStore().setActiveTab('customers')
-            this.$router.push('/ShipToAddressList/:id')
+            this.$router.push('/ShipToAddressList/CMZCASH')
         },
         expand(id){
             const myElt=document.getElementById(id);
@@ -326,6 +329,7 @@ export default {
     mounted(){
         axios.get(`http://${this.hostname}:3000/app/getShipToAddressCard/${this.ShiptoaddressCardId1}/${this.ShiptoaddressCardId2}`)
         .then(result => {
+            console.log(result.data)
             this.ShipToAddressCard = result.data.recordset[0]
         }).catch(err=>console.log(err))
 

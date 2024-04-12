@@ -90,9 +90,9 @@ import NewRepossessionRequest from "./components/NewRepossessionRequest.vue"
 import NewDebtCollection from "./components/NewDebtCollection.vue"
 
 //11-----contrat d'achat groupé
-import GoupBuyContractList from "./components/GoupBuyContractList.vue"
-import GoupBuyContractCard from "./components/GoupBuyContractCard.vue"
-import NewGoupBuyContract from "./components/NewGroupBuyContract.vue"
+import CreditContractList from "./components/CreditContractList.vue"
+import CreditContractCard from "./components/CreditContractCard.vue"
+import NewCreditContract from "./components/NewCreditContract.vue"
 
 const routes = [
   ///////////////////1
@@ -176,9 +176,9 @@ const routes = [
   
   
    ///////////////////12
-  {path:'/GoupBuyContractList/:id',component:GoupBuyContractList,name:'GoupBuyContractListPage'},
-  {path:'/GoupBuyContractCard/:id',component:GoupBuyContractCard,name:'GoupBuyContractCardPage'},
-  {path:'/NewGoupBuyContract',component:NewGoupBuyContract,name:'NewGoupBuyContractPage'},
+  {path:'/CreditContractList',component:CreditContractList,name:'CreditContractListPage'},
+  {path:'/CreditContractCard',component:CreditContractCard,name:'CreditContractCardPage'},
+  {path:'/NewCreditContract',component:NewCreditContract,name:'NewCreditContractPage'},
   
 
 

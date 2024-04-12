@@ -17,9 +17,9 @@
               <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
                   <thead class=" my-2">
                       <tr> 
+                          <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Code contact</th>
                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Client</th>
                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Titre</th>
-                          <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Code contact</th>
                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Prénom</th>
                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Nom complet</th>
                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Ville</th>
@@ -30,14 +30,14 @@
                   <tbody>
                       <tr id="" v-for="contact of filteredcontactList" :key="contact['Customer No_']" class="is-narrow">
                           <td class="has-text-left has-background-light"> 
-                              <router-link :to="`/ContactCard/${ contact['Customer No_'] }`">
+                              <router-link :to="`/ContactCard/${ contact['Customer No_'] }/${ contact['No_'] }`">
                                   <a href="#" class="has-text-orange">
-                                      {{ contact['Customer No_'] }} 
+                                      {{ contact['No_'] }} 
                                   </a>
                               </router-link>
                           </td>
+                          <td class="has-text-left has-background-light is-narrow"> {{ contact['Customer No_']}}</td>
                           <td class="has-text-left has-background-light is-narrow"> {{ contact['Salutation Code'] }}</td>
-                          <td class="has-text-left has-background-light is-narrow"> {{ contact['No_']}}</td>
                           <td class="has-text-left has-background-light is-narrow"> {{ contact['First Name']}}</td>
                           <td class="has-text-left has-background-light is-narrow"> {{ contact['Name'] }}</td>
                           <td class="has-text-left has-background-light is-narrow"> {{ contact['City'] }}</td>
@@ -61,9 +61,9 @@
                               <p class="has-text-left ">
                                   <span class="is-size-7 has-text-grey has-background-light">
                                       
-                                      <router-link :to="`/ContactCard/${ contact['Customer No_'] }`">
+                                      <router-link :to="`/ContactCard/${ contact['Customer No_'] }/${ contact['No_'] }`">
                                           <a href="#" class="has-text-orange">
-                                              {{ contact['Customer No_'] }} 
+                                              {{ contact['No_'] }} 
                                           </a>
                                       </router-link>
                           
@@ -115,9 +115,9 @@
                                       <p class="has-text-left ">
                                           <span class="is-size-7 has-text-grey has-background-light">
                                       
-                                              <router-link :to="`/ContactCard/${ contact['Customer No_'] }`">
+                                              <router-link :to="`/ContactCard/${ contact['Customer No_'] }/${ contact['No_'] }`">
                                                   <a href="#" class="has-text-orange">
-                                                      {{ contact['Customer No_'] }} 
+                                                      {{ contact['No_'] }} 
                                                   </a>
                                               </router-link>
                           

@@ -17,6 +17,7 @@
                 :printCardBtnDisabled="false"
                 :convertQuoteBtnDisabled="false"
                 :readOnlyModeDisabled="false"
+                :checkItemAvailabilityBtnIsDisabled="false"
             ></item-card-ribbon>
 
 <!---------Section formulaire fiche article----------------------->
@@ -62,6 +63,8 @@
                                 <input-text labelInputText="Volume unitaire" :valueInputText="itemCardHeader['Unit Volume']" :is_disabled="readOnlyMode"></input-text>
                                 <input-text labelInputText="Mode de livraison par défaut" :valueInputText="itemCardHeader['Shipment Method']" :is_disabled="readOnlyMode"></input-text>
                                 <input-text labelInputText="Code barre" :valueInputText="itemCardHeader['Bar Code']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Variante" :valueInputText="itemCardHeader['Variance Code']" :is_disabled="readOnlyMode"></input-text>
+                                
                             </div>
                         </div>
                     </div>
@@ -192,10 +195,10 @@
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
                                 <a @click="collapse('warranty_content');onglet4_expanded = !onglet4_expanded;" v-if="onglet4_expanded">
-                                    <span>Caractéristiques article</span>
+                                    <span>Plan de garantie</span>
                                 </a>
                                 <a @click="expand('warranty_content');onglet4_expanded = !onglet4_expanded;" v-if="!onglet4_expanded">
-                                    <span>Caractéristiques article</span>
+                                    <span>Plan de garantie</span>
                                     <span class="icon">
                                       <i class="fas fa-angle-right"></i>
                                     </span>
@@ -203,21 +206,29 @@
                             </div>
                         </div>
                         <div id="warranty_content" class="columns mt-5">
-                            <div v-if="itemAttributeInfo.length>0">
+                            <div v-if="itemWarrantyInfo.length>=0">
                                 <table class="table  is-narrow  is-fullwidth box">
                                     <thead class=" my-2">
                                         <tr> 
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-2" style="min-width: 300px;">Caractéristique</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-2" style="min-width: 300px;">Valeur</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-8" style="min-width: 150px;"><b>Plan de garantie</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-8" style="min-width: 150px;"><b>Description</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-8" style="min-width: 150px;"><b>Durée (mois)</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-8" style="min-width: 150px;"><b>Mode Tarification</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-8" style="min-width: 150px;"><b>Pourcentage</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-8" style="min-width: 150px;"><b>Montant</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-8" style="min-width: 150px;"><b>Mode Tarification</b></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr :id="index" v-for="(elt,index) of itemAttributeInfo" :key="index"  >
+                                        <tr :id="index" v-for="(elt,index) of itemWarrantyInfo" :key="index"  >
+                                            <td class="has-text-left">{{ elt['Warranty Plan Code'] }}</td>
+                                            <td class="has-text-left">{{ elt['Name'] }}</td>
+                                            <td class="has-text-left">{{ elt['Duration (months)'] }}</td>
+                                            <td class="has-text-left">{{ elt['Pricing Mode'] }}</td>
+                                            <td class="has-text-left">{{ elt['Percentage'] }}</td>
+                                            <td class="has-text-left">{{ elt['Amount (LCY)'] }}</td>
                                             <td class="has-text-left">
-                                               <span class="subtitle is-6 has-text-weight-bold"> <b>{{ elt['Name'] }}</b></span>
-                                            </td>
-                                            <td class="has-text-left">
-                                                {{ elt['Value'] }}
+                                                <input-select-basic-1 labelInputText="" v-model="elt['Pricing Mode']" :option-list="`optionLabelListForPricingMode`"></input-select-basic-1> 
                                             </td>
                                         </tr>
                                     </tbody>
@@ -245,6 +256,7 @@ import ItemCardRibbon from "./RibbonForCard.vue";
 import inputText from "./input/input-text.vue";
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
+import inputSelectBasic1 from './input/input-select-basic1.vue'
 import axios from "axios";
 import { onMounted, ref } from "vue";
 import { useRoute} from 'vue-router'
@@ -256,12 +268,14 @@ export default {
       ItemCardHeader,
       ItemInfo,
       inputText,
-      ItemCardRibbon 
+      ItemCardRibbon ,
+      inputSelectBasic1
     },
  
     setup() {
       const itemCardHeader = ref({});
       const readOnlyMode = ref(true);
+      const optionLabelListForPricingMode = ref([])
       //nom de l'hote dans l'url 
       const hostname = window.location.hostname;
       const userLocation = ref(useWebUserInfoStore().defaultLocation)
@@ -269,6 +283,7 @@ export default {
       const itemCardId = useRoute().params.id
 
       const itemAttributeInfo = ref([])
+      const itemWarrantyInfo = ref([])
       const itemAvailabilityInfo = {
             itemInStockLocation:ref(0),
             itemOnSalesLocation:ref(0),
@@ -278,6 +293,20 @@ export default {
             itemAvailableGlobal:ref(0),
             itemOnPurchaseGlobal:ref(0),
         }
+
+        function getOptionLabelList(field){
+            axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
+            .then(result => {
+                if (field=='Approval Status')
+                optionLabelListForPricingMode.value=result.data.recordset
+               
+               
+    
+                    console.log(result.data.recordset)
+    
+            }).catch(err=>console.log(err))
+        }
+
 
       function getItemAvailabilityInfo(){
           axios.get(`http://${hostname}:3000/app/getItemAvailabilityInfo/${itemCardId}/${userLocation.value}`)
@@ -311,6 +340,19 @@ export default {
           })
       }
 
+      function getItemWarrantyInfo(){
+          axios.get(`http://${hostname}:3000/app/getitemwarrantyplan/${itemCardId}`)
+          .then(res =>{
+              if (new Array(res.data.recordset).length>=0){
+                  itemWarrantyInfo.value =  res.data.recordset
+                  
+              }
+          })
+          .catch((err) => {
+              console.log(err)
+          })
+      }
+
       function getItemCardInfo(){
           axios.get(`http://${hostname}:3000/app/getItemCard/${itemCardId}?respCenter=${userRespCenter.value}`)
           .then(result => {
@@ -320,6 +362,7 @@ export default {
                   getItemAvailabilityInfo()
               }
               getItemAttributeInfo()
+              getItemWarrantyInfo()
           }).catch(err=>console.log(err))
       }
 
@@ -345,7 +388,16 @@ export default {
           readOnlyMode,
           ...itemAvailabilityInfo,
           itemAttributeInfo,
-          getItemAvailabilityInfo
+          getItemAvailabilityInfo,
+          itemWarrantyInfo,
+          getItemWarrantyInfo,
+          getOptionLabelList,
+
+
+          
+          optionLabelListForPricingMode,
+
+          
       };
     },
 

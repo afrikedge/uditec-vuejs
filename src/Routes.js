@@ -39,7 +39,6 @@ import NewShipToAddress from './components/NewShipToAddress.vue'
 import NewSaleQuote from './components/NewSaleQuote.vue'
 import NewSaleOrder from './components/NewSaleOrder.vue'
 
-import NewGroupBuy from './components/NewGroupBuy.vue'
 
 
 
@@ -74,15 +73,26 @@ import PaymentPromiseList from "./components/PaymentPromiseList.vue"
 import RecoveryActivityCard from "./components/RecoveryActivityCard.vue"
 import RecoveryActivityList from "./components/RecoveryActivityList.vue"
 
-//8-----composants de formulaire activite de recouvrement et promesse de règlement et créance
 import DebtCollectionList from './components/DebtCollectionList.vue'
 import DebtCollectionCard from './components/DebtCollectionCard.vue'
+
 import PromiseToPayList from './components/PromiseToPayList.vue'
 import PromiseToPayCard from './components/PromiseToPayCard.vue'
+
 import ReceivablesList from './components/ReceivablesList.vue'
 import ReceivablesCard from './components/ReceivablesCard.vue'
+
 import PaymentValidationRequestList from './components/PaymentValidationRequestList.vue'
 import PaymentValidationRequestCard from './components/PaymentValidationRequestCard.vue'
+
+//11-----Formulaire création recouvrement
+import NewRepossessionRequest from "./components/NewRepossessionRequest.vue"
+import NewDebtCollection from "./components/NewDebtCollection.vue"
+
+//11-----contrat d'achat groupé
+import CreditContractList from "./components/CreditContractList.vue"
+import CreditContractCard from "./components/CreditContractCard.vue"
+import NewGoupBuyContract from "./components/NewGroupBuyContract.vue"
 
 const routes = [
   ///////////////////1
@@ -123,6 +133,7 @@ const routes = [
   ///////////////////6
   {path:'/NewSaleQuote',component:NewSaleQuote,name:'NewSaleQuotePage'},
   {path:'/NewSaleOrder',component:NewSaleOrder,name:'NewSaleOrderPage'},
+  
 
   ///////////////////7
   {path:'/RevisionRequestCard/:id',component:RevisionRequestCard,name:'RevisionRequestCardPage'},
@@ -150,6 +161,10 @@ const routes = [
   {path:'/RecoveryActivityCard/:id',component:RecoveryActivityCard,name:'RecoveryActivityCardPage'},
   {path:'/RecoveryActivityList',component:RecoveryActivityList,name:'RecoveryActivityListPage'},
 
+  ///////////////////11
+  {path:'/NewRepossessionRequest',component:NewRepossessionRequest,name:'NewRepossessionRequestPage'},
+  {path:'/NewDebtCollection',component:NewDebtCollection,name:'NewDebtCollectionPage'},
+  
   {path:'/DebtCollectionList',component:DebtCollectionList,name:'DebtCollectionListPage'},
   {path:'/DebtCollectionCard/:id',component:DebtCollectionCard,name:'DebtCollectionCardPage'},
   {path:'/PromiseToPayList',component:PromiseToPayList,name:'PromiseToPayListPage'},
@@ -158,7 +173,14 @@ const routes = [
   {path:'/ReceivablesCard/:id',component:ReceivablesCard,name:'ReceivablesCardPage'},
   {path:'/PaymentValidationRequestList',component:PaymentValidationRequestList,name:'PaymentValidationRequestListPage'},
   {path:'/PaymentValidationRequestCard/:id',component:PaymentValidationRequestCard,name:'PaymentValidationRequestCardPage'},
-  {path:'/NewGroupBuy',component:NewGroupBuy,name:'NewGroupBuy'},
+  
+  
+   ///////////////////12
+  {path:'/CreditContractList',component:CreditContractList,name:'CreditContractListListPage'},
+  {path:'/CreditContractCard',component:CreditContractCard,name:'CreditContractCardCardPage'},
+  {path:'/NewGoupBuyContract',component:NewGoupBuyContract,name:'NewGoupBuyContractPage'},
+  
+
 
 
 ];

@@ -186,7 +186,7 @@ export default {
         }).catch(err=>console.log(err))
 
         const language = useWebUserInfoStore().defaultLanguage
-        const field = '[Processing Status]'
+        const field = '[Type]'
         if(this.saleOrderList.length==0){
             axios.get(`http://${this.hostname}:3000/app/getOptionLabelList?lg=${language}&fd=${field}`)
             .then(result => {

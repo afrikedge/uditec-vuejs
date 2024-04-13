@@ -34,9 +34,9 @@
                     <tbody>
                         <tr id="" v-for="receivable of filteredReceivableList" :key="receivable['Customer No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/ReceivablesCard/${ receivable['Customer No_'] }`">
+                                <router-link :to="`/ReceivablesCard/${ receivable['Document No_'] }`">
                                     <a href="#" class="has-text-orange">
-                                        {{ receivable['Customer No_'] }} 
+                                        {{ receivable['Document No_'] }} 
                                     </a>
                                 </router-link>
                             </td>

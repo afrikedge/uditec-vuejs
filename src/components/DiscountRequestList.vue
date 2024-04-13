@@ -17,27 +17,28 @@
                 <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
                     <thead class=" my-2">
                         <tr> 
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Demande</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Document</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Objet</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Remise accordé  (%)</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Document</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Crée le</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Crée par</th>
                             
                         </tr>   
                     </thead>
                     <tbody>
                         <tr id="" v-for="discount of  filteredDiscountList" :key="discount['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/DiscountRequestCard/${ discount['Status'] }`">
+                                <router-link :to="`/DiscountRequestCard/${ discount['No_'] }`">
                                     <a href="#" class="has-text-orange">
-                                        {{discount['Status']==0 ? 'Actif' : 'Non actif' }} 
+                                        {{discount['No_'] }} 
                                     </a>
                                 </router-link>
                             </td>
-                            <td class="has-text-left has-background-light is-narrow"> {{discount['No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{discount['Document No_']==0 ? 'PDF' : 'docx' }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{discount['Subject'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{discount['Approuved Discount'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{discount['Document No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{discount['Created on'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{discount['Created by'] }}</td>
+
                         </tr>
                     </tbody>
                 </table>

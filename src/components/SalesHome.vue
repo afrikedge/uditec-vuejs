@@ -19,11 +19,13 @@
     import dashboard from './SalesDasboard.vue'
     import saleQuotes from './SaleQuoteList.vue'
     import saleOrders from './SaleOrderList.vue'
+    import receivables from './ReceivablesList.vue'
     import revisionRequests from './RevisionRequestList.vue'
     import discountRequests from './DiscountRequestList.vue'
     import releaseRequests from './ReleaseRequestList.vue'
     import creditRequests from './CreditRequestList.vue'
     import repossessionRequests from "./RepossessionRequestList.vue"
+    import debtCollection from "./DebtCollectionList.vue"
     import assignedDebt from './AssignedDebtList.vue'
     import paymentPromise from "./PaymentPromiseList.vue"
     import recoveryActivity from "./RecoveryActivityList.vue"
@@ -44,7 +46,9 @@
             items,
             saleQuotes,
             saleOrders,
+            receivables,
             repossessionRequests,
+            debtCollection,
             assignedDebt,
             paymentPromise,
             recoveryActivity,

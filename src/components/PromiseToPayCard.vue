@@ -74,9 +74,18 @@
                                 <input-text labelInputText="Montant honoré" v-model="PromiseCard['Honored amount']" :valueInputText="PromiseCard['Honored amount']" :is_disabled="!readOnlyModeIsDisabled"></input-text>
                                
                                 <input-text labelInputText="Activité d'origine" v-model="PromiseCard['Originated activity']" :valueInputText="PromiseCard['Originated activity']" :is_disabled="!readOnlyModeIsDisabled"></input-text>
+
+                                <input-text labelInputText="Type Activité de rappel" :valueInputText="PromiseCard['Activity Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Type Activité de rappel" v-model="PromiseCard['Activity Type']" :option-list="optionLabelListForRepossActivityType" v-else></input-select-basic-1> 
+
+
                                 <input-text labelInputText="Date rappel" :valueInputText="formatDate(PromiseCard['Riminding Date'])" :is_disabled="readOnlyMode" ></input-text>
                                 <input-text labelInputText="Échéance rappel" :valueInputText="formatDate(PromiseCard['Reminding Due Date'])" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Statut" :valueInputText="PromiseCard['Status']==0 ? 'Actif' : 'Non actif'" :is_disabled="readOnlyMode"></input-text> 
+                                 
+
+                                <input-text labelInputText="Statut" :valueInputText="PromiseCard['Promise Status']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Statut" v-model="PromiseCard['Promise Status']" :option-list="optionLabelListForRepossPromiseStatus" v-else></input-select-basic-1> 
+                                
                             </div>
                         </div>                    
                     </div>
@@ -98,21 +107,25 @@ import CustomerCardHeader from './HeaderForCard.vue'
 import CustomerInfo from './CustomerInfo.vue'
 import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
+import inputSelectBasic1 from './input/input-select-basic1.vue'
 import axios from 'axios'
 import { ref } from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
+import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
+
 
 export default {
     name:'customer-card',
     components:{
-        CustomerCardHeader,CustomerInfo,inputText,CustomerCardRibbon
+        CustomerCardHeader,CustomerInfo,inputText,CustomerCardRibbon,inputSelectBasic1
     },
     setup(){
         const PromiseCard = ref({})
         const readOnlyMode = ref(true)
         const readOnlyModeIsDisabled = ref(false)
-
-
+        const optionLabelListForRepossPromiseStatus = ref([])
+        const optionLabelListForRepossActivityType= ref([])
+        const  hostname = window.location.hostname
 
         function setReadOnlyModeIsDisabled(){
             readOnlyModeIsDisabled.value=true
@@ -122,11 +135,29 @@ export default {
             readOnlyModeIsDisabled.value=false
         }
 
+
+        function getOptionLabelList(field){
+            axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
+            .then(result => {
+                if (field=='[Promise Status]') 
+                optionLabelListForRepossPromiseStatus.value=result.data.recordset
+
+                optionLabelListForRepossActivityType.value=result.data.recordset
+                if (field=='[Activity Type]')
+                console.log(result.data.recordset)
+    
+            }).catch(err=>console.log(err))
+        }
+
         // expose to template and other options API hooks
         return {
             setReadOnlyModeIsDisabled,
             setReadWriteModeIsDisabled,
+            getOptionLabelList,
             PromiseCard,readOnlyMode, readOnlyModeIsDisabled,
+
+            optionLabelListForRepossPromiseStatus,
+            optionLabelListForRepossActivityType,
         }
     },
     data(){
@@ -145,7 +176,9 @@ export default {
             onglet5_expanded:true,
 
             //nom de l'hote dans l'url 
-            hostname:window.location.hostname
+            hostname:window.location.hostname,
+             //nom de l'hote dans l'url 
+          
         }
     },
     methods:{

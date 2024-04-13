@@ -47,8 +47,11 @@
                                 <td class="has-text-left has-background-light is-narrow"> {{Lead['Phone No_']}}</td>
                                 <td class="has-text-left has-background-light is-narrow"> {{Lead['Salesperson Code']}}</td>
                                 <td class="has-text-left has-background-light is-narrow"> {{Lead['E-Mail']}}</td>                
-                                <td class="has-text-left has-background-light is-narrow"> {{Lead['Post Code']}}</td>                
-                                <td class="has-text-left has-background-light is-narrow"> {{Lead['Type']==0 ? 'valide' : 'Non valide'}}</td>                
+                                <td class="has-text-left has-background-light is-narrow"> {{Lead['Post Code']}}</td>    
+                                
+                                <td class="has-text-left has-background-light is-narrow" v-if="Lead['Lead Type']==0||Lead['Lead Type']==1"> {{ getLabel(Lead['Lead Type']) }}</td>                
+                                <td class="has-text-left has-background-light is-narrow has-text-primary" v-else> {{ getLabel(Lead['Type']) }}</td>  
+                
                                 <td class="has-text-left has-background-light is-narrow"> {{Lead['County']}}</td>                
                             
                             </tr>
@@ -166,6 +169,8 @@ import ProspectListRibbon from './RibbonForLists.vue'
 import { ref } from 'vue'
 import axios from 'axios'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
+import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
+
 export default {
     name:'lead-list',
     components:{
@@ -178,10 +183,14 @@ export default {
     },
     setup() {
         const LeadList = ref([])
+        const optionLabelList = ref([])
+
+        
 
         // expose to template and other options API hooks
         return {
-            LeadList
+            LeadList,
+            optionLabelList,
         }
     },
     data(){
@@ -206,6 +215,13 @@ export default {
             }
         },
 
+
+        getLabel(fieldValue){
+            if (this.optionLabelList[Number(fieldValue)]){
+                return this.optionLabelList[Number(fieldValue)]['Description']
+            }
+        }
+
     },
     mounted(){
         axios
@@ -214,6 +230,15 @@ export default {
           this.LeadList = result.data.recordset;
         })
         .catch(err=>console.log(err));
+
+        const language = useWebUserInfoStore().defaultLanguage
+        const field = '[Lead Type]'
+        if(this.LeadList.length==0){
+            axios.get(`http://${this.hostname}:3000/app/getOptionLabelList?lg=${language}&fd=${field}`)
+            .then(result => {
+                this.optionLabelList = result.data.recordset
+            }).catch(err=>console.log(err))
+        }
     }
 }
 

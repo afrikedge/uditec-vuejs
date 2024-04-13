@@ -110,7 +110,8 @@
                                 <input-number labelInputText="Durée (mois)" :valueInputText="groupbuyCardHeader['Duration (Month)']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-number>
                                 <input-number labelInputText="Durée (mois)" :valueInputText="groupbuyCardHeader['Duration (Month)']" v-else></input-number>
 
-                                <input-text labelInputText="Type engagement" :valueInputText="groupbuyCardHeader['Commitment Type']" :is_disabled="true" ></input-text>
+                                <input-text labelInputText="Type engagement" :valueInputText="groupbuyCardHeader['Commitment Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 v-model="repossessionRequestSource" labelInputText="Type engagement" :option-list="optionLabelListForCommitment" v-else></input-select-basic-1> 
 
                                 <input-text labelInputText="Mode de règlement" :valueInputText="groupbuyCardHeader['Payment Method Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select labelInputText="Mode de règlement" v-model="groupbuyCardHeader['Payment Method Code']" @openModal="activeModalForSelectableElementList='paymentMethodList'" v-else></input-select>
@@ -305,6 +306,7 @@ import inputText from './input/input-text.vue'
 import inputSelect from './input/input-select.vue'
 import inputDate from './input/input-date.vue'
 import inputNumber from './input/input-number.vue'
+import inputSelectBasic1 from './input/input-select-basic1.vue'
 import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
 import ModalForSelectablePaymentMethodList from './ModalForSelectablePaymentMethodList.vue'
 import axios from 'axios'
@@ -317,7 +319,7 @@ export default {
     name:'groupbuycontract-card',
     components:{
         CustomerCardHeader,CustomerInfo,
-        inputText,
+        inputText,inputSelectBasic1,
         CustomerCardRibbon,inputSelect,
         inputDate,inputNumber,
         ModalForSelectablePaymentMethodList,
@@ -346,9 +348,8 @@ export default {
         
 
         const optionLabelListForRepossSource = ref([])
-        const optionLabelListForRepossStatus = ref([])
-        const optionLabelListForRepossType = ref([])
-        const optionLabelListForRepossItemStatus = ref([])
+        const optionLabelListForCommitment = ref([])
+    
 
         const getLabelForRepossSource = computed(()=> {
             return optionLabelListForRepossSource.value.filter(row => row['Value']== groupbuyCardHeader.value['Source'])
@@ -368,15 +369,11 @@ export default {
             axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
             .then(result => {
                 if (field=='[Reposs Source]')
-                    optionLabelListForRepossSource.value=result.data.recordset
-                if (field=='[Reposs Status]')
-                    optionLabelListForRepossStatus.value=result.data.recordset
-                if (field=='[Reposs Type]')
-                    optionLabelListForRepossType.value=result.data.recordset
-                if (field=='[Activity Type]')
-                    optionLabelListForRepossItemStatus.value=result.data.recordset
+                    optionLabelListForRepossSource.value=result.data.recordset[0]
+                if (field=='[Commitment Type]')
+                optionLabelListForCommitment.value=result.data.recordset
     
-                    console.log(result.data.recordset)
+                    console.log(result.data.recordset[0])
     
             }).catch(err=>console.log(err))
         }
@@ -402,7 +399,6 @@ export default {
       function getCustomerHistoryInfo(){
           axios.get(`http://localhost:3000/app/getCustomerHistory?customerNo=UDT00001`)
           .then(res =>{
-              console.log(res.data[0])
               if (new Array(res.data[0]).length>=0){
                 buyHistoryInfo.value =  res.data
                 buyHistoricalInfo.value =  res.data
@@ -503,7 +499,6 @@ export default {
                 'No_':groupbuyCardHeader.value['No_'],
                 'Customer No_':groupbuyCardHeader.value['Customer No_'],
                 'Name':groupbuyCardHeader.value['Name'],
-                'Activity Type':groupbuyCardHeader.value[ 'Activity Type'],
                 'Subject':groupbuyCardHeader.value['Subject'],
                 'Description':groupbuyCardHeader.value['Description'],
                 'Created on':groupbuyCardHeader.value['Created on'],
@@ -522,10 +517,8 @@ export default {
         onMounted(() => {
             if (webUserInfo.name.value){
                 getcontractCardInfo()
-                getOptionLabelList('[Reposs Source]')
-                getOptionLabelList('[Reposs Status]')
                 getOptionLabelList('[Reposs Type]')
-                getOptionLabelList('[Reposs Item Status]')
+                getOptionLabelList('[Commitment Type]')
             }else{
                 axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
                 .then(res=>{
@@ -533,10 +526,9 @@ export default {
                     webUserInfo.name.value=useWebUserInfoStore().name
                     webUserInfo.company.value=useWebUserInfoStore().activeCompanyId
                     getcontractCardInfo()
-                    getOptionLabelList('[Reposs Source]')
-                    getOptionLabelList('[Reposs Status]')
                     getOptionLabelList('[Reposs Type]')
-                    getOptionLabelList('[Reposs Item Status]')
+                    getOptionLabelList('[Commitment Type]')
+
                 })
                 .catch(err=>console.log(err))
             }
@@ -565,9 +557,8 @@ export default {
             buyHistoryInfo,
             fillCustomerInfoField,
             optionLabelListForRepossSource,
-            optionLabelListForRepossStatus,
-            optionLabelListForRepossType,
-            optionLabelListForRepossItemStatus,
+            optionLabelListForCommitment,
+
             tttt,
             dateInfo,
             getISODate,

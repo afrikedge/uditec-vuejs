@@ -310,7 +310,7 @@ import inputSelectBasic1 from './input/input-select-basic1.vue'
 import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
 import ModalForSelectablePaymentMethodList from './ModalForSelectablePaymentMethodList.vue'
 import axios from 'axios'
-import { onMounted,ref,computed,onBeforeMount } from 'vue'
+import { onMounted,ref,onBeforeMount } from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 import { useRoute} from 'vue-router'
@@ -347,17 +347,10 @@ export default {
         const buyHistoryInfo = ref([])
         
 
-        const optionLabelListForRepossSource = ref([])
+        
         const optionLabelListForCommitment = ref([])
     
 
-        const getLabelForRepossSource = computed(()=> {
-            return optionLabelListForRepossSource.value.filter(row => row['Value']== groupbuyCardHeader.value['Source'])
-        } )
-
-        const tttt = computed(()=>{
-            return getLabelForRepossSource.value
-        })
 
         const dateInfo = {
             OpStartingDate: ref(''),
@@ -368,8 +361,6 @@ export default {
         function getOptionLabelList(field){
             axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
             .then(result => {
-                if (field=='[Reposs Source]')
-                    optionLabelListForRepossSource.value=result.data.recordset[0]
                 if (field=='[Commitment Type]')
                 optionLabelListForCommitment.value=result.data.recordset
     
@@ -517,7 +508,6 @@ export default {
         onMounted(() => {
             if (webUserInfo.name.value){
                 getcontractCardInfo()
-                getOptionLabelList('[Reposs Type]')
                 getOptionLabelList('[Commitment Type]')
             }else{
                 axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
@@ -526,7 +516,6 @@ export default {
                     webUserInfo.name.value=useWebUserInfoStore().name
                     webUserInfo.company.value=useWebUserInfoStore().activeCompanyId
                     getcontractCardInfo()
-                    getOptionLabelList('[Reposs Type]')
                     getOptionLabelList('[Commitment Type]')
 
                 })
@@ -556,10 +545,9 @@ export default {
             buyHistoricalInfo,
             buyHistoryInfo,
             fillCustomerInfoField,
-            optionLabelListForRepossSource,
             optionLabelListForCommitment,
 
-            tttt,
+            
             dateInfo,
             getISODate,
             getCustomerHistoryInfo,

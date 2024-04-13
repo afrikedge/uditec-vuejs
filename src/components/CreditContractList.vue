@@ -29,7 +29,7 @@
                     <tbody>
                         <tr id="" v-for="groupbuy of filteredgroupBuyList" :key="groupbuy['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/CreditContractCard?contractNo=UDT/AGP/24-0002`">
+                                <router-link :to="`/CreditContractCard?contractNo=${groupbuy['No_']}`">
                                     <a href="#" class="has-text-orange">
                                         {{ groupbuy['No_'] }} 
                                     </a>

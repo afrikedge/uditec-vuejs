@@ -206,11 +206,11 @@
                                             <td class="has-text-left">{{ elt['Customer Name'] }}</td>
                                             <td class="has-text-left">{{ elt['Sales Mode'] }}</td>
                                             <td class="has-text-left">{{ elt['Document No_'] }}</td>
-                                            <td class="has-text-left">{{ elt['Posting Date'] }}</td>
-                                            <td class="has-text-left">{{ elt['Due Date'] }}</td>
+                                            <td class="has-text-left">{{ formatDate(elt['Posting Date']) }}</td>
+                                            <td class="has-text-left">{{ formatDate(elt['Due Date']) }}</td>
                                             <td class="has-text-left">{{ elt['Amount (LCY)'] }}</td>
                                             <td class="has-text-left">{{ elt['Payment (LCY)'] }}</td>
-                                            <td class="has-text-left">{{ elt['Payment Date'] }}</td>
+                                            <td class="has-text-left">{{ formatDate(elt['Payment Date']) }}</td>
                                             <td class="has-text-left">{{ elt['Days late'] }}</td>
                                             <td class="has-text-left">{{ elt['Debt Status'] }}</td>
                                         </tr>
@@ -308,10 +308,10 @@ import inputNumber from './input/input-number.vue'
 import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
 import ModalForSelectablePaymentMethodList from './ModalForSelectablePaymentMethodList.vue'
 import axios from 'axios'
-import { onMounted,ref,computed } from 'vue'
+import { onMounted,ref,computed,onBeforeMount } from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
-
+import { useRoute} from 'vue-router'
 
 export default {
     name:'groupbuycontract-card',
@@ -324,6 +324,8 @@ export default {
         ModalForSelectableCustomerList
     },
     setup(){
+        const route = useRoute()
+        const CreditContractNo = ref('')
         const groupbuyCardHeader = ref({})
         const readOnlyModeIsDisabled = ref(false)
         const hostname = window.location.hostname
@@ -388,21 +390,24 @@ export default {
         // let CreditCardContractNo = this.$route.query.contractNo
 
         function getcontractCardInfo(){
-            axios.get(`http://${hostname}:3000/app/getCreditContractCard?contractNo=UDT/AGP/24-0002`)
+            axios.get(`http://${hostname}:3000/app/getCreditContractCard?contractNo=${CreditContractNo.value}`)
             .then(result => {
                 groupbuyCardHeader.value = result.data[0]
                 dateInfo.OpStartingDate.value = getISODate(groupbuyCardHeader.value["OP Starting Date"])
-                getCreditContractInfo()
+                getCustomerHistoryInfo()
             }).catch(err=>console.log(err))
         }
 
         
-      function getCreditContractInfo(){
+      function getCustomerHistoryInfo(){
           axios.get(`http://localhost:3000/app/getCustomerHistory?customerNo=UDT00001`)
           .then(res =>{
               console.log(res.data[0])
               if (new Array(res.data[0]).length>=0){
                 buyHistoryInfo.value =  res.data
+                buyHistoricalInfo.value =  res.data
+                buyEmployedInfo.value =  res.data
+                
                   
               }
           })
@@ -538,7 +543,11 @@ export default {
         })
 
 
-
+        onBeforeMount(()=>{
+            if(route.query.contractNo){
+                CreditContractNo.value = route.query.contractNo
+            }
+        })
         // expose to template and other options API hooks
         return {
             setReadOnlyModeIsDisabled,
@@ -562,7 +571,7 @@ export default {
             tttt,
             dateInfo,
             getISODate,
-            getCreditContractInfo,
+            getCustomerHistoryInfo,
             
         }
     },

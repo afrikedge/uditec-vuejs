@@ -34,8 +34,8 @@
                                     </a>
                                 </router-link>
                             </td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ shipto['Name'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ shipto['Customer No_']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ shipto['Name'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ shipto['City'] }}</td>
                            
                         </tr>

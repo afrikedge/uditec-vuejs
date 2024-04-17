@@ -11,13 +11,14 @@
             
 <!---------Composant rubban fiche demande validation paiement----------------------->      
             <Customer-card-ribbon
+            @onGoingBackToList='goBackToList'
+            routeForNewCard="../NewPaymentValidationRequest"
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
             componentWithCompInfo="customerCardRightInfoMaxWidth"
             :newContactBtnIsDisabled="true"
             :newShipToAddressBtnIsDisabled="true"
             @onCancellingUpdate="setReadWriteModeIsDisabled"
             :newCardBtnIsDisabled="false"
-            :editCardBtnIsDisabled="false"
             :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
             :cancelEditCardBtnIsDisabled="true"
             ></Customer-card-ribbon>
@@ -231,6 +232,13 @@ export default {
         }
     },
     methods:{
+        goBackToList(){
+            useNavigationTabStore().setActiveGroup('recovery')
+            useNavigationTabStore().setActiveTab('paymentvalCollection')
+            this.$router.push('/')
+        },
+
+
         /////////////////////////methode pour masquer ou afficher le composant info à droite
      hideOrShowComponentInfo(){
             if(this.customerInfoCompMaxWidth=='0px') {

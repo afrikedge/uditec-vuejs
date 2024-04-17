@@ -133,6 +133,68 @@
                     </div>
                     <br><br>
 
+                    
+                    <div id="deadline" v-if="!readOnlyModeIsDisabled">
+                        <div :class="{'has-background-light':onglet2_expanded}">
+                            <div :class="{'columns':!onglet2_expanded,'p-3':onglet2_expanded,'has-border-bottom-grey':onglet2_expanded,'has-border-bottom':!onglet2_expanded}">
+                                <div class="column p-0 has-text-left has-text-weight-bold">
+                                    <a @click="collapse('deadline_content');onglet2_expanded=!onglet2_expanded" v-if="onglet2_expanded">
+                                        <span>Échéances</span>
+                                    </a>
+                                    <a @click="expand('deadline_content');onglet2_expanded=!onglet2_expanded" v-if="!onglet2_expanded">
+                                        <span>Échéances</span>
+                                        <span class="icon">
+                                            <i class="fas fa-angle-right"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div id="deadline_content" class="columns px-5 mt-5" style="max-height: 250px; overflow:scroll;">
+                                <table class="table  is-narrow  is-fullwidth">
+                                    <thead class=" my-2">
+                                        <tr > 
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° ligne</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Document </th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date comptabilisation</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date document</th>
+
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant initial</th>
+
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant ouvert</th>
+
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut échéance</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr :id="index" v-for="(elt,index) of debtCardLines" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
+                                            <td class="has-text-left has-background-light">
+                                                <span class="icon">
+                                                    <i class="fas fa-arrow-right has-text-grey"></i>
+                                                </span>
+                                            </td>
+                                            <td class="has-text-left">{{ elt['Line No_'] }}</td>
+                                            <td class="has-text-left">{{ elt['Document No_']  }}</td>
+                                            <td class="has-text-left">{{ elt['Posting Date'] }}</td>
+                                            <td class="has-text-left">{{ elt['Document Date'] }}</td>
+                                            <td class="has-text-left">{{ elt['Description']  }}</td>
+                                            <td class="has-text-left">{{ elt['Original Amount'] }}</td>
+                                            <td class="has-text-left">{{ elt['Remaining Amount]'] }}</td>
+                                            <td class="has-text-left">{{ elt['[Debt Status]'] }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>     
+                        </div>
+                                       
+                    </div>  
+                    <br><br>
+
+
+
+
                 </div>
 <!---------composant info client----------------------->
                 <customer-info class="customer-info"></customer-info>
@@ -315,37 +377,29 @@ export default {
             }
             updateDebtCollection(formatToBCJsonData(JSData))
         }
-
         onMounted(() => {
             if (webUserInfo.name.value){
                 getRACardInfo()
-                
-                
-               
-                getOptionLabelList('[Reposs Item Status]')
-                getOptionLabelList('[Activity Status]')
                 getOptionLabelList('[Activity Type]')
-
+                getOptionLabelList('[Activity Status]')
+                
             }else{
                 axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
                 .then(res=>{
-                    useWebUserInfoStore().fillWebUserInfo(res.data[0])
+                    useWebUserInfoStore().fillWebUserInfo(res.data.recordset[0])
                     webUserInfo.name.value=useWebUserInfoStore().name
                     webUserInfo.company.value=useWebUserInfoStore().activeCompanyId
                     getRACardInfo()
-                    
-                    
-                  
-                    getOptionLabelList('[Reposs Item Status]')
-                    getOptionLabelList('[Activity Status]')
                     getOptionLabelList('[Activity Type]')
+                    getOptionLabelList('[Activity Status]')
+                   
                 })
                 .catch(err=>console.log(err))
             }
         })
 
 
-
+      
         // expose to template and other options API hooks
         return {
             setReadOnlyModeIsDisabled,
@@ -360,6 +414,7 @@ export default {
             
         
             optionLabelListForActivityType,
+
             optionLabelListForActivityStatus,
             dateInfo,
             getISODate
@@ -372,6 +427,8 @@ export default {
 
             //indique si les onglets sont réduits ou non
             onglet1_expanded:true,
+            onglet2_expanded:true,
+            
         }
     },
     methods:{
@@ -416,7 +473,7 @@ export default {
     transition: max-width 0.5s;
 }
 
-#general_content{
+#general_content,#deadline_content{
     max-height: 5000px;
     overflow: hidden;
     transition: max-height 0.5s

@@ -216,7 +216,7 @@
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-8" style="min-width: 150px;"><b>Mode Tarification</b></th>
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-8" style="min-width: 150px;"><b>Pourcentage</b></th>
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-8" style="min-width: 150px;"><b>Montant</b></th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-8" style="min-width: 150px;"><b>Mode Tarification</b></th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -227,9 +227,7 @@
                                             <td class="has-text-left">{{ elt['Pricing Mode'] }}</td>
                                             <td class="has-text-left">{{ elt['Percentage'] }}</td>
                                             <td class="has-text-left">{{ elt['Amount (LCY)'] }}</td>
-                                            <td class="has-text-left">
-                                                <input-select-basic-1 labelInputText="" v-model="elt['Pricing Mode']" :option-list="`optionLabelListForPricingMode`"></input-select-basic-1> 
-                                            </td>
+                                            
                                         </tr>
                                     </tbody>
                                 </table>
@@ -256,7 +254,6 @@ import ItemCardRibbon from "./RibbonForCard.vue";
 import inputText from "./input/input-text.vue";
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
-import inputSelectBasic1 from './input/input-select-basic1.vue'
 import axios from "axios";
 import { onMounted, ref } from "vue";
 import { useRoute} from 'vue-router'
@@ -269,7 +266,7 @@ export default {
       ItemInfo,
       inputText,
       ItemCardRibbon ,
-      inputSelectBasic1
+     
     },
  
     setup() {

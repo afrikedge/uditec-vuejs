@@ -76,14 +76,15 @@ import RecoveryActivityList from "./components/RecoveryActivityList.vue"
 import DebtCollectionList from './components/DebtCollectionList.vue'
 import DebtCollectionCard from './components/DebtCollectionCard.vue'
 
-import PromiseToPayList from './components/PromiseToPayList.vue'
-import PromiseToPayCard from './components/PromiseToPayCard.vue'
+
 
 import ReceivablesList from './components/ReceivablesList.vue'
 import ReceivablesCard from './components/ReceivablesCard.vue'
 
 import PaymentValidationRequestList from './components/PaymentValidationRequestList.vue'
 import PaymentValidationRequestCard from './components/PaymentValidationRequestCard.vue'
+import NewPaymentValidationRequest from './components/NewPaymentValidationRequest.vue'
+
 
 //11-----Formulaire création recouvrement
 import NewRepossessionRequest from "./components/NewRepossessionRequest.vue"
@@ -141,15 +142,16 @@ const routes = [
   {path:'/DiscountRequestCard/:id',component:DiscountRequestCard,name:'DiscountRequestCardPage'},
   {path:'/DiscountRequestList',component:DiscountRequestList,name:'DiscountRequestListPage'},
   {path:'/ReleaseRequestCard/:id',component:ReleaseRequestCard,name:'ReleaseRequestCardPage'},
-  {path:'/ReleaseRequestList',component:ReleaseRequestList,name:'ReleaseRequestListPage'},
+  {path:'/',component:ReleaseRequestList,name:'ReleaseRequestListPage'},
 
-  ///////////////////8
+  ///////////////////8ReleaseRequestList
   {path:'/STP2_Sales',component:SPT2_SalesContainer,name:'SPT2_SalesContainerPage'},
   
   ///////////////////9
   {path:'/CreditRequestCard/:id',component:CreditRequestCard,name:'CreditRequestCardPage'},
   {path:'/CreditRequestList',component:CreditRequestList,name:'CreditRequestListPage'},
   {path:'/NewCreditRequest',component:NewCreditRequest,name:'NewCreditRequestPage'},
+ 
 
   ///////////////////10
   {path:'/RepossessionRequestCard/:id',component:RepossessionRequestCard,name:'RepossessionRequestCardPage'},
@@ -167,14 +169,13 @@ const routes = [
   
   {path:'/DebtCollectionList',component:DebtCollectionList,name:'DebtCollectionListPage'},
   {path:'/DebtCollectionCard/:id',component:DebtCollectionCard,name:'DebtCollectionCardPage'},
-  {path:'/PromiseToPayList',component:PromiseToPayList,name:'PromiseToPayListPage'},
-  {path:'/PromiseToPayCard/:id',component:PromiseToPayCard,name:'PromiseToPayCardPage'},
   {path:'/ReceivablesList',component:ReceivablesList,name:'ReceivablesListPage'},
   {path:'/ReceivablesCard/:id',component:ReceivablesCard,name:'ReceivablesCardPage'},
   {path:'/PaymentValidationRequestList',component:PaymentValidationRequestList,name:'PaymentValidationRequestListPage'},
   {path:'/PaymentValidationRequestCard/:id',component:PaymentValidationRequestCard,name:'PaymentValidationRequestCardPage'},
+  {path:'/NewPaymentValidationRequest',component:NewPaymentValidationRequest,name:'NewPaymentValidationRequestPage'},
   
-  
+
    ///////////////////12
   {path:'/CreditContractList',component:CreditContractList,name:'CreditContractListListPage'},
   {path:'/CreditContractCard',component:CreditContractCard,name:'CreditContractCardCardPage'},

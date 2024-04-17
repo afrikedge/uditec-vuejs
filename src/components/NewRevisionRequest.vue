@@ -49,11 +49,11 @@
                 </div>
             </article>
   
-<!---------Section formulaire fiche demande déblocage----------------------->
+<!---------Section formulaire fiche demande révision----------------------->
             <div id="content-comp" class="columns mt-2" >
                 <div class="column" >
 
-    <!---------sous-Section onglet 1 formulaire fiche demande déblocage----------------------->
+    <!---------sous-Section onglet 1 formulaire fiche demande révision----------------------->
                     <div id="general">
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
@@ -90,6 +90,10 @@
                     </div>
                     <br/><br/>
                 </div>
+                
+                <!---------composant info demande révision----------------------->
+                <revision-info class="customer-info"></revision-info>
+
             </div>
         </div>
 
@@ -111,6 +115,7 @@
 <script>
   import  revisionRequestCardHeader from "./HeaderForCard.vue";
   import  revisionRequestCardRibbon from "./RibbonForCard.vue";
+  import revisionInfo from './CustomerInfo.vue'
   import inputText from "./input/input-text.vue";
   import inputSelect from './input/input-select.vue'
   import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
@@ -130,6 +135,7 @@
     components: {
       revisionRequestCardHeader,
       inputText,
+      revisionInfo,
       inputSelect,
       revisionRequestCardRibbon,
       ModalForSelectableCustomerList,
@@ -275,6 +281,10 @@
   };
 </script>
 <style scoped>
+.customer-info{
+    max-width: v-bind(customerInfoCompMaxWidth);
+    transition: max-width 0.5s;
+}
   #general_content {
     max-height: 5000px;
     overflow: hidden;

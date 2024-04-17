@@ -84,6 +84,8 @@
                     </div>
                     <br/><br/>
                 </div>
+                <!---------composant info demande déblocage----------------------->
+                <release-info class="customer-info"></release-info>
             </div>
         </div>
 
@@ -99,6 +101,7 @@
 <script>
   import  releaseRequestCardHeader from "./HeaderForCard.vue";
   import  releaseRequestCardRibbon from "./RibbonForCard.vue";
+  import releaseInfo from './CustomerInfo.vue'
   import inputText from "./input/input-text.vue";
   import inputSelect from './input/input-select.vue'
   import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
@@ -117,6 +120,7 @@
     components: {
       releaseRequestCardHeader,
       inputText,
+      releaseInfo,
       inputSelect,
       releaseRequestCardRibbon,
       ModalForSelectableCustomerList,
@@ -255,6 +259,10 @@
   };
 </script>
 <style scoped>
+.customer-info{
+    max-width: v-bind(customerInfoCompMaxWidth);
+    transition: max-width 0.5s;
+}
   #general_content {
     max-height: 5000px;
     overflow: hidden;

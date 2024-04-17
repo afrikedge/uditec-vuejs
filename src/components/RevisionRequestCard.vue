@@ -93,10 +93,7 @@
                                 <input-select labelInputText="Mode de paiement (Proposé)" v-model="paymentCard['[New Payment Method Code']" @openModal="activeModalForSelectableElementList='paymentMethodList';" v-else></input-select>
 
                                 <input-text labelInputText="Régime TVA (Proposé)" :valueInputText="paymentCard['New VAT Bus_ Posting Group']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select labelInputText="Régime TVA (Proposé)" v-model="paymentCard['New VAT Bus_ Posting Group']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-select>
-
-                                <input-text labelInputText="% Acompte exigé (Proposé)" :valueInputText="paymentCard['New Prepayment _']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>   
-                                <input-text labelInputText="% Acompte exigé (Proposé)" :valueInputText="paymentCard['New Prepayment _']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>   
+                                <input-select labelInputText="Régime TVA (Proposé)" v-model="paymentCard['New VAT Bus_ Posting Group']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-select> 
                                 
                                 <input-text labelInputText="% Acompte exigé (Proposé)" :valueInputText="paymentCard['New Prepayment _']" :is_disabled="!readOnlyModeIsDisabled"  :is_readOnly="true"></input-text>
                                 

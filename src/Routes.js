@@ -45,6 +45,7 @@ import NewSaleOrder from './components/NewSaleOrder.vue'
 //7-----Autres
 import RevisionRequestList from './components/RevisionRequestList.vue'
 import RevisionRequestCard from './components/RevisionRequestCard.vue'
+import NewRevisionRequest from "./components/NewRevisionRequest.vue"
 import DiscountRequestList from './components/DiscountRequestList.vue'
 import DiscountRequestCard from './components/DiscountRequestCard.vue'
 import ReleaseRequestList from './components/ReleaseRequestList.vue'
@@ -132,6 +133,8 @@ const routes = [
   ///////////////////7
   {path:'/RevisionRequestCard/:id',component:RevisionRequestCard,name:'RevisionRequestCardPage'},
   {path:'/RevisionRequestList',component:RevisionRequestList,name:'RevisionRequestListPage'},
+  {path:'/NewRevisionRequest',component:NewRevisionRequest,name:'NewRevisionRequestPage'},
+
   {path:'/DiscountRequestCard/:id',component:DiscountRequestCard,name:'DiscountRequestCardPage'},
   {path:'/DiscountRequestList',component:DiscountRequestList,name:'DiscountRequestListPage'},
   {path:'/ReleaseRequestCard/:id',component:ReleaseRequestCard,name:'ReleaseRequestCardPage'},

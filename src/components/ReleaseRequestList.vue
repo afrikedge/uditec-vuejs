@@ -8,7 +8,7 @@
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
         @onInputSearchData="(eltToSearch)=>this.eltToSearch=eltToSearch"
         componentWithCompInfo="customerListRightInfoMaxWidth"
-        routeForNewCard="NewCustomer"
+        routeForNewCard="NewReleaseRequest"
         ></customer-list-ribbon>
 
 

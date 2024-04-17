@@ -6,24 +6,29 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <Customer-Card-Header   :soNo="paymentCardId" :soDesc="paymentCard.Subject" pageTitle="Fiche Demande revision" />
+                <Customer-Card-Header   soNo="paymentCardId" :soDesc="paymentCard.Subject"
+                @onGoingBackToList='goBackToList'
+                pageTitle="Fiche Demande revision" />
             </div>
             
-<!---------Composant rubban fiche client----------------------->      
+<!---------Composant rubban fiche demande déblocage----------------------->      
             <Customer-card-ribbon
+            routeForNewCard="../NewRevisionRequest"
+            @onDisablingReadOnlyMode="setReadOnlyModeIsDisabled"
+            @onCancellingUpdate="setReadWriteModeIsDisabled"
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
             componentWithCompInfo="customerCardRightInfoMaxWidth"
             :newCardBtnIsDisabled="false"
-           
+            :editCardBtnIsDisabled="false"
             :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
           
             ></Customer-card-ribbon>
 
-<!---------Section formulaire fiche client----------------------->      
+<!---------Section formulaire fiche demande déblocage----------------------->      
             <div id="content-comp" class="columns mt-2" style="overflow-y: scroll;">
                 <div class="column" style="overflow-y: scroll;">
 
-<!---------sous-Section ongle 1 formulaire fiche client----------------------->                         
+<!---------sous-Section ongle 1 formulaire fiche demande déblocage----------------------->                         
                     <div id="general">
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
@@ -43,7 +48,7 @@
                             <div class="column">
                                 <input-text labelInputText="N° Demande" :valueInputText="paymentCard['[Revision No_']" :is_disabled="readOnlyMode" ></input-text>
                                 <input-text labelInputText="Statut" :valueInputText="paymentCard['Approval Status']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Code client" :valueInputText="paymentCard['Customer No']" :is_disabled="readOnlyMode"></input-text> 
+                                <input-text labelInputText="Code client" :valueInputText="paymentCard['Customer No_']" :is_disabled="readOnlyMode"></input-text> 
                                 <input-text labelInputText="Nom du client" :valueInputText="paymentCard['Name']" :is_disabled="readOnlyMode"></input-text>
                                 <input-text labelInputText="Mode de vente" :valueInputText="paymentCard['Sales Mode']" :is_disabled="readOnlyMode"></input-text> 
                                 <input-text labelInputText="Conditions de paiement" :valueInputText="paymentCard['Payment Terms Code']" :is_disabled="readOnlyMode"></input-text>
@@ -78,20 +83,23 @@
                         </div>
                         <div id="revision_content" class="columns">
                             <div class="column">
+                               
                                 <input-text labelInputText="Conditions de paiement (Proposé)" :valueInputText="paymentCard['[New Payment Terms Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-text labelInputText="Conditions de paiement (Proposé)" :valueInputText="paymentCard['[New Payment Terms Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-
-                                <input-text labelInputText="Limite de crédit (Proposé)" :valueInputText="paymentCard['New Credit limit (LCY)']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-text labelInputText="Limite de crédit (Proposé)" :valueInputText="paymentCard['New Credit limit (LCY)']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-
-                                <input-text labelInputText="Mode de paiement (Proposé)" :valueInputText="paymentCard['New Payment Method Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
-                                <input-text labelInputText="Mode de paiement (Proposé)" :valueInputText="paymentCard['New Payment Method Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
+                                <input-select labelInputText="Conditions de paiement (Proposé)" v-model="paymentCard['[New Payment Terms Code']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-select>
+                                
+                                <input-text labelInputText="Limite de crédit (Proposé)" :valueInputText="paymentCard['New Credit limit (LCY)']" :is_disabled="!readOnlyModeIsDisabled"  :is_readOnly="true"></input-text>
+                                
+                                <input-text labelInputText="Mode de paiement (Proposé)" :valueInputText="paymentCard['[New Payment Method Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select labelInputText="Mode de paiement (Proposé)" v-model="paymentCard['[New Payment Method Code']" @openModal="activeModalForSelectableElementList='paymentMethodList';" v-else></input-select>
 
                                 <input-text labelInputText="Régime TVA (Proposé)" :valueInputText="paymentCard['New VAT Bus_ Posting Group']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-text labelInputText="Régime TVA (Proposé)" :valueInputText="paymentCard['New VAT Bus_ Posting Group']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select labelInputText="Régime TVA (Proposé)" v-model="paymentCard['New VAT Bus_ Posting Group']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-select>
 
                                 <input-text labelInputText="% Acompte exigé (Proposé)" :valueInputText="paymentCard['New Prepayment _']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>   
                                 <input-text labelInputText="% Acompte exigé (Proposé)" :valueInputText="paymentCard['New Prepayment _']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>   
+                                
+                                <input-text labelInputText="% Acompte exigé (Proposé)" :valueInputText="paymentCard['New Prepayment _']" :is_disabled="!readOnlyModeIsDisabled"  :is_readOnly="true"></input-text>
+                                
                             </div>
                             <div class="column">
                                 <input-text labelInputText="Conditions de paiement (Validé)" :valueInputText="paymentCard['Approved Payment Terms Code']" :is_disabled="readOnlyMode"></input-text> 
@@ -215,11 +223,26 @@
                     
    
                 </div>
-<!---------composant info client----------------------->
+<!---------composant info demande déblocage----------------------->
                 <customer-info class="customer-info"></customer-info>
 
             </div>
         </div>
+
+        
+<!----------------------------------------------------------->
+        <modal-for-selectable-customer-list 
+            v-if="activeModalForSelectableElementList=='customerList'"  
+            :isActive="activeModalForSelectableElementList=='customerList'" 
+            @closeModal="activeModalForSelectableElementList=''" 
+            @onGettingLineFromSelectableCustomerListModal="(elt)=>fillCustomerInfoField(elt)">
+        </modal-for-selectable-customer-list>
+        <modal-for-selectable-payment-method-list 
+            v-if="activeModalForSelectableElementList=='paymentMethodList'" 
+            :isActive="activeModalForSelectableElementList=='paymentMethodList'" 
+            @closeModal="activeModalForSelectableElementList=''" 
+            @onGettingLineFromSelectablePaymentMethodListModal="(elt)=>fillPaymentMethodInfoField(elt)">
+        </modal-for-selectable-payment-method-list>
 
     </div>    
 
@@ -229,25 +252,75 @@ import CustomerCardHeader from './HeaderForCard.vue'
 import CustomerInfo from './CustomerInfo.vue'
 import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
+import inputSelect from './input/input-select.vue'
+import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
+import ModalForSelectablePaymentMethodList from './ModalForSelectablePaymentMethodList.vue'
 import axios from 'axios'
-import { ref,watch } from 'vue'
+import { onMounted,onBeforeMount,ref,watch } from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
+import { useRoute } from 'vue-router'
+import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 
 export default {
     name:'customer-card',
     components:{
-        CustomerCardHeader,CustomerInfo,inputText,CustomerCardRibbon
+        CustomerCardHeader,CustomerInfo,
+        inputText,
+        CustomerCardRibbon,
+        ModalForSelectableCustomerList,
+        inputSelect,
+        ModalForSelectablePaymentMethodList
     },
     setup(){
         const paymentCard = ref({})
         const readOnlyModeIsDisabled = ref(false)
         const readOnlyMode = ref(true)
 
+        //nom de l'hote dans l'url 
+        const hostname = window.location.hostname
+        const route = useRoute()
+
+        //indique la route active
+        const paymentCardId = ref('')
+        
+        let webUserInfo = {
+            name:ref(useWebUserInfoStore().name),
+            company:ref(useWebUserInfoStore().activeCompanyId),
+        }
         
         //variable de success serveur
         let success_message=ref('')
         let is_convertSQ_success = ref(false)
 
+          
+        function getPVRQCardInfo(){
+            axios.get(`http://${hostname}:3000/app/getPVRQCard/${paymentCardId.value}`)
+            .then(result => {
+                console.log(result)
+                paymentCard.value = result.data
+             
+            }).catch(err=>console.log(err))
+        }
+
+        function fillCustomerInfoField(customer){
+            paymentCard.value["Sell-to Customer No_"]=customer["No_"]
+            paymentCard.value["Sell-to Customer Name"]=customer["Name"]
+            paymentCard.value["Sell-to Contact No_"]=customer["Primary Contact No_"]
+            paymentCard.value["Payment Method Code"]=customer['Payment Method Code']
+            paymentCard.value["Payment Terms Code"]=customer['Payment Terms Code']
+            paymentCard.value["Prepayment _"]=customer['Prepayment _']
+            paymentCard.value["Shipment Method Code"]=customer['Shipment Method Code']
+            paymentCard.value["Customer Posting Group"]=customer['Customer Posting Group']
+            paymentCard.value["Gen_ Bus_ Posting Group"]=customer['Gen_ Bus_ Posting Group']
+            paymentCard.value["VAT Bus_ Posting Group"]=customer['VAT Bus_ Posting Group']
+            paymentCard.value["Customer Price Group"]=customer['Customer Price Group']
+            paymentCard.value["Ship-to Code"]=customer['Ship-to Code']
+            paymentCard.value["Sales Mode"]=customer['Sales Mode']
+        }
+
+        function fillPaymentMethodInfoField(paymentMethod){
+            paymentCard.value["Payment Method Code"]=paymentMethod["Code"]
+        }
         
         function setReadOnlyModeIsDisabled(){
             readOnlyModeIsDisabled.value=true
@@ -262,6 +335,29 @@ export default {
             }
         })
 
+        onMounted(() => {
+            if (webUserInfo.name.value){
+                getPVRQCardInfo()
+             
+            }else{
+                axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
+                .then(res=>{
+                    useWebUserInfoStore().fillWebUserInfo(res.data.recordset[0])
+                    webUserInfo.name.value=useWebUserInfoStore().name
+                    webUserInfo.company.value=useWebUserInfoStore().activeCompanyId
+                    getPVRQCardInfo()
+                })
+                .catch(err=>console.log(err))
+            }
+        })
+
+        onBeforeMount(()=>{
+            if(route.params.id){
+                paymentCardId.value = route.params.id
+                
+            }
+        })
+
         // expose to template and other options API hooks
         return {
             paymentCard,
@@ -269,7 +365,9 @@ export default {
             readOnlyModeIsDisabled,
             setReadWriteModeIsDisabled,
             setReadOnlyModeIsDisabled,
-            success_message
+            success_message,
+            fillCustomerInfoField,
+            fillPaymentMethodInfoField
         }
     },
     data(){
@@ -277,21 +375,26 @@ export default {
             //taille (largeur) initiale du composant customerInfo
             customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerCardRightInfoMaxWidth,
 
-            //indique la route active
-            paymentCardId:this.$route.params.id,
+           
+           
 
             //indique si les onglets sont réduits ou non
             onglet1_expanded:true,
             onglet2_expanded:true,
             onglet3_expanded:true,
             onglet4_expanded:true,
-            onglet5_expanded:true,
+            
 
-            //nom de l'hote dans l'url 
-            hostname:window.location.hostname
+
+            //élement pour le modal sélection des enregistrements
+            activeModalForSelectableElementList:''
         }
     },
     methods:{
+        goBackToList(){
+            useNavigationTabStore().setActiveTab('customers')
+            this.$router.push('/RevisionRequestList')
+        },
         /////////////////////////methode pour masquer ou afficher le composant info à droite
      hideOrShowComponentInfo(){
             if(this.customerInfoCompMaxWidth=='0px') {
@@ -320,14 +423,7 @@ export default {
         },
        
     },
-    mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getPVRQCard/${this.paymentCardId}`)
-        .then(result => {
-         this.paymentCard = result.data;
-         console.log(result)
-        }).catch(err=>console.log(err))
-
-    },
+   
 }
 
 </script>
@@ -337,7 +433,7 @@ export default {
     transition: max-width 0.5s;
 }
 
-#general_content,#address_content,#historique_content,#cash_content,#delivery_content,#revision_content,#details_content ,#Suivi_content{
+#general_content,#revision_content{
     max-height: 5000px;
     overflow: hidden;
     transition: max-height 0.5s

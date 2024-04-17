@@ -4,14 +4,14 @@
         <div id="scrollBlock" class="modal-card box shadow is-rounded h-100" style="width: 90%">
 <!---------Composant entête fiche----------------------->
             <div id="card-header-comp">
-                <release-request-card-Header soDesc="Nouvelle demande déblocage" pageTitle="Fiche demande déblocage" @onGoingBackToList="goBackToList" />
+                <revision-request-card-Header soDesc="Nouvelle demande revision" pageTitle="Fiche demande revision" @onGoingBackToList="goBackToList" />
             </div>
   
 <!---------Composant rubban fiche client----------------------->
-            <release-request-card-ribbon
+            <revision-request-card-ribbon
             @onSubmittingForm="submitForm"
             :readOnlyModeIsDisabled="true"            
-            ></release-request-card-ribbon>
+            ></revision-request-card-ribbon>
 
 <!---------Composant message d'enregistrement en cours ou d'erreur ou de success----------------------->      
             <article v-if="submitting_message" class="" >
@@ -70,15 +70,21 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-                           
-                                <input-text labelInputText="N° Demande" v-model="releaseRequestNo"></input-text>
-                                <input-text labelInputText="Objet" v-model="releaseRequestSubject"></input-text>
+                                
+                                <input-select v-model="revisionRequestCustomerNo" labelInputText="Code Client" @openModal="activeModalForSelectableElementList='customerList'"></input-select>
+                               
+                                <input-select v-model="revisionRequestNewPaymentTermsCode" labelInputText="Conditions de paiement (Proposé)" @openModal="activeModalForSelectableElementList='customerList'"></input-select>
+                             
+                                <input-text labelInputText="Limite de crédit (Proposé)" v-model="revisionRequestNewCreditLimit"></input-text>
                                 
                                 
                             </div>
                             <div class="column">
-                                <input-select v-model="releaseRequestCustomerNo" labelInputText="N° Document" :is_disabled="false"  @openModal="activeModalForSelectableElementList='customerList';"></input-select>
+                                <input-select v-model="revisionRequestNewPaymentMethodCode" labelInputText="Mode de paiement (Proposé)"  @openModal="activeModalForSelectableElementList='paymentMethodList'"></input-select>
                                 
+                                <input-select v-model="revisionRequestNewVATBusPostingGroup" labelInputText="Régime TVA (Proposé)"  @openModal="activeModalForSelectableElementList='customerList'"></input-select>
+                                
+                                <input-text labelInputText="% Acompte exigé (Proposé)" v-model="revisionRequestNewPrepayment"></input-text>
                             </div>
                         </div>
                     </div>
@@ -93,15 +99,22 @@
             @closeModal="activeModalForSelectableElementList=''" 
             @onGettingLineFromSelectableCustomerListModal="(elt)=>fillCustomerInfoField(elt)">
         </modal-for-selectable-customer-list>
+        <modal-for-selectable-payment-method-list 
+            v-if="activeModalForSelectableElementList=='paymentMethodList'" 
+            :isActive="activeModalForSelectableElementList=='paymentMethodList'" 
+            @closeModal="activeModalForSelectableElementList=''" 
+            @onGettingLineFromSelectablePaymentMethodListModal="(elt)=>fillPaymentMethodInfoField(elt)">
+        </modal-for-selectable-payment-method-list>
 
     </div>
 </template>
 <script>
-  import  releaseRequestCardHeader from "./HeaderForCard.vue";
-  import  releaseRequestCardRibbon from "./RibbonForCard.vue";
+  import  revisionRequestCardHeader from "./HeaderForCard.vue";
+  import  revisionRequestCardRibbon from "./RibbonForCard.vue";
   import inputText from "./input/input-text.vue";
   import inputSelect from './input/input-select.vue'
   import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
+  import ModalForSelectablePaymentMethodList from './ModalForSelectablePaymentMethodList.vue'
   import { ref } from 'vue'
   import { useNavigationTabStore } from '@/Stores/NavigationTab'
   import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
@@ -113,13 +126,14 @@
   
   
   export default {
-    name: "new-release-request",
+    name: "new-revision-request",
     components: {
-      releaseRequestCardHeader,
+      revisionRequestCardHeader,
       inputText,
       inputSelect,
-      releaseRequestCardRibbon,
+      revisionRequestCardRibbon,
       ModalForSelectableCustomerList,
+      ModalForSelectablePaymentMethodList
     },
   
     data() {
@@ -135,7 +149,7 @@
     methods: {
         goBackToList(){
             useNavigationTabStore().setActiveTab('customers')
-            this.$router.push('/ReleaseRequestCard/SO24-00043')
+            this.$router.push('/RevisionRequestCard/RG000009')
         },
       expand(id) {
         const myElt = document.getElementById(id);
@@ -171,16 +185,19 @@
             name:useWebUserInfoStore().name
         }
 
-        const  releaseRequestCardInfo = {
-          releaseRequestCustomerNo : ref(webUserInfo.customerNo),
-          releaseRequestJobTitle : ref(''),
-          releaseRequestSubject: ref('')
+        const  revisionRequestCardInfo = {
+          revisionRequestCustomerNo : ref(webUserInfo.customerNo),
+          revisionRequestNewPaymentMethodCode : ref(''),
+          revisionRequestNewVATBusPostingGroup : ref(''),
+          revisionRequestNewPaymentTermsCode : ref(''),
+          revisionRequestNewCreditLimit: ref(''),
+          revisionRequestNewPrepayment: ref('')
 
           }
           
 
           function fillCustomerInfoField(customer){
-            releaseRequestCardInfo.releaseRequestCustomerNo.value=customer['No_']                
+            revisionRequestCardInfo.revisionRequestCustomerNo.value=customer['No_']                
           }
 
           function displayErrorMessage(errorObject){
@@ -207,13 +224,13 @@
               }
           }
 
-          function createReleaseRequest(sqData){
+          function createRevisionRequest(sqData){
               axios.post(`http://${hostname}:3000/app/getBCWSResponse?company=${webUserInfo.company}`,sqData)
               .then(res => {
                   submitting_message.value=''
                   success_message.value='Enregistrement réussi, vous serez redirigé dans un instant'
                   error_message.value=''
-                  setTimeout(()=> router.push(`/ReleaseRequestCard/${ releaseRequestCardInfo. releaseRequestCustomerNo.value}/${res.data.documentNo}`),5000)
+                  setTimeout(()=> router.push(`/RevisionRequestCard/${ revisionRequestCardInfo. revisionRequestCustomerNo.value}/${res.data.documentNo}`),5000)
               })
               .catch(err => {
                   displayErrorMessage(err)
@@ -231,18 +248,21 @@
             function submitForm(){
                 submitting_message.value='Enregistrement en cours'
                 const JSData = {
-                    Parameter:' releaseRequests_insert',
+                    Parameter:' revisionRequests_insert',
                     webUserName:webUserInfo.name,
-                    releaseRequestNo:'',
-                    releaseRequestSubject: releaseRequestCardInfo.releaseRequestSubject.value,
-                    releaseRequestCustomerNo : ref(webUserInfo.customerNo),
-                    releaseRequestJobTitle :  releaseRequestCardInfo.contactJobTitle.value
+                    revisionRequestNewPaymentTermsCode: revisionRequestCardInfo.revisionRequestNewPaymentTermsCode.value,
+                    revisionRequestNewCreditLimit: revisionRequestCardInfo.revisionRequestNewCreditLimit.value,
+                    revisionRequestNewPrepayment: revisionRequestCardInfo.revisionRequestNewPrepayment.value,
+                    revisionRequestNewPaymentMethodCode: revisionRequestCardInfo.revisionRequestNewPaymentMethodCode.value,
+                    revisionRequestNewVATBusPostingGroup: revisionRequestCardInfo.revisionRequestNewVATBusPostingGroup.value,
+                    revisionRequestCustomerNo : ref(webUserInfo.customerNo),
+                    
                 }
-                createReleaseRequest(formatToBCJsonData(JSData))
+                createRevisionRequest(formatToBCJsonData(JSData))
             }
 
           return{
-              ... releaseRequestCardInfo,
+              ... revisionRequestCardInfo,
               submitting_message,
               error_message,
               error_message_code,

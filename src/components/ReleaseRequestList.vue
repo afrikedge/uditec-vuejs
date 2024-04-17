@@ -17,8 +17,8 @@
                 <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
                     <thead class=" my-2">
                         <tr> 
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Demande</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Limite de crédit</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Encours</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Encours échue</th>
@@ -30,18 +30,18 @@
                     <tbody>
                         <tr id="" v-for="release of  filteredreleaseList" :key="release['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/ReleaseRequestCard/${ release['Status'] }`">
+                                <router-link :to="`/ReleaseRequestCard/${ release['No_'] }`">
                                     <a href="#" class="has-text-orange">
-                                        {{release['Status']==0 ? 'Actif' : 'Non actif' }} 
+                                        {{release['No_']}} 
                                     </a>
                                 </router-link>
                             </td>
-                            <td class="has-text-left has-background-light is-narrow"> {{release['No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{release['Credit Limit (LCY)']==0 ? 'pas de crédit' : 'créditer' }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{release['Balance Amount']==0 ? '2000Fcfa' : '1.000.000.000Fcfa' }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{release['Amount Due']==0 ? '2000Fcfa' : '1.000.000.000Fcfa' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Approval Status'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Credit Limit (LCY)']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Balance Amount']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Amount Due']}}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{release['Gross exposure'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{release['Exceeding Amount']==0 ? 'Excessif' : 'Non excessif' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Exceeding Amount']}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -77,10 +77,10 @@ export default {
         const eltToSearch = ref('')
         const  filteredreleaseList = computed(()=>
         releaseList.value
-        .filter((row) => new String(row['Status']).toLowerCase().includes(eltToSearch.value.toLowerCase())
-                || new String(row['Customer No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
-                || new String(row['Name']).toLowerCase().includes(eltToSearch.value.toLowerCase())
-                || new String(row['Activity Type']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+        .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Credit Limit (LCY)']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Approval Status']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Balance Amount']).toLowerCase().includes(eltToSearch.value.toLowerCase())
         ),
      )
         // expose to template and other options API hooks

@@ -101,27 +101,27 @@
                         <div id="details_content" class="columns">
                             <div class="column">
                                 <input-text labelInputText="Zone" :valueInputText="ShipToAddressCard['Service Zone Code']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Zone" v-model="ShipToAddressCard['Service Zone Code']" :option-list="`optionLabelListForServiceZoneCode`" v-else></input-select-basic-1> 
+                                <input-select-basic-1 labelInputText="Zone"  :option-list="optionLabelListForServiceZoneCode" v-else></input-select-basic-1> 
                                
                                 <input-text labelInputText="Créneau de préférence" :valueInputText="ShipToAddressCard['Time preference']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Créneau de préférence" v-model="ShipToAddressCard['Time preference']" :option-list="`optionLabelListForTimePreference`" v-else></input-select-basic-1> 
+                                <input-select-basic-1 labelInputText="Créneau de préférence"  :option-list="optionLabelListForTimePreference" v-else></input-select-basic-1> 
                                
                                 <input-text labelInputText="Type de route" :valueInputText="ShipToAddressCard['Road Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Type de route" v-model="ShipToAddressCard['Road Type']" :option-list="`optionLabelListForServiceRoadType`" v-else></input-select-basic-1> 
+                                <input-select-basic-1 labelInputText="Type de route" v-model="ShipToAddressCard['Road Type']" :option-list="optionLabelListForRoadType" v-else></input-select-basic-1> 
 
                                 
                                 <input-text labelInputText="Autres préciser" :valueInputText="ShipToAddressCard['Road Type(Others)']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-text labelInputText="Autres préciser" v-model="ShipToAddressCard['Road Type(Others)']"  v-else></input-text>
                                 
                                 <input-text labelInputText="Distance de transport à pied" :valueInputText="ShipToAddressCard['Walking distance']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Distance de transport à pied" v-model="ShipToAddressCard['Walking distance']" :option-list="`optionLabelListForServiceWalkingDistance`" v-else></input-select-basic-1> 
+                                <input-select-basic-1 labelInputText="Distance de transport à pied" v-model="ShipToAddressCard['Walking distance']" :option-list="optionLabelListForWalkingDistance" v-else></input-select-basic-1> 
                                
                                  
                                 <input-text labelInputText="Autres préciser" :valueInputText="ShipToAddressCard['Walking distance(Others)']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-text labelInputText="Autres préciser" v-model="ShipToAddressCard['Walking distance(Others)']"  v-else></input-text>
                                
                                 <input-text labelInputText="Emplacement de livraison" :valueInputText="ShipToAddressCard['Delivery Location']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Emplacement de livraison" v-model="ShipToAddressCard['Delivery Location']" :option-list="`optionLabelListForServiceDeliveryLocation`" v-else></input-select-basic-1> 
+                                <input-select-basic-1 labelInputText="Emplacement de livraison" v-model="ShipToAddressCard['Delivery Location']" :option-list="optionLabelListForDeliveryLocation" v-else></input-select-basic-1> 
                                
                             </div>
                             <div class="column">
@@ -129,16 +129,16 @@
                                 <input-text labelInputText="Accès moto" v-model="ShipToAddressCard['Motorcycle Access']"  v-else></input-text>
                                 
                                 <input-text labelInputText="Plan d'accès" :valueInputText="ShipToAddressCard['Access Plan']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Plan d'accès" v-model="ShipToAddressCard['Access Plan']" :option-list="`optionLabelListForServiceAccessPlan`" v-else></input-select-basic-1> 
+                                <input-select-basic-1 labelInputText="Plan d'accès" v-model="ShipToAddressCard['Access Plan']" :option-list="optionLabelListForAccessPlan" v-else></input-select-basic-1> 
                              
                                 <input-text labelInputText="Type d'accès" :valueInputText="ShipToAddressCard['Access Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Type d'accès" v-model="ShipToAddressCard['Access Type']" :option-list="`optionLabelListForServiceAccessType`" v-else></input-select-basic-1>   
+                                <input-select-basic-1 labelInputText="Type d'accès" v-model="ShipToAddressCard['Access Type']" :option-list="optionLabelListForAccessType" v-else></input-select-basic-1>   
                                 
                                 <input-text labelInputText="Type de camion" :valueInputText="ShipToAddressCard['Truck Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Type de camion" v-model="ShipToAddressCard['Truck Type']" :option-list="`optionLabelListForServiceAccessTruckType`" v-else></input-select-basic-1> 
+                                <input-select-basic-1 labelInputText="Type de camion" v-model="ShipToAddressCard['Truck Type']" :option-list="optionLabelListForTruckType" v-else></input-select-basic-1> 
                                 
                                 <input-text labelInputText="Parking Publique" :valueInputText="ShipToAddressCard['Public parking presence']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Parking Publique" v-model="ShipToAddressCard['Public parking presence']" :option-list="`optionLabelListForServicePublicParkingPresence`" v-else></input-select-basic-1> 
+                                <input-select-basic-1 labelInputText="Parking Publique" v-model="ShipToAddressCard['Public parking presence']" :option-list="optionLabelListForPublicParkingPresence" v-else></input-select-basic-1> 
                              
                                 <input-text labelInputText="Remarques" :valueInputText="ShipToAddressCard['Remarks']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-text labelInputText="Remarques" v-model="ShipToAddressCard['Remarks']"  v-else></input-text>
@@ -178,11 +178,12 @@ import shiptoaddressCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import inputSelectBasic1 from './input/input-select-basic1.vue'
 import axios from 'axios'
-import { ref, watch} from 'vue'
+import { onMounted,onBeforeMount, ref, watch} from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
 import ModalForSelectableContactList from './ModalForSelectableContactList.vue'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
+import { useRoute} from 'vue-router'
 export default {
     name:'ship-to-address-card',
     components:{
@@ -193,53 +194,68 @@ export default {
         ModalForSelectableContactList 
     },
     setup(){
+        const route = useRoute()
         const ShipToAddressCard = ref({})
         const readOnlyModeIsDisabled = ref(false)
         const readOnlyMode = ref(true)
         const hostname = window.location.hostname
+        const ShiptoaddressCardId1 = ref('')
+        const ShiptoaddressCardId2 = ref('')
+
         const optionLabelListForServiceZoneCode = ref([])
         const optionLabelListForTimePreference = ref([])
-        const optionLabelListForServiceRoadType = ref([])
-        const optionLabelListForServiceWalkingDistance = ref([])
-        const optionLabelListForServiceDeliveryLocation = ref([])
-        const optionLabelListForServiceAccessPlan = ref([])
-        const optionLabelListForServiceAccessType = ref([])
-        const optionLabelListForServiceAccessTruckType = ref([])
-        const optionLabelListForServicePublicParkingPresence = ref([])
+        const optionLabelListForRoadType = ref([])
+        const optionLabelListForWalkingDistance = ref([])
+        const optionLabelListForDeliveryLocation = ref([])
+        const optionLabelListForAccessPlan = ref([])
+        const optionLabelListForAccessType = ref([])
+        const optionLabelListForTruckType = ref([])
+        const optionLabelListForPublicParkingPresence = ref([])
         //variable de success serveur
         let success_message=ref('')
         let is_convertSQ_success = ref(false)
 
-
+        let webUserInfo = {
+            name:ref(useWebUserInfoStore().name),
+            company:ref(useWebUserInfoStore().activeCompanyId),
+        }
 
 
         
         function getOptionLabelList(field){
             axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
             .then(result => {
-                if (field=='Service Zone Code')
+                if (field=='[Service Zone Code]')
                 optionLabelListForServiceZoneCode.value=result.data.recordset
-                if (field=='Time preference')
+                if (field=='[Time preference]')
                 optionLabelListForTimePreference.value=result.data.recordset
-                if (field=='Road Type')
-                optionLabelListForServiceRoadType.value=result.data.recordset
-                if (field=='Walking distance')
-                optionLabelListForServiceWalkingDistance.value=result.data.recordset
-                if (field=='Delivery Location')
-                optionLabelListForServiceDeliveryLocation.value=result.data.recordset
-                if (field=='Access Plan')
-                optionLabelListForServiceAccessPlan.value=result.data.recordset
-                if (field=='Access Type')
-                optionLabelListForServiceAccessType.value=result.data.recordset
-                if (field=='Truck Type')
-                optionLabelListForServiceAccessTruckType.value=result.data.recordset
-                if (field=='Public parking presence')
-                optionLabelListForServicePublicParkingPresence.value=result.data.recordset
+                if (field=='[Road Type]')
+                optionLabelListForRoadType.value=result.data.recordset
+                if (field=='[Walking distance]')
+                optionLabelListForWalkingDistance.value=result.data.recordset
+                if (field=='[Delivery Location]')
+                optionLabelListForDeliveryLocation.value=result.data.recordset
+                if (field=='[Access Plan]')
+                optionLabelListForAccessPlan.value=result.data.recordset
+                if (field=='[Access Type]')
+                optionLabelListForAccessType.value=result.data.recordset
+                if (field=='[Truck Type]')
+                optionLabelListForTruckType.value=result.data.recordset
+                if (field=='[Public parking presence]')
+                optionLabelListForPublicParkingPresence.value=result.data.recordset
     
-                    console.log(result.data.recordset)
+                   console.log(result.data.recordset[0])
     
             }).catch(err=>console.log(err))
         }
+
+        function getShipToAddressCardInfo(){
+            axios.get(`http://${hostname}:3000/app/getShipToAddressCard/${ShiptoaddressCardId1.value}/${ShiptoaddressCardId2.value}`)
+            .then(result => {
+                ShipToAddressCard.value = result.data.recordset[0]
+            }).catch(err=>console.log(err))
+        }
+
         function setReadOnlyModeIsDisabled(){
             readOnlyModeIsDisabled.value=true
         }
@@ -265,6 +281,48 @@ export default {
                 readOnlyModeIsDisabled.value=false
             }
         })
+
+        onMounted(() => {
+            if (webUserInfo.name.value){
+                getShipToAddressCardInfo()
+                getOptionLabelList('[Service Zone Code]')
+                getOptionLabelList('[Time preference]')
+                getOptionLabelList('[Road Type]')
+                getOptionLabelList('[Walking distance]')
+                getOptionLabelList('[Delivery Location]')
+                getOptionLabelList('[Access Plan]')
+                getOptionLabelList('[Access Type]')
+                getOptionLabelList('[Truck Type]')
+                getOptionLabelList('[Public parking presence]')
+            }else{
+                axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
+                .then(res=>{
+                    useWebUserInfoStore().fillWebUserInfo(res.data.recordset[0])
+                    webUserInfo.name.value=useWebUserInfoStore().name
+                    webUserInfo.company.value=useWebUserInfoStore().activeCompanyId
+                    getShipToAddressCardInfo()
+                    getOptionLabelList('[Service Zone Code]')
+                    getOptionLabelList('[Time preference]')
+                    getOptionLabelList('[Road Type]')
+                    getOptionLabelList('[Walking distance]')
+                    getOptionLabelList('[Delivery Location]')
+                    getOptionLabelList('[Access Plan]')
+                    getOptionLabelList('[Access Type]')
+                    getOptionLabelList('[Truck Type]')
+                    getOptionLabelList('[Public parking presence]')
+                   
+
+                })
+                .catch(err=>console.log(err))
+            }
+        })
+
+        onBeforeMount(()=>{
+            if(route.params.id1 || route.params.id2){
+                ShiptoaddressCardId1.value = route.params.id1
+                ShiptoaddressCardId2.value = route.params.id2
+            }
+        })
         // expose to template and other options API hooks
         return {
             ShipToAddressCard,
@@ -276,17 +334,18 @@ export default {
             setReadOnlyModeIsDisabled,
             success_message,
             getOptionLabelList,
+            
 
 
             optionLabelListForServiceZoneCode,
             optionLabelListForTimePreference,
-            optionLabelListForServiceRoadType,
-            optionLabelListForServiceWalkingDistance,
-            optionLabelListForServiceDeliveryLocation,
-            optionLabelListForServiceAccessPlan,
-            optionLabelListForServiceAccessType,
-            optionLabelListForServiceAccessTruckType,
-            optionLabelListForServicePublicParkingPresence
+            optionLabelListForRoadType,
+            optionLabelListForWalkingDistance,
+            optionLabelListForDeliveryLocation,
+            optionLabelListForAccessPlan,
+            optionLabelListForAccessType,
+            optionLabelListForTruckType,
+            optionLabelListForPublicParkingPresence
         }
     },
     data(){
@@ -326,14 +385,7 @@ export default {
             myElt.style.maxHeight="0px"
         }
     },
-    mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getShipToAddressCard/${this.ShiptoaddressCardId1}/${this.ShiptoaddressCardId2}`)
-        .then(result => {
-            console.log(result.data)
-            this.ShipToAddressCard = result.data.recordset[0]
-        }).catch(err=>console.log(err))
-
-    },
+  
 
 }
 </script>

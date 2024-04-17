@@ -78,8 +78,8 @@
                         </div>
                         <div id="revision_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="Conditions de paiement (Proposé" :valueInputText="paymentCard['[New Payment Terms Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-text labelInputText="Conditions de paiement (Proposé" :valueInputText="paymentCard['[New Payment Terms Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-text labelInputText="Conditions de paiement (Proposé)" :valueInputText="paymentCard['[New Payment Terms Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-text labelInputText="Conditions de paiement (Proposé)" :valueInputText="paymentCard['[New Payment Terms Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
 
                                 <input-text labelInputText="Limite de crédit (Proposé)" :valueInputText="paymentCard['New Credit limit (LCY)']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-text labelInputText="Limite de crédit (Proposé)" :valueInputText="paymentCard['New Credit limit (LCY)']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>

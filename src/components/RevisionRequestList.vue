@@ -25,14 +25,13 @@
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Conditions de paiement</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Limite de crédit</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode de paiement</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">% Acompte exigé</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Niveau de risque</th>
+
                         </tr>   
                     </thead>
                     <tbody>
                         <tr id="" v-for="payment of filteredpaymentList" :key="payment['Revision No']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/PaymentValidationRequestCard/${ payment['Revision No'] }`">
+                                <router-link :to="`/RevisionRequestCard/${ payment['Revision No'] }`">
                                     <a href="#" class="has-text-orange">
                                         {{ payment['Revision No'] }} 
                                     </a>
@@ -41,13 +40,11 @@
                             <td class="has-text-left has-background-light is-narrow"> {{ payment['Approval Status'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ payment['Customer No_'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ payment['Name'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Sale Mode'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Sales Mode'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ payment['Payment Terms Code'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ payment['Credit limit (LCY)'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ payment['Payment Method Code'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['VAT Bus_ Posting Group'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Prepayment _'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Risk Level'] }}</td>
+                          
                         </tr>
                     </tbody>
                 </table>

@@ -2,7 +2,7 @@
     <div class="my-5 mx-5">
         
         <customer-list-ribbon 
-        pageTitle="Demande validation paiement"
+        pageTitle="Promesse de règlement"
         componentwithPresentationView="customerListPresentation"
         :hasAThirdPresentation="true"
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
@@ -17,35 +17,39 @@
                 <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
                     <thead class=" my-2">
                         <tr> 
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Demande</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Objet</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type document</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Document</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Crée le</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Crée par</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N°</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Client</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Contact</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Description</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Montant promis</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Montant honoré</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Activité d'origine</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Type Activité de rappel</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Statut</th>
                         </tr>   
                     </thead>
                     <tbody>
-                        <tr id="" v-for="payment of filteredpaymentList" :key="payment['No_']" class="is-narrow">
+                        <tr id="" v-for="promise of filteredpromiseList" :key="promise['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/PaymentValidationRequestCard/${ payment['No_'] }`">
+                                <router-link :to="`/PaymentValidationRequestCard/${ promise['No_'] }`">
                                     <a href="#" class="has-text-orange">
-                                        {{ payment['No_'] }} 
+                                        {{ promise['No_'] }} 
                                     </a>
                                 </router-link>
                             </td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Subject'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Document Type'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Document No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Created on'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Created by'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Status'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Customer No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Contact No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Description'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Promised amount']==0 ? '1.000.000.000 Fcfa' : '50 Fcfa'  }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Honored amount']==0 ? '1.000.000.000.000 Fcfa' : '150 Fcfa' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Originated activity'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Reminding Activity']==0 ?  'IA developper' :'Webmaster' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Status']==0 ? 'Actif' : 'Non actif' }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-           
+            
             <customer-info class="customer-info"></customer-info>
         </div>
     </div>
@@ -62,7 +66,7 @@ import { useNavigationTabStore } from '@/Stores/NavigationTab'
 
 export default {
 
-    name:'payment-list',
+    name:'promisetopay-list',
     components:{
         CustomerInfo,CustomerListRibbon
     },
@@ -72,21 +76,21 @@ export default {
         }
     },
     setup() {
-        const paymentList = ref([])
+        const promiseList = ref([])
         const eltToSearch = ref('')
-        const filteredpaymentList = computed(()=>
-        paymentList.value
-        .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value)
-                 || new String(row['Subject']).toLowerCase().includes(eltToSearch.value)
-                 || new String(row['Created by']).toLowerCase().includes(eltToSearch.value)
-                 || new String(row['Document No_']).toLowerCase().includes(eltToSearch.value)
-         ),
+        const filteredpromiseList = computed(()=>
+        promiseList.value
+        .filter((row) => new String(row['Reminding Activity']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Status']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Promised amount']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Honored amount']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+        ),
      )
         // expose to template and other options API hooks
         return {
-            paymentList,
+            promiseList,
             eltToSearch,
-            filteredpaymentList
+            filteredpromiseList
         }
     },
     data(){
@@ -114,10 +118,9 @@ export default {
     },
     
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getPVRQList`)
+        axios.get(`http://${this.hostname}:3000/app/getPPList`)
         .then((result) => {
-          this.paymentList = result.data;
-         
+          this.promiseList = result.data;
         })
         .catch(err=>console.log(err));
       

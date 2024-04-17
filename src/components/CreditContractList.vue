@@ -39,7 +39,7 @@
                             <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Customer Name']}}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['Days late'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ formatDate(groupbuy['OP Starting Date'])}}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ formatDate(groupbuy['OP Duration (Month)']) }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ groupbuy['OP Duration (Month)'] }}</td>
                             
                         </tr>
                     </tbody>

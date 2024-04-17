@@ -25,20 +25,13 @@
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Crée le</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Crée par</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date promesse</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Suivi par</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant promis</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant honoré</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Activité d'origine</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type Activité de rappel</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date rappel</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Échéance rappel</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut</th>
+
                         </tr>   
                     </thead>
                     <tbody>
                         <tr id="" v-for="promise of filteredpromiseList" :key="promise['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/PromiseToPayCard/${ promise['No_'] }`">
+                                <router-link :to="`/PaymentPromiseCard/${ promise['No_'] }`">
                                     <a href="#" class="has-text-orange">
                                         {{ promise['No_'] }} 
                                     </a>
@@ -48,17 +41,10 @@
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Customer No_'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Contact No_'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Description'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Created on'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDate(promise['Created on']) }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Created by'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Promise Date'] }}</td>                    
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Assigned to'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Promised amount']==0 ? '1.000.000.000 Fcfa' : '50 Fcfa'  }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Honored amount']==0 ? '1.000.000.000.000 Fcfa' : '150 Fcfa' }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Originated activity'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Reminding Activity']==0 ?  'IA developper' :'Webmaster' }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Riminding Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Reminding Due Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Status']==0 ? 'Actif' : 'Non actif' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{formatDate( promise['Promise Date']) }}</td>                    
+                           
                         </tr>
                     </tbody>
                 </table>
@@ -76,7 +62,7 @@
                                 <p class="has-text-left ">
                                     <span class="is-size-7 has-text-grey has-background-light">
                                         
-                                        <router-link :to="`/PromiseToPayCard/${ promise['No_'] }`">
+                                        <router-link :to="`/PaymentPromiseCard/${ promise['No_'] }`">
                                             <a href="#" class="has-text-orange">
                                                 {{ promise['No_'] }} 
                                             </a>
@@ -86,18 +72,18 @@
                                 </p>
                                 <div class="has-text-left columns">
                                     <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                        <span class="is-size-7 is-underlined">{{ promise['Reminding Activity']==0 ?  'IA developper' :'Webmaster' }}</span>
+                                        <span class="is-size-7 is-underlined">{{ promise['Reminding Activity']}}</span>
                                     </div>
                                     <div class="column has-text-right is-narrow py-0 mt-1">
-                                        <span class="is-size-7">{{ promise['Status']==0 ? 'Actif' : 'Non actif' }}</span>
+                                        <span class="is-size-7">{{ promise['Status'] }}</span>
                                     </div>
                                 </div>
                                 <div class="has-text-left columns">
                                     <div class="column has-text-left py-0" >
-                                        <span class="is-size-7">{{ promise['Promised amount']==0 ? '1.000.000.000 Fcfa' : '50 Fcfa' }}</span>
+                                        <span class="is-size-7">{{ promise['Promised amount']}}</span>
                                     </div>
                                     <div class="column has-text-right is-narrow py-0">
-                                        <span class="is-size-7">{{ promise['Honored amount']==0 ? '1.000.000.000.000 Fcfa' : '150 Fcfa' }}</span>
+                                        <span class="is-size-7">{{ promise['Honored amount'] }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +116,7 @@
                                         <p class="has-text-left ">
                                             <span class="is-size-7 has-text-grey has-background-light">
                                         
-                                                <router-link :to="`/PromiseToPayCard/${ promise['No_'] }`">
+                                                <router-link :to="`/PaymentPromiseCard/${ promise['No_'] }`">
                                                     <a href="#" class="has-text-orange">
                                                         {{ promise['No_'] }} 
                                                     </a>
@@ -140,18 +126,18 @@
                                         </p>
                                         <div class="has-text-left columns">
                                             <div class="column has-text-left has-text-orange py-0 mt-1" >
-                                                <span class="is-size-7 is-underlined">{{ promise['Reminding Activity']==0 ?  'IA developper' :'Webmaster' }}</span>
+                                                <span class="is-size-7 is-underlined">{{ promise['Reminding Activity']}}</span>
                                             </div>
                                             <div class="column has-text-right is-narrow py-0 mt-1">
-                                                <span class="is-size-7">{{ promise['Status']==0 ? 'Actif' : 'Non actif' }}</span>
+                                                <span class="is-size-7">{{ promise['Status']}}</span>
                                             </div>
                                         </div>
                                         <div class="has-text-left columns">
                                             <div class="column has-text-left py-0" >
-                                                <span class="is-size-7">{{promise['Promised amount']==0 ? '1.000.000.000 Fcfa' : '50 Fcfa'}}</span>
+                                                <span class="is-size-7">{{promise['Promised amount']}}</span>
                                             </div>
                                             <div class="column has-text-right is-narrow py-0">
-                                                <span class="is-size-7">{{  promise['Honored amount']==0 ? '1.000.000.000.000 Fcfa' : '150 Fcfa' }}</span>
+                                                <span class="is-size-7">{{  promise['Honored amount']}}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -227,6 +213,11 @@ export default {
             }
         },
 
+        formatDate(date){
+            const dateString = new String(date)
+            if (dateString.includes('1753-')) return ''
+            else return new Date(date).toLocaleDateString()
+        },
     },
     
     mounted(){

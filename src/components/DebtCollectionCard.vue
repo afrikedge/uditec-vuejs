@@ -335,7 +335,7 @@ export default {
             }
         })
 
-
+       
 
         // expose to template and other options API hooks
         return {

@@ -160,8 +160,7 @@
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date document</th>
 
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant initial</th>
-
+                                           
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant ouvert</th>
 
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut échéance</th>
@@ -473,7 +472,7 @@ export default {
     transition: max-width 0.5s;
 }
 
-#general_content,#deadline_content{
+#general_content{
     max-height: 5000px;
     overflow: hidden;
     transition: max-height 0.5s

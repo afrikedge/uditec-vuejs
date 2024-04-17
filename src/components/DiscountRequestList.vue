@@ -36,7 +36,7 @@
                             </td>
                             <td class="has-text-left has-background-light is-narrow"> {{discount['Subject'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{discount['Document No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{discount['Created on'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{formatDate(discount['Created on']) }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{discount['Created by'] }}</td>
 
                         </tr>
@@ -97,6 +97,7 @@ export default {
         }
     },
     methods:{
+
         /////////////////////////methode pour masquer ou afficher le composant info à droite
         hideOrShowComponentInfo(){
             if(this.customerInfoCompMaxWidth=='0px') {
@@ -107,6 +108,13 @@ export default {
                 useNavigationTabStore().setMaxWidth('customerListRightInfoMaxWidth','0px')
                 this.customerInfoCompMaxWidth='0px'
             }
+        },
+
+
+        formatDate(date){
+            const dateString = new String(date)
+            if (dateString.includes('1753-')) return ''
+            else return new Date(date).toLocaleDateString()
         },
 
     },

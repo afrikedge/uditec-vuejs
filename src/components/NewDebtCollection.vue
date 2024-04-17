@@ -356,7 +356,7 @@ import { useRouter } from 'vue-router'
 
 
 export default {
-    name:'new-repossession-request',
+    name:'new-debt-request',
     components:{
         RRCardHeader,
         RRCardRibbon,

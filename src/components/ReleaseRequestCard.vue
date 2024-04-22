@@ -6,19 +6,15 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <release-card-Header soNo="000001" soDesc="client Gérald"
+                <release-card-Header :soNo="'Demande déblocage N°'+ ReleaseCard['No_']" :soDesc="ReleaseCard['Customer No_']"
                 @onGoingBackToList='goBackToList'
                 pageTitle="Fiche demande déblocage" />
             </div>
             
 <!---------Composant rubban fiche demande déblocage----------------------->      
             <release-card-ribbon
-                routeForNewCard="../NewReleaseRequest"
                 @onDisablingReadOnlyMode="setReadOnlyModeIsDisabled"
                 @onCancellingUpdate="setReadWriteModeIsDisabled"
-                :newCardBtnIsDisabled="false"
-                :editCardBtnIsDisabled="false"
-                :cancelEditCardBtnIsDisabled="true"
                 :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
             
             />
@@ -51,20 +47,20 @@
                                 <input-text labelInputText="N° Document" :valueInputText="ReleaseCard['Document No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select labelInputText="N° Document" v-model="ReleaseCard['Document No_']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-select>
                                 
-                                <input-text labelInputText="Crée le" :valueInputText="formatDate(ReleaseCard['Created on'])" :is_disabled="true"></input-text>
-                                <input-text labelInputText="Crée par" :valueInputText="ReleaseCard['Created by']" :is_disabled="true"></input-text>
                                 <input-text labelInputText="N° Client" :valueInputText="ReleaseCard['Customer No_']" :is_disabled="true"></input-text>
                                 <input-text labelInputText="Gestionnaire" :valueInputText="ReleaseCard['Sales person Code']" :is_disabled="true"></input-text>
-                                <input-text labelInputText="Statut" :valueInputText="ReleaseCard['Status']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Statut" :valueInputText="ReleaseCard['Approval Status']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Limite de crédit" :valueInputText="ReleaseCard['Credit Limit (LCY)']" :is_disabled="true"></input-text>
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Limite de crédit" :valueInputText="ReleaseCard['Credit Limit (LCY)']" :is_disabled="true"></input-text>
                                 <input-text labelInputText="Encours " :valueInputText="ReleaseCard['Balance Amount']" :is_disabled="true"></input-text>
                                 <input-text labelInputText="Encours échue" :valueInputText="ReleaseCard['Amount Due']" :is_disabled="true"></input-text>
                                 <input-text labelInputText="Pire Statut Actuel" :valueInputText="ReleaseCard['Current Worst Status']" :is_disabled="true"></input-text>
                                 <input-text labelInputText="Exposition brute" :valueInputText="ReleaseCard['Gross exposure']" :is_disabled="true"></input-text>
                                 <input-text labelInputText="Niveau de risque" :valueInputText="ReleaseCard['Risk Level']" :is_disabled="true" ></input-text>
                                 <input-text labelInputText="Dépassement" :valueInputText="ReleaseCard['Exceeding Amount']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Crée le" :valueInputText="formatDateHour(ReleaseCard['Created on'])" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Crée par" :valueInputText="ReleaseCard['Created by']" :is_disabled="true"></input-text>
                             </div>
                         </div>                    
                     </div>
@@ -104,14 +100,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr :id="index" v-for="(elt,index) of  ReleaseCardLine" :key="index"  >
+                                            <tr :id="index" v-for="(elt,index) of  releaseHistoryInfo" :key="index"  >
                                                 <td class="has-text-left">{{ elt['Sales Mode'] }}</td>
                                                 <td class="has-text-left">{{ elt['Document No_']  }}</td>
-                                                <td class="has-text-left">{{ formatDate(elt['Posting Date'])  }}</td>
-                                                <td class="has-text-left">{{ formatDate(elt['Due Date'])  }}</td>
+                                                <td class="has-text-left">{{ formatDateHour(elt['Posting Date'])  }}</td>
+                                                <td class="has-text-left">{{ formatDateHour(elt['Due Date'])  }}</td>
                                                 <td class="has-text-left">{{ elt['Amount (LCY)'] }}</td>
                                                 <td class="has-text-left">{{ elt['Payment (LCY)']  }}</td>
-                                                <td class="has-text-left">{{ formatDate(elt['Payment Date'])  }}</td>
+                                                <td class="has-text-left">{{ formatDateHour(elt['Payment Date'])  }}</td>
                                                 <td class="has-text-left">{{ elt['Days late']  }}</td>
                                                 <td class="has-text-left">{{ elt['Debt Status'] }}</td>
                                                 
@@ -144,37 +140,37 @@
 
                             <div id="tracking_content" class="columns px-5 mt-5" style="max-height: 250px; overflow:scroll;">
                                
-                               <div v-if=" ReleaseCardLine.length>=0">
-                                    <table class="table  is-narrow  is-fullwidth">
-                                        <thead class=" my-2">
-                                            <tr> 
-                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">N° Séquence</th>
-                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Mode validation</th>
-                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Validé le</th>
-                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Validé par</th>
-                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Validé en tant que</th>
-                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Statut Actuel</th>
-                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Statut Suivant</th>
-                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Commentaire</th>
-                                        
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr :id="index" v-for="(elt,index) of  ReleaseCardLine" :key="index"  >
-                                            <td class="has-text-left">{{ elt['Approval Sequence'] }}</td>
-                                            <td class="has-text-left">{{ elt['Approval Mode']  }}</td>
-                                            <td class="has-text-left">{{ formatDate(elt['Approved On'])  }}</td>
-                                            <td class="has-text-left">{{ elt['Approved by']  }}</td>
-                                            <td class="has-text-left">{{ elt['Approved as']  }}</td>
-                                            <td class="has-text-left">{{ elt['Current Status']  }}</td>
-                                            <td class="has-text-left">{{ elt['Next Status']  }}</td>
-                                            <td class="has-text-left">{{ elt['Comment']  }}</td>
-                                            
+                                <table class="table  is-narrow  is-fullwidth">
+                                    <thead class=" my-2">
+                                        <tr> 
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">N° Séquence</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Mode validation</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Validé le</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Validé par</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Validé en tant que</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Statut Actuel</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Statut Suivant</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Commentaire</th>
+                                    
                                         </tr>
-                                        </tbody>
-                                    </table>
+                                    </thead>
+                                    <tbody>
+                                        <tr :id="index" v-for="(elt,index) of  ReleaseCardLine" :key="index"  >
+                                        <td class="has-text-left">{{ elt['Approval Sequence'] }}</td>
+                                        <td class="has-text-left">{{ elt['Approval Mode']  }}</td>
+                                        <td class="has-text-left">{{ formatDateHour(elt['Approved On'])  }}</td>
+                                        <td class="has-text-left">{{ elt['Approved by']  }}</td>
+                                        <td class="has-text-left">{{ elt['Approved as']  }}</td>
+                                        <td class="has-text-left">{{ elt['Current Status']  }}</td>
+                                        <td class="has-text-left">{{ elt['Next Status']  }}</td>
+                                        <td class="has-text-left">{{ elt['Comment']  }}</td>
+                                        
+                                    </tr>
+                                    </tbody>
+                                </table>
+                               <!-- <div v-if=" ReleaseCardLine.length>=0">
                                </div>
-                               <div v-else>Il n'y'a rien à afficher</div>
+                               <div v-else>Il n'y'a rien à afficher</div> -->
                             </div>     
                      </div>
                                        
@@ -223,10 +219,11 @@ export default {
     setup(){
         const ReleaseCard = ref({})
         const ReleaseCardLine = ref([])
+        const releaseHistoryInfo = ref([])
         const readOnlyModeIsDisabled = ref(false)
         const hostname = window.location.hostname
         const route = useRoute()
-        const releaseCardId = ref('')
+        const  releasedocumentNo = ref('')
         let webUserInfo = {
             name:ref(useWebUserInfoStore().name),
             company:ref(useWebUserInfoStore().activeCompanyId),
@@ -234,14 +231,27 @@ export default {
 
         
         function getRRQCardInfo(){
-            axios.get(`http://${hostname}:3000/app/getRRQCard/${releaseCardId.value}`)
+            axios.get(`http://${hostname}:3000/app/getSOUnlockingCard?documentNo=${releasedocumentNo.value}`)
             .then(result => {
                 console.log(result.data[0])
                 ReleaseCard.value = result.data[0]
-                ReleaseCardLine.value = result.data[1]
+                getCUHListInfo()
             }).catch(err=>console.log(err))
         }
 
+        function getCUHListInfo(){
+          axios.get(`http://localhost:3000/app/getCUHList?customerId=UDT00001`)
+          .then(res =>{
+                console.log(res);
+              if (new Array(res.data[0]).length>=0){
+                releaseHistoryInfo.value =  res.data
+                   
+              }
+          })
+          .catch((err) => {
+              console.log(err)
+          })
+      }
         
         function setReadOnlyModeIsDisabled(){
             readOnlyModeIsDisabled.value=true
@@ -284,8 +294,8 @@ export default {
         })
 
         onBeforeMount(()=>{
-            if(route.params.id){
-                releaseCardId.value = route.params.id
+            if(route.query.documentNo){
+                releasedocumentNo.value = route.query.documentNo
                 
             }
         })
@@ -296,7 +306,9 @@ export default {
             readOnlyModeIsDisabled,
             fillCustomerInfoField,
             setReadOnlyModeIsDisabled,
-            setReadWriteModeIsDisabled
+            setReadWriteModeIsDisabled,
+            getCUHListInfo,
+            releaseHistoryInfo
         }
     },
     data(){
@@ -304,8 +316,7 @@ export default {
             //taille (largeur) initiale du composant customerInfo
             customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerCardRightInfoMaxWidth,
 
-            //indique la route active
-            releaseCardId:this.$route.params.id,
+
 
             //élement pour le modal sélection des enregistrements
             activeModalForSelectableElementList:'',
@@ -334,10 +345,12 @@ export default {
                 this.customerInfoCompMaxWidth='0px'
             }
         },
-        formatDate(date){
-            const dateString = new String(date)
-            if (dateString.includes('1753-')||dateString.includes('1900-')) return ''
-            else return new Date(date).toLocaleDateString()
+        formatDateHour(date){
+            if(date){
+                const dateString = new String(date)
+                if (dateString.includes('1753-')||dateString.includes('1900-')) return ''
+                else return new Date(date).toLocaleDateString() + ' à ' +new Date(date).toLocaleTimeString()
+            }else{ return ''}
         },
         expand(id){
             const myElt=document.getElementById(id);

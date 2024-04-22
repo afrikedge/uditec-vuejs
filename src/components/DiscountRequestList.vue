@@ -17,27 +17,28 @@
                 <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
                     <thead class=" my-2">
                         <tr> 
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Demande</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Document</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Objet</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Remise accordé  (%)</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Demande</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Objet</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Remise demandée (%)</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Remise accordé  (%)</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Crée le</th>
                             
                         </tr>   
                     </thead>
                     <tbody>
                         <tr id="" v-for="discount of  filteredDiscountList" :key="discount['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/DiscountRequestCard/${ discount['Status'] }`">
+                                <router-link :to="`/DiscountRequestCard?documentNo=${ discount['No_'] }`">
                                     <a href="#" class="has-text-orange">
-                                        {{discount['Status']==0 ? 'Actif' : 'Non actif' }} 
+                                        {{discount['No_'] }} 
                                     </a>
                                 </router-link>
                             </td>
-                            <td class="has-text-left has-background-light is-narrow"> {{discount['No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{discount['Document No_']==0 ? 'PDF' : 'docx' }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{discount['Subject'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{discount['Requested Discount'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{discount['Approuved Discount'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{formatDateHour(discount['Created on']) }}</td>
+
                         </tr>
                     </tbody>
                 </table>
@@ -96,6 +97,7 @@ export default {
         }
     },
     methods:{
+
         /////////////////////////methode pour masquer ou afficher le composant info à droite
         hideOrShowComponentInfo(){
             if(this.customerInfoCompMaxWidth=='0px') {
@@ -108,10 +110,19 @@ export default {
             }
         },
 
+
+        formatDateHour(date){
+            if(date){
+                const dateString = new String(date)
+                if (dateString.includes('1753-')||dateString.includes('1900-')) return ''
+                else return new Date(date).toLocaleDateString() + ' à ' +new Date(date).toLocaleTimeString()
+            }else{ return ''}
+        },
+
     },
     
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getDRQList`)
+        axios.get(`http://${this.hostname}:3000/app/getDiscountRequestList`)
         .then((result) => {
             console.log(result.data)
           this.discountList = result.data;

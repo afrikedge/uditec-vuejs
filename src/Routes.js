@@ -48,6 +48,7 @@ import RevisionRequestCard from './components/RevisionRequestCard.vue'
 import NewRevisionRequest from "./components/NewRevisionRequest.vue"
 import DiscountRequestList from './components/DiscountRequestList.vue'
 import DiscountRequestCard from './components/DiscountRequestCard.vue'
+import NewDiscountRequest from "./components/NewDiscountRequest.vue"
 import ReleaseRequestList from './components/ReleaseRequestList.vue'
 import ReleaseRequestCard from './components/ReleaseRequestCard.vue'
 import NewReleaseRequest from "./components/NewReleaseRequest.vue"
@@ -79,6 +80,7 @@ import DebtCollectionCard from './components/DebtCollectionCard.vue'
 
 import PaymentValidationRequestList from './components/PaymentValidationRequestList.vue'
 import PaymentValidationRequestCard from './components/PaymentValidationRequestCard.vue'
+import NewPaymentValidationRequest from './components/NewPaymentValidationRequest.vue'
 
 //11-----Formulaire création recouvrement
 import NewRepossessionRequest from "./components/NewRepossessionRequest.vue"
@@ -131,13 +133,14 @@ const routes = [
   
 
   ///////////////////7
-  {path:'/RevisionRequestCard/:id',component:RevisionRequestCard,name:'RevisionRequestCardPage'},
+  {path:'/RevisionRequestCard',component:RevisionRequestCard,name:'RevisionRequestCardPage'},
   {path:'/RevisionRequestList',component:RevisionRequestList,name:'RevisionRequestListPage'},
   {path:'/NewRevisionRequest',component:NewRevisionRequest,name:'NewRevisionRequestPage'},
 
-  {path:'/DiscountRequestCard/:id',component:DiscountRequestCard,name:'DiscountRequestCardPage'},
+  {path:'/DiscountRequestCard',component:DiscountRequestCard,name:'DiscountRequestCardPage'},
   {path:'/DiscountRequestList',component:DiscountRequestList,name:'DiscountRequestListPage'},
-  {path:'/ReleaseRequestCard/:id',component:ReleaseRequestCard,name:'ReleaseRequestCardPage'},
+  {path:'/NewDiscountRequest',component:NewDiscountRequest,name:'NewDiscountRequestPage'},
+  {path:'/ReleaseRequestCard',component:ReleaseRequestCard,name:'ReleaseRequestCardPage'},
   {path:'/ReleaseRequestList',component:ReleaseRequestList,name:'ReleaseRequestListPage'},
   {path:'/NewReleaseRequest',component:NewReleaseRequest,name:'NewReleaseRequestPage'},
   
@@ -166,8 +169,8 @@ const routes = [
   {path:'/DebtCollectionList',component:DebtCollectionList,name:'DebtCollectionListPage'},
   {path:'/DebtCollectionCard/:id',component:DebtCollectionCard,name:'DebtCollectionCardPage'},
   {path:'/PaymentValidationRequestList',component:PaymentValidationRequestList,name:'PaymentValidationRequestListPage'},
-  {path:'/PaymentValidationRequestCard/:id',component:PaymentValidationRequestCard,name:'PaymentValidationRequestCardPage'},
-  
+  {path:'/PaymentValidationRequestCard',component:PaymentValidationRequestCard,name:'PaymentValidationRequestCardPage'},
+  {path:'/NewPaymentValidationRequest',component:NewPaymentValidationRequest,name:'NewPaymentValidationRequestPage'},
   
    ///////////////////12
   {path:'/CreditContractList',component:CreditContractList,name:'CreditContractListPage'},

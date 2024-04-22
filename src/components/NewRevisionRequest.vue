@@ -155,7 +155,7 @@
     methods: {
         goBackToList(){
             useNavigationTabStore().setActiveTab('customers')
-            this.$router.push('/RevisionRequestCard/RG000009')
+            this.$router.push('/RevisionRequestCard?documentNo=0001')
         },
       expand(id) {
         const myElt = document.getElementById(id);

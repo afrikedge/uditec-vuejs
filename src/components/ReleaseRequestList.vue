@@ -8,7 +8,6 @@
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
         @onInputSearchData="(eltToSearch)=>this.eltToSearch=eltToSearch"
         componentWithCompInfo="customerListRightInfoMaxWidth"
-        routeForNewCard="NewReleaseRequest"
         ></customer-list-ribbon>
 
 
@@ -17,20 +16,20 @@
                 <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
                     <thead class=" my-2">
                         <tr> 
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Demande</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Limite de crédit</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Encours</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Encours échue</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Exposition brute</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Dépassement</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Demande</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Statut</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Limite de crédit</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow"  style="min-width: 100px;">Objet</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Client</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Gestionnaire</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow"  style="min-width: 100px;">Crée le</th>
                             
                         </tr>   
                     </thead>
                     <tbody>
                         <tr id="" v-for="release of  filteredreleaseList" :key="release['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/ReleaseRequestCard/${ release['No_'] }`">
+                                <router-link :to="`/ReleaseRequestCard?documentNo=${ release['No_'] }`">
                                     <a href="#" class="has-text-orange">
                                         {{release['No_']}} 
                                     </a>
@@ -38,10 +37,10 @@
                             </td>
                             <td class="has-text-left has-background-light is-narrow"> {{release['Approval Status'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{release['Credit Limit (LCY)']}}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{release['Balance Amount']}}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{release['Amount Due']}}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{release['Gross exposure'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{release['Exceeding Amount']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Subject']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Customer No_']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Sales person Code'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{formatDateHour(release['Created on'])}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -79,7 +78,7 @@ export default {
         releaseList.value
         .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
                 || new String(row['Credit Limit (LCY)']).toLowerCase().includes(eltToSearch.value.toLowerCase())
-                || new String(row['Approval Status']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Customer No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
                 || new String(row['Balance Amount']).toLowerCase().includes(eltToSearch.value.toLowerCase())
         ),
      )
@@ -111,11 +110,17 @@ export default {
                 this.customerInfoCompMaxWidth='0px'
             }
         },
+        formatDateHour(date){
+            if(date){
+                const dateString = new String(date)
+                if (dateString.includes('1753-')||dateString.includes('1900-')) return ''
+                else return new Date(date).toLocaleDateString() + ' à ' +new Date(date).toLocaleTimeString()
+            }else{ return ''} },
 
     },
     
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getRRQList`)
+        axios.get(`http://${this.hostname}:3000/app/getSOUnlockingList`)
         .then((result) => {
             console.log(result.data)
           this.releaseList = result.data;

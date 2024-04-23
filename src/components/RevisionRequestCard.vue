@@ -138,7 +138,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr :id="index" v-for="(elt,index) of saleOrderCardLines" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
+                                        <tr :id="index" v-for="(elt,index) of saleOrderCardLines" :key="index" >
                                             <td class="has-text-left has-background-light">
                                                 <span class="icon">
                                                     <i class="fas fa-arrow-right has-text-grey"></i>

@@ -217,7 +217,7 @@ export default {
          axios.get(`http://${hostname}:3000/app/getPaymentRequestCard?documentNo=${paymentdocumentNo.value}`)
          .then(result => {
              console.log(result.data[0])
-             paymentCard.value = result.data[0]['0']
+             paymentCard.value = result.data[0]
              getPaymentapprovalfowInfo()
          }).catch(err=>console.log(err))
      }

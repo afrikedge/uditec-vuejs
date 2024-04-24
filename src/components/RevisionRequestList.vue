@@ -8,7 +8,7 @@
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
         @onInputSearchData="(eltToSearch)=>this.eltToSearch=eltToSearch"
         componentWithCompInfo="customerListRightInfoMaxWidth"
-        routeForNewCard="NewCustomer"
+        routeForNewCard="NewRevisionRequest"
         ></customer-list-ribbon>
 
 
@@ -23,6 +23,9 @@
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Nom du client</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Mode de vente</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Mode de paiement</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Limite de crédit</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Crée le</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Crée par</th>
                            
                         </tr>   
                     </thead>
@@ -40,6 +43,9 @@
                             <td class="has-text-left has-background-light is-narrow"> {{ revision['Customer Name'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ revision['Sales Mode'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ revision['Payment Method Code'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ revision['Credit Limit (LCY)'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDateHour(revision['Created on']) }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ revision['Created by'] }}</td>
                            
                         </tr>
                     </tbody>
@@ -110,6 +116,15 @@ export default {
                 this.customerInfoCompMaxWidth='0px'
             }
         },
+        formatDateHour(date){
+            if(date){
+                const dateString = new String(date)
+                if (dateString.includes('1753-')||dateString.includes('1900-')) return ''
+                else return new Date(date).toLocaleDateString() + ' à ' +new Date(date).toLocaleTimeString()
+            }else{ return ''} 
+        },
+
+    
 
     },
     

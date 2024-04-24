@@ -18,10 +18,12 @@
                         <tr> 
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Demande</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Statut</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Limite de crédit</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow"  style="min-width: 100px;">Objet</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Objet</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Client</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Gestionnaire</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Limite de crédit</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow"  style="min-width: 100px;">Encours</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow"  style="min-width: 100px;">Encours échue</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow"  style="min-width: 100px;">Crée le</th>
                             
                         </tr>   
@@ -36,10 +38,12 @@
                                 </router-link>
                             </td>
                             <td class="has-text-left has-background-light is-narrow"> {{release['Approval Status'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{release['Credit Limit (LCY)']}}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{release['Subject']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Subject'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{release['Customer No_']}}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{release['Sales person Code'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Credit Limit (LCY)']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Balance Amount']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{release['Amount Due']}}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{formatDateHour(release['Created on'])}}</td>
                         </tr>
                     </tbody>

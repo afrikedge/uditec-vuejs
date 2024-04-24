@@ -6,7 +6,7 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <release-card-Header :soNo="'Demande déblocage N°'+ ReleaseCard['No_']" :soDesc="ReleaseCard['Customer No_']"
+                <release-card-Header :soNo="ReleaseCard['No_']" :soDesc="ReleaseCard['Customer No_']"
                 @onGoingBackToList='goBackToList'
                 pageTitle="Fiche demande déblocage" />
             </div>
@@ -16,7 +16,6 @@
                 @onDisablingReadOnlyMode="setReadOnlyModeIsDisabled"
                 @onCancellingUpdate="setReadWriteModeIsDisabled"
                 :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
-            
             />
 
 <!---------Section formulaire fiche demande déblocage----------------------->      
@@ -43,9 +42,6 @@
                             <div class="column">
                                 <input-text labelInputText="N° Demande" :valueInputText="ReleaseCard['No_']" :is_disabled="true" ></input-text>
                                 <input-text labelInputText="Objet" :valueInputText="ReleaseCard['Subject']" :is_disabled="true"></input-text>
-                                
-                                <input-text labelInputText="N° Document" :valueInputText="ReleaseCard['Document No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select labelInputText="N° Document" v-model="ReleaseCard['Document No_']" @openModal="activeModalForSelectableElementList='customerList';" v-else></input-select>
                                 
                                 <input-text labelInputText="N° Client" :valueInputText="ReleaseCard['Customer No_']" :is_disabled="true"></input-text>
                                 <input-text labelInputText="Gestionnaire" :valueInputText="ReleaseCard['Sales person Code']" :is_disabled="true"></input-text>
@@ -88,6 +84,7 @@
                                     <table class="table  is-narrow  is-fullwidth">
                                         <thead class=" my-2">
                                             <tr > 
+                                                <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;"></th>
                                                 <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Mode de vente</th>
                                                 <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">N° Document</th>
                                                 <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Date comptabilisation</th>
@@ -100,14 +97,19 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr :id="index" v-for="(elt,index) of  releaseHistoryInfo" :key="index"  >
+                                            <tr :id="index" v-for="(elt,index) of  releaseHistoryInfo" :key="index">
+                                                <td class="has-text-left has-background-light">
+                                                    <span class="icon">
+                                                        <i class="fas fa-arrow-right has-text-grey"></i>
+                                                    </span>
+                                                </td>
                                                 <td class="has-text-left">{{ elt['Sales Mode'] }}</td>
                                                 <td class="has-text-left">{{ elt['Document No_']  }}</td>
-                                                <td class="has-text-left">{{ formatDateHour(elt['Posting Date'])  }}</td>
-                                                <td class="has-text-left">{{ formatDateHour(elt['Due Date'])  }}</td>
+                                                <td class="has-text-left">{{ formatDate(elt['Posting Date'])  }}</td>
+                                                <td class="has-text-left">{{ formatDate(elt['Due Date'])  }}</td>
                                                 <td class="has-text-left">{{ elt['Amount (LCY)'] }}</td>
                                                 <td class="has-text-left">{{ elt['Payment (LCY)']  }}</td>
-                                                <td class="has-text-left">{{ formatDateHour(elt['Payment Date'])  }}</td>
+                                                <td class="has-text-left">{{ formatDate(elt['Payment Date'])  }}</td>
                                                 <td class="has-text-left">{{ elt['Days late']  }}</td>
                                                 <td class="has-text-left">{{ elt['Debt Status'] }}</td>
                                                 
@@ -143,6 +145,7 @@
                                 <table class="table  is-narrow  is-fullwidth">
                                     <thead class=" my-2">
                                         <tr> 
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;"></th>
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">N° Séquence</th>
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Mode validation</th>
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal has-text-weight-bold is-size-7" style="min-width: 100px;">Validé le</th>
@@ -155,10 +158,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr :id="index" v-for="(elt,index) of  ReleaseCardLine" :key="index"  >
+                                        <tr :id="index" v-for="(elt,index) of  releaseTrackingInfo" :key="index">
+                                        <td class="has-text-left has-background-light">
+                                            <span class="icon">
+                                                <i class="fas fa-arrow-right has-text-grey"></i>
+                                            </span>
+                                        </td>
                                         <td class="has-text-left">{{ elt['Approval Sequence'] }}</td>
                                         <td class="has-text-left">{{ elt['Approval Mode']  }}</td>
-                                        <td class="has-text-left">{{ formatDateHour(elt['Approved On'])  }}</td>
+                                        <td class="has-text-left">{{ formatDate(elt['Approved On'])  }}</td>
                                         <td class="has-text-left">{{ elt['Approved by']  }}</td>
                                         <td class="has-text-left">{{ elt['Approved as']  }}</td>
                                         <td class="has-text-left">{{ elt['Current Status']  }}</td>
@@ -201,7 +209,6 @@ import ReleaseCardHeader from './HeaderForCard.vue'
 import CustomerInfo from './CustomerInfo.vue'
 import ReleaseCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
-import inputSelect from './input/input-select.vue'
 import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
 import axios from 'axios'
 import { onBeforeMount,ref,onMounted } from 'vue'
@@ -214,12 +221,13 @@ export default {
         ReleaseCardHeader,
         CustomerInfo,inputText,
         ReleaseCardRibbon,
-        inputSelect,ModalForSelectableCustomerList
+        ModalForSelectableCustomerList
     },
     setup(){
         const ReleaseCard = ref({})
         const ReleaseCardLine = ref([])
         const releaseHistoryInfo = ref([])
+        const releaseTrackingInfo = ref([])
         const readOnlyModeIsDisabled = ref(false)
         const hostname = window.location.hostname
         const route = useRoute()
@@ -235,11 +243,12 @@ export default {
             .then(result => {
                 console.log(result.data[0])
                 ReleaseCard.value = result.data[0]
-                getCUHListInfo()
+                getHistoricalInfo();
+                getTrackingInfo();
             }).catch(err=>console.log(err))
         }
 
-        function getCUHListInfo(){
+        function getHistoricalInfo(){
           axios.get(`http://localhost:3000/app/getCUHList?customerId=UDT00001`)
           .then(res =>{
                 console.log(res);
@@ -251,6 +260,19 @@ export default {
           .catch((err) => {
               console.log(err)
           })
+      }
+
+      function getTrackingInfo(){
+        axios.get(`http://localhost:3000/app/getApprovalFlow?documentNo==0001`)
+        .then(res =>{
+            console.log(res);
+            if(new Array(res.data[0].length>=0)){
+                releaseTrackingInfo.value = res.data
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+        })
       }
         
         function setReadOnlyModeIsDisabled(){
@@ -307,8 +329,10 @@ export default {
             fillCustomerInfoField,
             setReadOnlyModeIsDisabled,
             setReadWriteModeIsDisabled,
-            getCUHListInfo,
-            releaseHistoryInfo
+            getHistoricalInfo,
+            getTrackingInfo,
+            releaseHistoryInfo,
+            releaseTrackingInfo
         }
     },
     data(){
@@ -344,6 +368,11 @@ export default {
                 useNavigationTabStore().setMaxWidth('customerCardRightInfoMaxWidth','0px')
                 this.customerInfoCompMaxWidth='0px'
             }
+        },
+        formatDate(date){
+            const dateString = new String(date)
+            if (dateString.includes('1753-')) return ''
+            else return new Date(date).toLocaleDateString()
         },
         formatDateHour(date){
             if(date){

@@ -6,7 +6,7 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <Customer-Card-Header   :soNo="'Demande révision N°'+ revisionCard['Revision No_']" :soDesc="revisionCard['Customer Name']"
+                <Customer-Card-Header   :soNo="revisionCard['Revision No_']" :soDesc="revisionCard['Customer Name']"
                 @onGoingBackToList='goBackToList'
                 pageTitle="Fiche Demande revision" />
             </div>
@@ -109,14 +109,14 @@
                     </div>
                     <br><br>
 <!---------sous-Section ongle 3 formulaire fiche demande révision----------------------->
-                    <div id="Suivi" v-if="!readOnlyModeIsDisabled">
+                    <div id="tracking" v-if="!readOnlyModeIsDisabled">
                         <div :class="{'has-background-light':onglet3_expanded}">
                             <div :class="{'columns':!onglet3_expanded,'p-3':onglet3_expanded,'has-border-bottom-grey':onglet3_expanded,'has-border-bottom':!onglet3_expanded}">
                                 <div class="column p-0 has-text-left has-text-weight-bold">
-                                    <a @click="collapse('Suivi_content');onglet3_expanded=!onglet3_expanded" v-if="onglet3_expanded">
+                                    <a @click="collapse('tracking_content');onglet3_expanded=!onglet3_expanded" v-if="onglet3_expanded">
                                         <span>Suivi</span>
                                     </a>
-                                    <a @click="expand('Suivi_content');onglet3_expanded=!onglet3_expanded" v-if="!onglet3_expanded">
+                                    <a @click="expand('tracking_content');onglet3_expanded=!onglet3_expanded" v-if="!onglet3_expanded">
                                         <span>Suivi</span>
                                         <span class="icon">
                                             <i class="fas fa-angle-right"></i>
@@ -125,12 +125,13 @@
                                 </div>
                             </div>
 
-                            <div id="Suivi_content" class="columns px-5 mt-5" style="max-height: 250px; overflow:scroll;">
+                            <div id="tracking_content" class="columns px-5 mt-5" style="max-height: 250px; overflow:scroll;">
                                 <table class="table  is-narrow  is-fullwidth">
                                     <thead class=" my-2">
                                         <tr > 
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Approuvé le</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Approuvé par</th>
+                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;"></th>
+                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Approuvé le</th>
+                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Approuvé par</th>
                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Approuvé en tant que</th>
                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut actuel</th>
                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut suivant </th>
@@ -138,7 +139,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr :id="index" v-for="(elt,index) of saleOrderCardLines" :key="index" >
+                                        <tr :id="index" v-for="(elt,index) of revisionTrackingInfo" :key="index" >
                                             <td class="has-text-left has-background-light">
                                                 <span class="icon">
                                                     <i class="fas fa-arrow-right has-text-grey"></i>
@@ -179,6 +180,7 @@
                                 <table class="table  is-narrow  is-fullwidth">
                                     <thead class=" my-2">
                                         <tr > 
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;"></th>
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode vente</th>
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Document </th>
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date comptabilisation</th>
@@ -191,7 +193,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr :id="index" v-for="(elt,index) of revisionHistoryInfo" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
+                                        <tr :id="index" v-for="(elt,index) of revisionHistoryInfo" :key="index">
                                             <td class="has-text-left has-background-light">
                                                 <span class="icon">
                                                     <i class="fas fa-arrow-right has-text-grey"></i>
@@ -199,11 +201,11 @@
                                             </td>
                                             <td class="has-text-left">{{elt['Sales Mode']}}</td>
                                             <td class="has-text-left">{{elt['Document No_'] }}</td>
-                                            <td class="has-text-left">{{formatDateHour(elt['Posting Date'])}}</td>
-                                            <td class="has-text-left">{{formatDateHour(elt['Due Date']) }}</td>
+                                            <td class="has-text-left">{{formatDate(elt['Posting Date'])}}</td>
+                                            <td class="has-text-left">{{formatDate(elt['Due Date']) }}</td>
                                             <td class="has-text-left">{{elt['Amount (LCY)']}}</td>
                                             <td class="has-text-left">{{elt['Payment (LCY)'] }}</td>
-                                            <td class="has-text-left">{{formatDateHour(elt['Payment Date'])}}</td>
+                                            <td class="has-text-left">{{formatDate(elt['Payment Date'])}}</td>
                                             <td class="has-text-left">{{ elt['Days late'] }}</td>
                                             <td class="has-text-left">{{ elt['Debt Status'] }}</td>
                                         </tr>
@@ -289,6 +291,7 @@ export default {
         const readOnlyModeIsDisabled = ref(false)
         const readOnlyMode = ref(true)
         const revisionHistoryInfo = ref([])
+        const revisionTrackingInfo = ref([])
         //nom de l'hote dans l'url 
         const hostname = window.location.hostname
         const route = useRoute()
@@ -312,11 +315,12 @@ export default {
             .then(result => {
                 
                 revisionCard.value = result.data[0];
-                getCUHListInfo();
+                getHistoryInfo();
+                getTrackingInfo();
             }).catch(err=>console.log(err))
         }
 
-        function getCUHListInfo(){
+        function getHistoryInfo(){
           axios.get(`http://localhost:3000/app/getCUHList?customerId=UDT00001`)
           .then(res =>{
                 console.log(res);
@@ -329,6 +333,19 @@ export default {
           .catch((err) => {
               console.log(err)
           })
+      }
+
+      function getTrackingInfo(){
+        axios.get(`http://localhost:3000/app/getApprovalFlow?documentNo==0001`)
+        .then(res =>{
+            console.log(res);
+            if(new Array(res.data[0].length>=0)){
+                revisionTrackingInfo.value = res.data
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+        })
       }
 
 
@@ -400,6 +417,7 @@ export default {
             readOnlyMode,
             readOnlyModeIsDisabled,
             revisionHistoryInfo,
+            revisionTrackingInfo,
             setReadWriteModeIsDisabled,
             setReadOnlyModeIsDisabled,
             success_message,
@@ -407,7 +425,8 @@ export default {
             fillPaymentMethodInfoField,
             fillPaymentTermInfoField,
             fillVatBusPostingGroupInfoField,
-            getCUHListInfo
+            getHistoryInfo,
+            getTrackingInfo
         }
     },
     data(){
@@ -446,6 +465,11 @@ export default {
                 this.customerInfoCompMaxWidth='0px'
             }
         },
+        formatDate(date){
+            const dateString = new String(date)
+            if (dateString.includes('1753-')) return ''
+            else return new Date(date).toLocaleDateString()
+        },
         formatDateHour(date){
             if(date){
                 const dateString = new String(date)
@@ -475,7 +499,7 @@ export default {
     transition: max-width 0.5s;
 }
 
-#general_content,#revision_content,#history_content{
+#general_content,#revision_content,#history_content,#tracking_content{
     max-height: 5000px;
     overflow: hidden;
     transition: max-height 0.5s

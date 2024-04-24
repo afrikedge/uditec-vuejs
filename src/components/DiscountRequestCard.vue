@@ -6,7 +6,7 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <Customer-Card-Header   :soNo="'N°'+ discountCard['No_']" :soDesc="discountCard['Subject']" pageTitle="Fiche demande remise" 
+                <Customer-Card-Header   :soNo="discountCard['No_']" :soDesc="discountCard['Subject']" pageTitle="Fiche demande remise" 
                 @onGoingBackToList='goBackToList'
                 />
             </div>
@@ -133,7 +133,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr :id="index" v-for="(elt,index) of  discountCardLine" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
+                                        <tr :id="index" v-for="(elt,index) of  discountTrackingInfo" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
                                             <td class="has-text-left has-background-light">
                                                 <span class="icon">
                                                     <i class="fas fa-arrow-right has-text-grey"></i>
@@ -190,7 +190,7 @@ export default {
     },
     setup(){
         const discountCard = ref({})
-        const discountCardLine = ref([])
+        const discountTrackingInfo = ref([])
         const readOnlyModeIsDisabled = ref(false)
         const route = useRoute()
 
@@ -222,10 +222,22 @@ export default {
             .then(result => {
                 console.log(result)
                 discountCard.value = result.data[0]
-               
+                getTrackingInfo()
             }).catch(err=>console.log(err))
         }
 
+        function getTrackingInfo(){
+            axios.get(`http://localhost:3000/app/getApprovalFlow?documentNo==RG000018`)
+            .then(res =>{
+                console.log(res);
+                if(new Array(res.data[0].length>=0)){
+                    discountTrackingInfo.value = res.data
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+      }
         function getISODate(date){
             if(new String(date).includes('1753')||new String(date).includes('1900'))
                 return ''
@@ -343,7 +355,8 @@ export default {
             submitForm,
             readOnlyModeIsDisabled,
             discountCard,
-            discountCardLine,
+            discountTrackingInfo,
+            getTrackingInfo,
             submitting_message,
             error_message,
             error_message_code,

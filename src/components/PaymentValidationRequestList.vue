@@ -18,9 +18,10 @@
                     <thead class=" my-2">
                         <tr> 
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Demande</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Statut</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Objet</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Crée le</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Statut</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Crée par</th>
                         </tr>   
                     </thead>
                     <tbody>
@@ -32,9 +33,10 @@
                                     </a>
                                 </router-link>
                             </td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Approval Status'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ payment['Subject'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ formatDateHour(payment['Created on']) }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ payment['Approval Status'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ (payment['Created by']) }}</td>
                         </tr>
                     </tbody>
                 </table>

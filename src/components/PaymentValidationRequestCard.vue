@@ -6,7 +6,7 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <Customer-Card-Header   :soNo="'Demande paiement N°'+ paymentCard['Document No_']" :soDesc="paymentCard['Refence No_']" 
+                <Customer-Card-Header   :soNo="paymentCard['No_']" :soDesc="paymentCard['Subject']" 
                 @onGoingBackToList='goBackToList'
                 pageTitle="Fiche Demande validation paiement" />
             </div>
@@ -48,12 +48,6 @@
                                 <input-text labelInputText="N° Demande" :valueInputText="paymentCard['No_']" :is_disabled="readOnlyMode" ></input-text>
                                 <input-text labelInputText="Objet" :valueInputText="paymentCard['Subject']" :is_disabled="readOnlyMode"></input-text>
 
-                                <input-text labelInputText="Type document" :valueInputText="paymentCard['Document Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Type document" v-model="paymentCard['Document Type']" :option-list="optionLabelListForRepossType" v-else></input-select-basic-1> 
-
-
-                                <input-text labelInputText="N° Document" :valueInputText="paymentCard['Document No_']" :is_disabled="readOnlyMode"></input-text>  
-                                 
                             </div>
                             <div class="column">
                                 <input-text labelInputText="Crée le" :valueInputText="formatDateHour(paymentCard['Created on'])" :is_disabled="readOnlyMode" ></input-text>
@@ -132,20 +126,25 @@
                                 <table class="table  is-narrow  is-fullwidth">
                                     <thead class=" my-2">
                                         <tr > 
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Séquence </th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;"></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Séquence</th>
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode validation</th>
                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Validé le</th>
                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Validé par</th>
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Validé en tant que </th>
-                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut Actuel </th>
+                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Validé en tant que</th>
+                                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut Actuel</th>
                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut Suivant </th> 
                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Commentaire</th> 
 
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr :id="index" v-for="(elt,index) of paymentCardLines" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
-                                          
+                                        <tr :id="index" v-for="(elt,index) of paymentTrackingInfo" :key="index">
+                                             <td class="has-text-left has-background-light">
+                                                <span class="icon">
+                                                    <i class="fas fa-arrow-right has-text-grey"></i>
+                                                </span>
+                                             </td>
                                              <td class="has-text-left">{{elt['Approval Sequence'] }}</td>
                                              <td class="has-text-left">{{elt['Approval Mode'] }}</td>
                                              <td class="has-text-left">{{formatDateHour(elt['Approved On']) }}</td>
@@ -178,7 +177,6 @@ import CustomerCardHeader from './HeaderForCard.vue'
 import CustomerInfo from './CustomerInfo.vue'
 import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
-import inputSelectBasic1 from './input/input-select-basic1.vue'
 import axios from 'axios'
 import { onMounted,onBeforeMount,ref} from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
@@ -188,14 +186,18 @@ import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 export default {
     name:'payment-validation-request-card',
     components:{
-        CustomerCardHeader,CustomerInfo,inputText,CustomerCardRibbon,inputSelectBasic1
+        CustomerCardHeader,
+        CustomerInfo,
+        inputText,
+        CustomerCardRibbon
     },
     setup(){
         const paymentCard = ref({})
-        const paymentCardLines = ref([])
         const readOnlyMode = ref(true)
         const readOnlyModeIsDisabled = ref(false)
         const optionLabelListForRepossType = ref([])
+        const paymentTrackingInfo = ref([])
+        const paymentCardLines = ref([])
 
         //nom de l'hote dans l'url 
         const hostname = window.location.hostname
@@ -214,12 +216,24 @@ export default {
          
          axios.get(`http://${hostname}:3000/app/getPaymentRequestCard?documentNo=${paymentdocumentNo.value}`)
          .then(result => {
-             console.log(result.data[0]['0'])
-             paymentCard.value = result.data[0]['0'];
-          
+             console.log(result.data)
+             paymentCard.value = result.data[0];
+             getTrackingInfo();
          }).catch(err=>console.log(err))
      }
 
+     function getTrackingInfo(){
+        axios.get(`http://localhost:3000/app/getApprovalFlow?documentNo==RG000018`)
+        .then(res =>{
+            // console.log(res);
+            if(new Array(res.data[0].length>=0)){
+                paymentTrackingInfo.value = res.data
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+      }
         function setReadOnlyModeIsDisabled(){
             readOnlyModeIsDisabled.value=true
         }
@@ -252,9 +266,15 @@ export default {
             }
         })
         return {
-            paymentCardLines,paymentCard,readOnlyMode,readOnlyModeIsDisabled,  setReadOnlyModeIsDisabled,
+            paymentCardLines,
+            paymentTrackingInfo,
+            paymentCard,
+            readOnlyMode,
+            readOnlyModeIsDisabled,
+            setReadOnlyModeIsDisabled,
             setReadWriteModeIsDisabled,
             optionLabelListForRepossType,
+            getTrackingInfo
         }
     },
     data(){

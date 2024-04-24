@@ -8,7 +8,6 @@
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
         @onInputSearchData="(eltToSearch)=>this.eltToSearch=eltToSearch"
         componentWithCompInfo="customerListRightInfoMaxWidth"
-        routeForNewCard="NewCustomer"
         ></customer-list-ribbon>
 
 
@@ -22,6 +21,7 @@
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Remise demandée (%)</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Remise accordé  (%)</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Crée le</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Crée par</th>
                             
                         </tr>   
                     </thead>
@@ -38,6 +38,7 @@
                             <td class="has-text-left has-background-light is-narrow"> {{discount['Requested Discount'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{discount['Approuved Discount'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{formatDateHour(discount['Created on']) }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{(discount['Created by']) }}</td>
 
                         </tr>
                     </tbody>

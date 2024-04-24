@@ -11,16 +11,15 @@
                 />
             </div>
             
-<!---------Composant rubban fiche activité recouvrement----------------------->      
+<!---------Composant rubban fiche demande remise----------------------->      
             <Customer-card-ribbon
-            routeForNewCard="../NewDiscountRequest"
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
             @onDisablingReadOnlyMode="setReadOnlyModeIsDisabled"
             @onSubmittingForm="submitForm"
             @onCancellingUpdate="setReadWriteModeIsDisabled"
             componentWithCompInfo="newdiscoundRightInfoMaxWidth"
-            :newCardBtnIsDisabled="false"
-            :editCardBtnIsDisabled="false"
+            :newCardBtnIsDisabled="true"
+            :editCardBtnIsDisabled="true"
             :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
             :cancelEditCardBtnIsDisabled="true"
             ></Customer-card-ribbon>
@@ -64,11 +63,11 @@
 
 
 
-<!---------Section formulaire fiche activité recouvrement----------------------->      
+<!---------Section formulaire fiche demande remise----------------------->      
             <div id="content-comp" class="columns mt-2" style="overflow-y: scroll;">
                 <div class="column" style="overflow-y: scroll;">
 
-<!---------sous-Section ongle 1 formulaire fiche activité recouvrement----------------------->                         
+<!---------sous-Section ongle 1 formulaire fiche demande remise----------------------->                         
                         <div id="general">
                             <div class="columns has-border-bottom">
                                 <div class="column p-0 has-text-left has-text-weight-bold">
@@ -88,21 +87,23 @@
                                 <div class="column">
                                     <input-text labelInputText="N° Demande" :valueInputText="discountCard['No_']" :is_disabled="true" ></input-text>
                                     <input-text labelInputText="Objet" :valueInputText="discountCard['Subject']" :is_disabled="true"></input-text>
-                                    <input-text labelInputText="N° Document" :valueInputText="discountCard['Document No_']" :is_disabled="true"></input-text>
-                                    <input-text labelInputText="Crée le" :valueInputText="formatDate(discountCard['Created on'])" :is_disabled="true"></input-text>
+                                  
+                                    <input-text labelInputText="Crée le" :valueInputText="formatDateHour(discountCard['Created on'])" :is_disabled="true"></input-text>
+
+                                    <input-text labelInputText="Crée par" :valueInputText="discountCard['Created by']" :is_disabled="true"></input-text>
                                 </div>
                                 <div class="column">
 
-                                    <input-text labelInputText="Crée par" :valueInputText="discountCard['Created by']" :is_disabled="true"></input-text>
+                                   
                                     <input-text labelInputText="Remise demandée (%)" v-model="discountCard['Description']" :valueInputText="discountCard['Requested Discount']" :is_disabled="!readOnlyModeIsDisabled" :is_readOnly="true"></input-text>
                                     <input-text labelInputText="Remise accordé  (%)" :valueInputText="discountCard['Approuved Discount']" :is_disabled="true"></input-text>
-                                    <input-text labelInputText="Statut" :valueInputText="discountCard['Status']" :is_disabled="true"></input-text>
+                                    <input-text labelInputText="Statut" :valueInputText="discountCard['Approval Status']" :is_disabled="true"></input-text>
                                 </div>
                             </div>                    
                         </div>
                         <br><br>
 
-                    
+<!---------sous-Section ongle 2 formulaire fiche demande remise----------------------->   
                     <div id="tracking" v-if="!readOnlyModeIsDisabled">
                         <div :class="{'has-background-light':onglet2_expanded}">
                             <div :class="{'columns':!onglet2_expanded,'p-3':onglet2_expanded,'has-border-bottom-grey':onglet2_expanded,'has-border-bottom':!onglet2_expanded}">
@@ -134,7 +135,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr :id="index" v-for="(elt,index) of  discountCardLine" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
+                                        <tr :id="index" v-for="(elt,index) of  approvalfow" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
                                             <td class="has-text-left has-background-light">
                                                 <span class="icon">
                                                     <i class="fas fa-arrow-right has-text-grey"></i>
@@ -142,7 +143,7 @@
                                             </td>
                                             <td class="has-text-left">{{ elt['Approval Sequence'] }}</td>
                                                 <td class="has-text-left">{{ elt['Approval Mode']  }}</td>
-                                                <td class="has-text-left">{{ formatDate(elt['Approved On'])  }}</td>
+                                                <td class="has-text-left">{{ formatDateHour(elt['Approved On'])  }}</td>
                                                 <td class="has-text-left">{{ elt['Approved by']  }}</td>
                                                 <td class="has-text-left">{{ elt['Approved as']  }}</td>
                                                 <td class="has-text-left">{{ elt['Current Status']  }}</td>
@@ -161,7 +162,7 @@
 
 
                 </div>
-<!---------composant info client----------------------->
+<!---------composant info demande remise----------------------->
                 <customer-info class="customer-info"></customer-info>
 
             </div>
@@ -176,14 +177,14 @@ import CustomerInfo from './CustomerInfo.vue'
 import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import axios from 'axios'
-import { onMounted,ref } from 'vue'
+import { onBeforeMount,onMounted,ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 
 
 export default {
-    name:'discout-request-card',
+    name:'discount-request-card',
     components:{
         CustomerCardHeader,CustomerInfo,
         inputText,
@@ -191,9 +192,17 @@ export default {
     },
     setup(){
         const discountCard = ref({})
+        const discountCardLine = ref([])
         const readOnlyModeIsDisabled = ref(false)
+        const route = useRoute()
+
+        const approvalfow = ref([])
+
+        //nom de l'hote dans l'url 
         const hostname = window.location.hostname
-        const discoundCardId = useRoute().params.id
+
+        //indique la route active
+        const discoundDocumentNo = ref('')
 
         //variable de soumission forme
         const submitting_message=ref('') 
@@ -212,14 +221,27 @@ export default {
             company:ref(useWebUserInfoStore().activeCompanyId),
         }
 
-        function getDRQCardInfo(){
-            axios.get(`http://${hostname}:3000/app/getDRQCard/${discoundCardId}`)
+        function getDiscountCardInfo(){
+            axios.get(`http://${hostname}:3000/app/getDiscountRequestCard?documentNo=${discoundDocumentNo.value}`)
             .then(result => {
                 console.log(result)
-                this.discountCard = result.data.recordset[0]
-               
+                discountCard.value = result.data[0]
+                getDiscoundapprovalfowInfo()
             }).catch(err=>console.log(err))
         }
+        function getDiscoundapprovalfowInfo(){
+          axios.get(`http://localhost:3000/app/getApprovalFlow?documentNo=SO24-00002`)
+          .then(res =>{
+            
+           approvalfow.value =  res.data
+                 
+          })
+          .catch((err) => {
+              console.log(err)
+          })
+      }
+
+
 
         function getISODate(date){
             if(new String(date).includes('1753')||new String(date).includes('1900'))
@@ -307,7 +329,7 @@ export default {
         }
         onMounted(() => {
             if (webUserInfo.name.value){
-                getDRQCardInfo()
+                getDiscountCardInfo()
                 
                 
             }else{
@@ -316,7 +338,7 @@ export default {
                     useWebUserInfoStore().fillWebUserInfo(res.data.recordset[0])
                     webUserInfo.name.value=useWebUserInfoStore().name
                     webUserInfo.company.value=useWebUserInfoStore().activeCompanyId
-                    getDRQCardInfo()
+                    getDiscountCardInfo()
                     
                    
                 })
@@ -324,7 +346,12 @@ export default {
             }
         })
 
-
+        onBeforeMount(()=>{
+            if(route.query.documentNo){
+                discoundDocumentNo.value = route.query.documentNo
+                
+            }
+        })
       
         // expose to template and other options API hooks
         return {
@@ -333,12 +360,12 @@ export default {
             submitForm,
             readOnlyModeIsDisabled,
             discountCard,
+            discountCardLine,
             submitting_message,
             error_message,
             error_message_code,
             success_message,
-            
-        
+            approvalfow,
 
             
 
@@ -359,8 +386,8 @@ export default {
     methods:{
         goBackToList(){
             useNavigationTabStore().setActiveGroup('recovery')
-            useNavigationTabStore().setActiveTab('debtCollection')
-            this.$router.push('/')
+            useNavigationTabStore().setActiveTab('customers')
+            this.$router.push('/DiscountRequestList')
         },
         /////////////////////////methode pour masquer ou afficher le composant info à droite
      hideOrShowComponentInfo(){
@@ -373,10 +400,12 @@ export default {
                 this.customerInfoCompMaxWidth='0px'
             }
         },
-        formatDate(date){
-            const dateString = new String(date)
-            if (dateString.includes('1753-')) return ''
-            else return new Date(date).toLocaleDateString()
+        formatDateHour(date){
+            if(date){
+                const dateString = new String(date)
+                if (dateString.includes('1753-')||dateString.includes('1900-')) return ''
+                else return new Date(date).toLocaleDateString() + ' à ' +new Date(date).toLocaleTimeString()
+            }else{ return ''}
         },
         expand(id){
             const myElt=document.getElementById(id);

@@ -45,11 +45,13 @@ import NewSaleOrder from './components/NewSaleOrder.vue'
 //7-----Autres
 import RevisionRequestList from './components/RevisionRequestList.vue'
 import RevisionRequestCard from './components/RevisionRequestCard.vue'
+
 import DiscountRequestList from './components/DiscountRequestList.vue'
 import DiscountRequestCard from './components/DiscountRequestCard.vue'
 import NewDiscountResquest from './components/NewDiscountRequest.vue'
 import ReleaseRequestList from './components/ReleaseRequestList.vue'
 import ReleaseRequestCard from './components/ReleaseRequestCard.vue'
+import NewReleaseRequest from "./components/NewReleaseRequest.vue"
 
 
 //8-----Sport2000
@@ -138,13 +140,14 @@ const routes = [
   
 
   ///////////////////7
-  {path:'/RevisionRequestCard/:id',component:RevisionRequestCard,name:'RevisionRequestCardPage'},
+  {path:'/RevisionRequestCard',component:RevisionRequestCard,name:'RevisionRequestCardPage'},
   {path:'/RevisionRequestList',component:RevisionRequestList,name:'RevisionRequestListPage'},
-  {path:'/DiscountRequestCard/:id',component:DiscountRequestCard,name:'DiscountRequestCardPage'},
+  {path:'/DiscountRequestCard',component:DiscountRequestCard,name:'DiscountRequestCardPage'},
   {path:'/NewDiscountRequest',component:NewDiscountResquest,name:'NewDiscountRequestrPage'},
   {path:'/DiscountRequestList',component:DiscountRequestList,name:'DiscountRequestListPage'},
-  {path:'/ReleaseRequestCard/:id',component:ReleaseRequestCard,name:'ReleaseRequestCardPage'},
+  {path:'/ReleaseRequestCard',component:ReleaseRequestCard,name:'ReleaseRequestCardPage'},
   {path:'/',component:ReleaseRequestList,name:'ReleaseRequestListPage'},
+  {path:'/NewReleaseRequest',component:NewReleaseRequest,name:'NewReleaseRequestPage'},
 
   ///////////////////8ReleaseRequestList
   {path:'/STP2_Sales',component:SPT2_SalesContainer,name:'SPT2_SalesContainerPage'},
@@ -174,7 +177,7 @@ const routes = [
   {path:'/ReceivablesList',component:ReceivablesList,name:'ReceivablesListPage'},
   {path:'/ReceivablesCard/:id',component:ReceivablesCard,name:'ReceivablesCardPage'},
   {path:'/PaymentValidationRequestList',component:PaymentValidationRequestList,name:'PaymentValidationRequestListPage'},
-  {path:'/PaymentValidationRequestCard/:id',component:PaymentValidationRequestCard,name:'PaymentValidationRequestCardPage'},
+  {path:'/PaymentValidationRequestCard',component:PaymentValidationRequestCard,name:'PaymentValidationRequestCardPage'},
   {path:'/NewPaymentValidationRequest',component:NewPaymentValidationRequest,name:'NewPaymentValidationRequestPage'},
   
 

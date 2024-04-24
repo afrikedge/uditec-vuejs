@@ -110,7 +110,8 @@
                                 <input-number labelInputText="Durée (mois)" :valueInputText="groupbuyCardHeader['Duration (Month)']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-number>
                                 <input-number labelInputText="Durée (mois)" :valueInputText="groupbuyCardHeader['Duration (Month)']" v-else></input-number>
 
-                                <input-text labelInputText="Type engagement" :valueInputText="groupbuyCardHeader['Commitment Type']" :is_disabled="true" ></input-text>
+                                <input-text labelInputText="Type engagement" :valueInputText="groupbuyCardHeader['Commitment Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 v-model="repossessionRequestSource" labelInputText="Type engagement" :option-list="optionLabelListForCommitment" v-else></input-select-basic-1> 
 
                                 <input-text labelInputText="Mode de règlement" :valueInputText="groupbuyCardHeader['Payment Method Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select labelInputText="Mode de règlement" v-model="groupbuyCardHeader['Payment Method Code']" @openModal="activeModalForSelectableElementList='paymentMethodList'" v-else></input-select>
@@ -206,11 +207,11 @@
                                             <td class="has-text-left">{{ elt['Customer Name'] }}</td>
                                             <td class="has-text-left">{{ elt['Sales Mode'] }}</td>
                                             <td class="has-text-left">{{ elt['Document No_'] }}</td>
-                                            <td class="has-text-left">{{ elt['Posting Date'] }}</td>
-                                            <td class="has-text-left">{{ elt['Due Date'] }}</td>
+                                            <td class="has-text-left">{{ formatDate(elt['Posting Date']) }}</td>
+                                            <td class="has-text-left">{{ formatDate(elt['Due Date']) }}</td>
                                             <td class="has-text-left">{{ elt['Amount (LCY)'] }}</td>
                                             <td class="has-text-left">{{ elt['Payment (LCY)'] }}</td>
-                                            <td class="has-text-left">{{ elt['Payment Date'] }}</td>
+                                            <td class="has-text-left">{{ formatDate(elt['Payment Date']) }}</td>
                                             <td class="has-text-left">{{ elt['Days late'] }}</td>
                                             <td class="has-text-left">{{ elt['Debt Status'] }}</td>
                                         </tr>
@@ -256,11 +257,11 @@
                                         <tr :id="index" v-for="(elt,index) of buyHistoryInfo" :key="index"  >
                                             <td class="has-text-left">{{ elt['Sales Mode'] }}</td>
                                             <td class="has-text-left">{{ elt['Document No_'] }}</td>
-                                            <td class="has-text-left">{{ elt['Posting Date'] }}</td>
-                                            <td class="has-text-left">{{ elt['Due Date'] }}</td>
+                                            <td class="has-text-left">{{ formatDate(elt['Posting Date']) }}</td>
+                                            <td class="has-text-left">{{ formatDate(elt['Due Date']) }}</td>
                                             <td class="has-text-left">{{ elt['Amount (LCY)'] }}</td>
                                             <td class="has-text-left">{{ elt['Payment (LCY)'] }}</td>
-                                            <td class="has-text-left">{{ elt['Payment Date'] }}</td>
+                                            <td class="has-text-left">{{ formatDate(elt['Payment Date']) }}</td>
                                             <td class="has-text-left">{{ elt['Days late'] }}</td>
                                             <td class="has-text-left">{{ elt['Debt Status'] }}</td>
                                         </tr>
@@ -305,29 +306,32 @@ import inputText from './input/input-text.vue'
 import inputSelect from './input/input-select.vue'
 import inputDate from './input/input-date.vue'
 import inputNumber from './input/input-number.vue'
+import inputSelectBasic1 from './input/input-select-basic1.vue'
 import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
 import ModalForSelectablePaymentMethodList from './ModalForSelectablePaymentMethodList.vue'
 import axios from 'axios'
-import { onMounted,ref,computed } from 'vue'
+import { onMounted,ref,onBeforeMount } from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
-
+import { useRoute} from 'vue-router'
 
 export default {
     name:'groupbuycontract-card',
     components:{
         CustomerCardHeader,CustomerInfo,
-        inputText,
+        inputText,inputSelectBasic1,
         CustomerCardRibbon,inputSelect,
         inputDate,inputNumber,
         ModalForSelectablePaymentMethodList,
         ModalForSelectableCustomerList
     },
     setup(){
+        const route = useRoute()
+        const CreditContractNo = ref('')
         const groupbuyCardHeader = ref({})
         const readOnlyModeIsDisabled = ref(false)
         const hostname = window.location.hostname
-
+        
         //variable de soumission forme
         const submitting_message=ref('') 
 
@@ -341,18 +345,12 @@ export default {
         const buyEmployedInfo = ref([])
         const buyHistoricalInfo = ref([])
         const buyHistoryInfo = ref([])
-        const optionLabelListForRepossSource = ref([])
-        const optionLabelListForRepossStatus = ref([])
-        const optionLabelListForRepossType = ref([])
-        const optionLabelListForRepossItemStatus = ref([])
+        
 
-        const getLabelForRepossSource = computed(()=> {
-            return optionLabelListForRepossSource.value.filter(row => row['Value']== groupbuyCardHeader.value['Source'])
-        } )
+        
+        const optionLabelListForCommitment = ref([])
+    
 
-        const tttt = computed(()=>{
-            return getLabelForRepossSource.value
-        })
 
         const dateInfo = {
             OpStartingDate: ref(''),
@@ -363,16 +361,10 @@ export default {
         function getOptionLabelList(field){
             axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
             .then(result => {
-                if (field=='[Reposs Source]')
-                    optionLabelListForRepossSource.value=result.data.recordset
-                if (field=='[Reposs Status]')
-                    optionLabelListForRepossStatus.value=result.data.recordset
-                if (field=='[Reposs Type]')
-                    optionLabelListForRepossType.value=result.data.recordset
-                if (field=='[Activity Type]')
-                    optionLabelListForRepossItemStatus.value=result.data.recordset
+                if (field=='[Commitment Type]')
+                optionLabelListForCommitment.value=result.data.recordset
     
-                    console.log(result.data.recordset)
+                    console.log(result.data.recordset[0])
     
             }).catch(err=>console.log(err))
         }
@@ -381,15 +373,35 @@ export default {
             name:ref(useWebUserInfoStore().name),
             company:ref(useWebUserInfoStore().activeCompanyId),
         }
+       
+        // //indique la route active
+        // let CreditCardContractNo = this.$route.query.contractNo
 
         function getcontractCardInfo(){
-            axios.get(`http://${hostname}:3000/app/getCreditContractCard?contractNo=UDT/AGP/24-0001`)
+            axios.get(`http://${hostname}:3000/app/getCreditContractCard?contractNo=${CreditContractNo.value}`)
             .then(result => {
-                console.log(result)
                 groupbuyCardHeader.value = result.data[0]
                 dateInfo.OpStartingDate.value = getISODate(groupbuyCardHeader.value["OP Starting Date"])
+                getCustomerHistoryInfo()
             }).catch(err=>console.log(err))
         }
+
+        
+      function getCustomerHistoryInfo(){
+          axios.get(`http://localhost:3000/app/getCustomerHistory?customerNo=UDT00001`)
+          .then(res =>{
+              if (new Array(res.data[0]).length>=0){
+                buyHistoryInfo.value =  res.data
+                buyHistoricalInfo.value =  res.data
+                buyEmployedInfo.value =  res.data
+                
+                  
+              }
+          })
+          .catch((err) => {
+              console.log(err)
+          })
+      }
 
         function getISODate(date){
             if(new String(date).includes('1753')||new String(date).includes('1900'))
@@ -478,7 +490,6 @@ export default {
                 'No_':groupbuyCardHeader.value['No_'],
                 'Customer No_':groupbuyCardHeader.value['Customer No_'],
                 'Name':groupbuyCardHeader.value['Name'],
-                'Activity Type':groupbuyCardHeader.value[ 'Activity Type'],
                 'Subject':groupbuyCardHeader.value['Subject'],
                 'Description':groupbuyCardHeader.value['Description'],
                 'Created on':groupbuyCardHeader.value['Created on'],
@@ -497,10 +508,7 @@ export default {
         onMounted(() => {
             if (webUserInfo.name.value){
                 getcontractCardInfo()
-                getOptionLabelList('[Reposs Source]')
-                getOptionLabelList('[Reposs Status]')
-                getOptionLabelList('[Reposs Type]')
-                getOptionLabelList('[Reposs Item Status]')
+                getOptionLabelList('[Commitment Type]')
             }else{
                 axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
                 .then(res=>{
@@ -508,17 +516,19 @@ export default {
                     webUserInfo.name.value=useWebUserInfoStore().name
                     webUserInfo.company.value=useWebUserInfoStore().activeCompanyId
                     getcontractCardInfo()
-                    getOptionLabelList('[Reposs Source]')
-                    getOptionLabelList('[Reposs Status]')
-                    getOptionLabelList('[Reposs Type]')
-                    getOptionLabelList('[Reposs Item Status]')
+                    getOptionLabelList('[Commitment Type]')
+
                 })
                 .catch(err=>console.log(err))
             }
         })
 
 
-
+        onBeforeMount(()=>{
+            if(route.query.contractNo){
+                CreditContractNo.value = route.query.contractNo
+            }
+        })
         // expose to template and other options API hooks
         return {
             setReadOnlyModeIsDisabled,
@@ -535,19 +545,19 @@ export default {
             buyHistoricalInfo,
             buyHistoryInfo,
             fillCustomerInfoField,
+            optionLabelListForCommitment,
 
-            optionLabelListForRepossSource,
-            optionLabelListForRepossStatus,
-            optionLabelListForRepossType,
-            optionLabelListForRepossItemStatus,
-            tttt,
+            
             dateInfo,
-            getISODate
+            getISODate,
+            getCustomerHistoryInfo,
+            
         }
     },
     data(){
         return{
-
+            //indique la route active
+            CreditCardContractNo:this.$route.query.contractNo,
             //taille (largeur) initiale du composant customerInfo
             customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerCardRightInfoMaxWidth,
 

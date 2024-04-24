@@ -6,19 +6,19 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <Customer-Card-Header   :soNo="paymentCardId" :soDesc="paymentCard.Subject" pageTitle="Fiche Demande validation paiement" />
+                <Customer-Card-Header   :soNo="paymentCard['No_']" :soDesc="paymentCard['Subject']" 
+                @onGoingBackToList='goBackToList'
+                pageTitle="Fiche Demande validation paiement" />
             </div>
             
 <!---------Composant rubban fiche demande validation paiement----------------------->      
             <Customer-card-ribbon
-            @onGoingBackToList='goBackToList'
-            routeForNewCard="../NewPaymentValidationRequest"
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
             componentWithCompInfo="customerCardRightInfoMaxWidth"
             :newContactBtnIsDisabled="true"
             :newShipToAddressBtnIsDisabled="true"
             @onCancellingUpdate="setReadWriteModeIsDisabled"
-            :newCardBtnIsDisabled="false"
+            :newCardBtnIsDisabled="true"
             :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
             :cancelEditCardBtnIsDisabled="true"
             ></Customer-card-ribbon>
@@ -48,15 +48,11 @@
                                 <input-text labelInputText="N° Demande" :valueInputText="paymentCard['No_']" :is_disabled="readOnlyMode" ></input-text>
                                 <input-text labelInputText="Objet" :valueInputText="paymentCard['Subject']" :is_disabled="readOnlyMode"></input-text>
 
-                                <input-text labelInputText="Type document" :valueInputText="paymentCard['Document Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Type document" v-model="paymentCard['Document Type']" :option-list="optionLabelListForRepossType" v-else></input-select-basic-1> 
-
-
-                                <input-text labelInputText="N° Document" :valueInputText="paymentCard['Document No_']" :is_disabled="readOnlyMode"></input-text>  
+                                <input-text labelInputText="Crée le" :valueInputText="formatDateHour(paymentCard['Created on'])" :is_disabled="readOnlyMode" ></input-text>
                                  
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Crée le" :valueInputText="formatDate(paymentCard['Created on'])" :is_disabled="readOnlyMode" ></input-text>
+                               
                                 <input-text labelInputText="Crée par" :valueInputText="paymentCard['Created by']" :is_disabled="readOnlyMode"></input-text>
                                 <input-text labelInputText="Statut" :valueInputText="paymentCard['Status']" :is_disabled="readOnlyMode"></input-text>
                             </div>
@@ -64,7 +60,7 @@
                     </div>
                     <br><br>
 
-                  
+<!---------sous-Section ongle 2 formulaire fiche demande validation paiement----------------------->                  
                     <div id="details" v-if="!readOnlyModeIsDisabled">
                         <div :class="{'has-background-light':onglet2_expanded}">
                             <div :class="{'columns':!onglet2_expanded,'p-3':onglet2_expanded,'has-border-bottom-grey':onglet2_expanded,'has-border-bottom':!onglet2_expanded}">
@@ -111,8 +107,7 @@
                     </div>  
                     <br><br>
 
-
-
+<!---------sous-Section ongle 3 formulaire fiche demande validation paiement----------------------->
                      <div id="tracking" v-if="!readOnlyModeIsDisabled">
                         <div :class="{'has-background-light':onglet3_expanded}">
                             <div :class="{'columns':!onglet3_expanded,'p-3':onglet3_expanded,'has-border-bottom-grey':onglet3_expanded,'has-border-bottom':!onglet3_expanded}">
@@ -133,6 +128,7 @@
                                 <table class="table  is-narrow  is-fullwidth">
                                     <thead class=" my-2">
                                         <tr > 
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;"></th>
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Séquence </th>
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode validation</th>
                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Validé le</th>
@@ -145,11 +141,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr :id="index" v-for="(elt,index) of paymentCardLines" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
-                                          
+                                        <tr :id="index" v-for="(elt,index) of  approvalfow" :key="index" @mouseover="setLineShadow(index)" @mouseout="removeLineShadow(index)" >
+                                            <td class="has-text-left has-background-light">
+                                                <span class="icon">
+                                                    <i class="fas fa-arrow-right has-text-grey"></i>
+                                                </span>
+                                            </td>
                                              <td class="has-text-left">{{elt['Approval Sequence'] }}</td>
                                              <td class="has-text-left">{{elt['Approval Mode'] }}</td>
-                                             <td class="has-text-left">{{formatDate(elt['Approved On']) }}</td>
+                                             <td class="has-text-left">{{formatDateHour(elt['Approved On']) }}</td>
                                              <td class="has-text-left">{{elt['[Approved by'] }}</td>
                                              <td class="has-text-left">{{elt['Approved as'] }}</td>
                                              <td class="has-text-left">{{elt['Current Status'] }}</td>
@@ -165,7 +165,7 @@
                     <br><br>
    
                 </div>
-<!---------composant info client----------------------->
+<!---------composant info demande validation paiement----------------------->
                 <customer-info class="customer-info"></customer-info>
 
             </div>
@@ -179,15 +179,16 @@ import CustomerCardHeader from './HeaderForCard.vue'
 import CustomerInfo from './CustomerInfo.vue'
 import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
-import inputSelectBasic1 from './input/input-select-basic1.vue'
 import axios from 'axios'
-import { ref } from 'vue'
+import { onMounted,onBeforeMount,ref} from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
+import { useRoute } from 'vue-router'
+import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 
 export default {
     name:'payment-validation-request-card',
     components:{
-        CustomerCardHeader,CustomerInfo,inputText,CustomerCardRibbon,inputSelectBasic1
+        CustomerCardHeader,CustomerInfo,inputText,CustomerCardRibbon,
     },
     setup(){
         const paymentCard = ref({})
@@ -195,7 +196,42 @@ export default {
         const readOnlyMode = ref(true)
         const readOnlyModeIsDisabled = ref(false)
         const optionLabelListForRepossType = ref([])
+
+        const approvalfow = ref([])
+
+        //nom de l'hote dans l'url 
+        const hostname = window.location.hostname
+        const route = useRoute()
+
+        //indique la route active
+        const paymentdocumentNo = ref('')
+        
+        let webUserInfo = {
+            name:ref(useWebUserInfoStore().name),
+            company:ref(useWebUserInfoStore().activeCompanyId),
+        }
         // expose to template and other options API hooks
+
+        function getpaymentCardInfo(){
+         
+         axios.get(`http://${hostname}:3000/app/getPaymentRequestCard?documentNo=${paymentdocumentNo.value}`)
+         .then(result => {
+             console.log(result.data[0])
+             paymentCard.value = result.data[0]['0']
+             getPaymentapprovalfowInfo()
+         }).catch(err=>console.log(err))
+     }
+         function getPaymentapprovalfowInfo(){
+          axios.get(`http://localhost:3000/app/getApprovalFlow?documentNo=RG000018`)
+          .then(res =>{
+            
+           approvalfow.value =  res.data
+                 
+          })
+          .catch((err) => {
+              console.log(err)
+          })
+      }
 
 
         function setReadOnlyModeIsDisabled(){
@@ -206,10 +242,35 @@ export default {
             readOnlyModeIsDisabled.value=false
         }
 
+        
+        onMounted(() => {
+            if (webUserInfo.name.value){
+                getpaymentCardInfo()
+             
+            }else{
+                axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
+                .then(res=>{
+                    useWebUserInfoStore().fillWebUserInfo(res.data.recordset[0])
+                    webUserInfo.name.value=useWebUserInfoStore().name
+                    webUserInfo.company.value=useWebUserInfoStore().activeCompanyId
+                    getpaymentCardInfo()
+                })
+                .catch(err=>console.log(err))
+            }
+        })
+
+        onBeforeMount(()=>{
+            if(route.query.documentNo){
+                paymentdocumentNo.value = route.query.documentNo
+                
+            }
+        })
+
         return {
             paymentCardLines,paymentCard,readOnlyMode,readOnlyModeIsDisabled,  setReadOnlyModeIsDisabled,
             setReadWriteModeIsDisabled,
             optionLabelListForRepossType,
+            approvalfow,
         }
     },
     data(){
@@ -217,15 +278,13 @@ export default {
             //taille (largeur) initiale du composant customerInfo
             customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerCardRightInfoMaxWidth,
 
-            //indique la route active
-            paymentCardId:this.$route.params.id,
+            
 
             //indique si les onglets sont réduits ou non
             onglet1_expanded:true,
             onglet2_expanded:true,
             onglet3_expanded:true,
-            onglet4_expanded:true,
-            onglet5_expanded:true,
+           
 
             //nom de l'hote dans l'url 
             hostname:window.location.hostname
@@ -234,8 +293,8 @@ export default {
     methods:{
         goBackToList(){
             useNavigationTabStore().setActiveGroup('recovery')
-            useNavigationTabStore().setActiveTab('paymentvalCollection')
-            this.$router.push('/')
+            useNavigationTabStore().setActiveTab('customers')
+            this.$router.push('/PaymentValidationRequestList')
         },
 
 
@@ -250,10 +309,12 @@ export default {
                 this.customerInfoCompMaxWidth='0px'
             }
         },
-        formatDate(date){
-            const dateString = new String(date)
-            if (dateString.includes('1753-')||dateString.includes('1900-')) return ''
-            else return new Date(date).toLocaleDateString()
+        formatDateHour(date){
+            if(date){
+                const dateString = new String(date)
+                if (dateString.includes('1753-')||dateString.includes('1900-')) return ''
+                else return new Date(date).toLocaleDateString() + ' à ' +new Date(date).toLocaleTimeString()
+            }else{ return ''}
         },
         expand(id){
             const myElt=document.getElementById(id);
@@ -266,14 +327,7 @@ export default {
             myElt.style.maxHeight="0px"
         }
     },
-    mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getPVRQCard/${this.paymentCardId}`)
-        .then(result => {
-         this.paymentCard = result.data;
-         console.log(result)
-        }).catch(err=>console.log(err))
-
-    },
+   
 }
 
 </script>

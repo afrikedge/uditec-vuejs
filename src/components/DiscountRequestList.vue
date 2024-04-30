@@ -2,7 +2,7 @@
     <div class="my-5 mx-5">
         
         <customer-list-ribbon 
-        pageTitle="Demande de déblocage"
+        pageTitle="Demande de remise"
         componentwithPresentationView="customerListPresentation"
         :hasAThirdPresentation="true"
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"

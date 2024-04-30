@@ -87,7 +87,6 @@
                                 <div class="column">
                                     <input-text labelInputText="N° Demande" :valueInputText="discountCard['No_']" :is_disabled="true" ></input-text>
                                     <input-text labelInputText="Objet" :valueInputText="discountCard['Subject']" :is_disabled="true"></input-text>
-                                    <input-text labelInputText="N° Document" :valueInputText="discountCard['Document No_']" :is_disabled="true"></input-text>
                                     <input-text labelInputText="Crée le" :valueInputText="formatDateHour(discountCard['Created on'])" :is_disabled="true"></input-text>
                                 </div>
                                 <div class="column">

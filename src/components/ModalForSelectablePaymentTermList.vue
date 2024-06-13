@@ -6,7 +6,7 @@
             <div class="has-text-left mb-5 columns">
                 <div>
                     <span class="subtitle  has-text-left column is-narrow">
-                        Modes de règlement |
+                        Conditions de paiement|
                     </span>
                 </div>
                 <input-search class="column is-narrow" v-model="eltToSearch"> </input-search>
@@ -19,13 +19,21 @@
                         <tr> 
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode de vente</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Calcul dare d'échéance</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">multi-deadlines ?</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">% Acompte exigé</th>
                         </tr>
                     </thead>
                     <tbody style="">
 
-                            <tr :id="elt['Code']"  v-for="(elt,index) of filteredPaymentMethodList" :key="index" @click="$emit('onGettingLineFromSelectablePaymentMethodListModal',elt);$emit('closeModal')">
+                            <tr :id="elt['Code']"  v-for="(elt,index) of filteredPaymentTermList" :key="index" @click="$emit('onGettingLineFromSelectablePaymentTermListModal',elt);$emit('closeModal')">
                                 <td class="has-text-left is-narrow"> <strong> {{ elt['Code'] }}</strong> </td>
                                 <td class="has-text-left is-narrow"> {{ elt['Description'] }}</td>
+                                <td class="has-text-left is-narrow"> {{ elt['Sales Mode'] }}</td>
+                                <td class="has-text-left is-narrow"> {{ elt['Due Date Calculation'] }}</td>
+                                <td class="has-text-left is-narrow"> {{ elt['Multi-deadlines'] }}</td>
+                                <td class="has-text-left is-narrow"> {{ elt['Prepayment'] }}</td>
                             </tr>
                     </tbody>
                 </table>
@@ -40,11 +48,10 @@
 import axios from 'axios'
 import inputSearch from './input/input-search.vue'
 import { computed, ref } from 'vue'
-import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 
 export default{
-    name:'modal-for-selectable-payment-method-list',
-    props:['isActive'],
+    name:'modal-for-selectable-payment-term-list',
+    props:['isActive','salesMode'],
     data(){
         return {
             //nom de l'hote dans l'url 
@@ -57,25 +64,26 @@ export default{
     components:{
         inputSearch
     },
-    setup(){
+    setup(props){
         const eltToSearch = ref('')
         const elementList = ref([])
 
-        const filteredPaymentMethodList = computed(()=>
+        const filteredPaymentTermList = computed(()=>
             elementList.value
-            .filter((row) => new String(row['Code']).toLowerCase().includes(eltToSearch.value)
-                || new String(row['Description']).toLowerCase().includes(eltToSearch.value)
+            .filter((row) => (new String(row['Code']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Description']).toLowerCase().includes(eltToSearch.value.toLowerCase()))
+                && row['Sales Mode'] == props.salesMode 
             )
         )
         
         return {
-            eltToSearch,elementList,filteredPaymentMethodList
+            eltToSearch,elementList,filteredPaymentTermList
         }
     },
     beforeMount(){
-        axios.get(`http://${this.hostname}:3000/app/getPaymentMethodList?respCenter=${useWebUserInfoStore().responsibilityCenter}`)
+        axios.get(`http://${this.hostname}:3000/app/getPaymentTermList`)
         .then(result => {
-            this.elementList=result.data.recordset
+            this.elementList=result.data
         }).catch(err=>console.log(err))
 
     }

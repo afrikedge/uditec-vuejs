@@ -6,7 +6,7 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <r-r-card-Header :soNo="'Client N° : '+repossessionRequestCustomerNo" :soDesc="repossessionRequestDocumentNo" pageTitle="Demande repossession"
+                <r-r-card-Header :soNo="'Client N° : '+paymentPromiseCustomerNo" :soDesc="paymentPromiseSubject" pageTitle="Promesse de règlement"
                 @onGoingBackToList='goBackToList'
                 ></r-r-card-Header>
             </div>
@@ -14,7 +14,7 @@
             <r-r-card-ribbon
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
             @onSubmittingForm="submitForm"
-            componentWithCompInfo="newrepossRightInfoMaxWidth"
+            componentWithCompInfo="newPayPromiseRightInfoMaxWidth"
             :readOnlyModeIsDisabled="true"
             ></r-r-card-ribbon>
 
@@ -75,24 +75,35 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-                                <input-select v-model="repossessionRequestCustomerNo" labelInputText="N° Client" @openModal="activeModalForSelectableElementList='customerList'"></input-select>
+                                <input-text v-model="paymentPromiseSubject" labelInputText="Objet"></input-text>
                                 
-                                <input-select v-model="repossessionRequestDocumentNo" labelInputText="N° Document" @openModal="activeModalForSelectableElementList='invoiceList'"></input-select>
+                                <input-select v-model="paymentPromiseCustomerNo" labelInputText="N° Client" @openModal="activeModalForSelectableElementList='customerList'"></input-select>
                                 
-                                <input-select v-model="repossessionRequestItemNo" labelInputText="Code Article" @openModal="activeModalForSelectableElementList='itemList'"></input-select>
+                                <input-select v-model="paymentPromiseContactNo" labelInputText="N° Contact" @openModal="activeModalForSelectableElementList='contactList'"></input-select>
                                 
-                                <input-text v-model="repossessionRequestSerialNo" labelInputText="Numéro Série"></input-text>
+                                <input-text v-model="paymentPromiseDescription" labelInputText="Description"></input-text>
+
+                                <input-select v-model="paymentPromiseOriginatedActivity" labelInputText="Activité d'origine" @openModal="activeModalForSelectableElementList='activityList'"></input-select>
+                                
+                                <input-select v-model="paymentPromiseAssignedTo" labelInputText="Suivi par" @openModal="activeModalForSelectableElementList='userList'"></input-select>
                             </div>
                             <div class="column">
-                                <input-select-basic-1 v-model="repossessionRequestSource" labelInputText="Origine" :option-list="optionLabelListForRepossSource"></input-select-basic-1> 
+                                <input-date v-model="paymentPromiseDate" labelInputText="Date promesse"></input-date> 
 
-                                <input-text v-model="repossessionRequestMotivation" labelInputText="Motif"></input-text>
 
-                                <input-select-basic-1 v-model="repossessionRequestAcceptanceStatus" labelInputText="Statut Acceptation" :option-list="optionLabelListForRepossStatus"></input-select-basic-1> 
+                                <input-number v-model="paymentPromisePromisedAmount" labelInputText="Montant promis"></input-number> 
 
-                                <input-select-basic-1 v-model="repossessionRequestType" labelInputText="Type" :option-list="optionLabelListForRepossType"></input-select-basic-1 > 
+                                <input-number v-model="paymentPromiseHonoredAmount" labelInputText="Montant honoré"></input-number> 
 
-                                <input-select-basic-1 v-model="repossessionRequestItemStatus" labelInputText="Statut Article" :option-list="optionLabelListForRepossItemStatus"></input-select-basic-1> 
+                            
+                                <input-select-basic-1 v-model="paymentPromiseActivityType" labelInputText="Type d'activité de rappel" :option-list="optionLabelListForActivityType"></input-select-basic-1> 
+                                
+                                <input-date v-model="paymentPromiseRemindingDate" labelInputText="Date rappel"></input-date> 
+                                
+                                <input-date v-model="paymentPromiseRemindingDueDate" labelInputText="Echéance rappel"></input-date> 
+                                
+                                <input-select-basic-1 v-model="paymentPromiseStatus" labelInputText="Statut" :option-list="optionLabelListForPromiseStatus"></input-select-basic-1> 
+
                             </div>
                         </div>                    
                     </div>
@@ -114,21 +125,27 @@
         </modal-for-selectable-customer-list>
 
 
-        <modal-for-selectable-invoice-list 
-            v-if="activeModalForSelectableElementList=='invoiceList'" 
-            :isActive="activeModalForSelectableElementList=='invoiceList'" 
-            :customerNo="repossessionRequestCustomerNo"
+        <modal-for-selectable-contact-list 
+            v-if="activeModalForSelectableElementList=='contactList'" 
+            :isActive="activeModalForSelectableElementList=='contactList'" 
+            :customerNo="paymentPromiseCustomerNo"
             @closeModal="activeModalForSelectableElementList=''" 
-            @onGettingLineFromSelectableInvoiceListModal="(elt)=>fillInvoiceInfoField(elt)">
-        </modal-for-selectable-invoice-list>
+            @onGettingLineFromSelectableInvoiceListModal="(elt)=>fillContactInfoField(elt)">
+        </modal-for-selectable-contact-list>
 
-        <modal-for-selectable-invoice-line 
-            v-if="activeModalForSelectableElementList=='itemList'" 
-            :isActive="activeModalForSelectableElementList=='itemList'"
-            :documentNo="repossessionRequestDocumentNo" 
+        <modal-for-selectable-activity-list 
+            v-if="activeModalForSelectableElementList=='activityList'" 
+            :isActive="activeModalForSelectableElementList=='activityList'"
             @closeModal="activeModalForSelectableElementList=''"
-            @onGettingLineFromSelectableInvoiceLineModal="(elt)=>fillItemInfoField(elt)">
-        </modal-for-selectable-invoice-line>
+            @onGettingLineFromSelectableActivityListModal="(elt)=>fillActivityInfoField(elt)">
+        </modal-for-selectable-activity-list>
+
+        <modal-for-selectable-user-list 
+            v-if="activeModalForSelectableElementList=='userList'" 
+            :isActive="activeModalForSelectableElementList=='userList'"
+            @closeModal="activeModalForSelectableElementList=''"
+            @onGettingLineFromSelectableUserListModal="(elt)=>fillExternalUserInfoField(elt)">
+        </modal-for-selectable-user-list>
 
 
 
@@ -141,10 +158,13 @@ import CustomerInfo from './CustomerInfo.vue'
 import RRCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import inputSelect from './input/input-select.vue'
+import inputDate from './input/input-date.vue'
+import inputNumber from './input/input-number.vue'
 import inputSelectBasic1 from './input/input-select-basic1.vue'
 import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
-import ModalForSelectableInvoiceList from './ModalForSelectableInvoiceList.vue'
-import ModalForSelectableInvoiceLine from './ModalForSelectableInvoiceLine.vue'
+import ModalForSelectableContactList from './ModalForSelectableContactList.vue'
+import ModalForSelectableActivityList from './ModalForSelectableActivityList.vue'
+import ModalForSelectableUserList from './ModalForSelectableExternalUserList.vue'
 import { onMounted, ref,  } from 'vue'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
@@ -161,10 +181,13 @@ export default {
         CustomerInfo,
         inputText,
         inputSelect,
+        inputDate,
+        inputNumber,
         inputSelectBasic1,
         ModalForSelectableCustomerList,
-        ModalForSelectableInvoiceList,
-        ModalForSelectableInvoiceLine
+        ModalForSelectableContactList,
+        ModalForSelectableActivityList,
+        ModalForSelectableUserList
     },
     data(){
         return{
@@ -174,7 +197,7 @@ export default {
             height:'700px',
 
             //taille (largeur) initiale du composant custumerInfo
-            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.newrepossRightInfoMaxWidth,
+            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.newquoteRightInfoMaxWidth,
 
             //indique si les onglets de la page sont réduits ou pas
             onglet1_expanded:true,
@@ -189,6 +212,8 @@ export default {
  /////////////DATAS//////////////////////////   
             
             const router = useRouter()
+            
+            const currentDate = new Date(new Date()).toISOString().split('T')[0]
 
             //nom de l'hote dans l'url 
             const hostname = window.location.hostname;
@@ -203,42 +228,29 @@ export default {
             //variable de success serveur
             let success_message=ref('')
 
-            const optionLabelListForRepossSource = ref([])
-            const optionLabelListForRepossStatus = ref([])
-            const optionLabelListForRepossType = ref([])
-            const optionLabelListForRepossItemStatus = ref([])
+            const optionLabelListForActivityType = ref([])
+            const optionLabelListForPromiseStatus = ref([])
 
             function getOptionLabelList(field){
                 axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
                 .then(result => {
-                    if (field=='[Reposs Source]')
-                        optionLabelListForRepossSource.value=result.data.recordset
-                    if (field=='[Reposs Status]')
-                        optionLabelListForRepossStatus.value=result.data.recordset
-                    if (field=='[Reposs Type]')
-                        optionLabelListForRepossType.value=result.data.recordset
-                    if (field=='[Reposs Item Status]')
-                        optionLabelListForRepossItemStatus.value=result.data.recordset
-
-                        console.log(result.data.recordset)
-
+                    if (field=='[Activity Type]')
+                        optionLabelListForActivityType.value=result.data.recordset
+                    if (field=='[Promise Status]')
+                        optionLabelListForPromiseStatus.value=result.data.recordset
                 }).catch(err=>console.log(err))
             }
 
             onMounted(() =>{
                 if(useWebUserInfoStore().defaultLanguage){
-                    getOptionLabelList('[Reposs Source]')
-                    getOptionLabelList('[Reposs Status]')
-                    getOptionLabelList('[Reposs Type]')
-                    getOptionLabelList('[Reposs Item Status]')
+                    getOptionLabelList('[Activity Type]')
+                    getOptionLabelList('[Promise Status]')
                 }else{
                     axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
                     .then(res=>{
                         useWebUserInfoStore().fillWebUserInfo(res.data.recordset[0])
-                        getOptionLabelList('[Reposs Source]')
-                        getOptionLabelList('[Reposs Status]')
-                        getOptionLabelList('[Reposs Type]')
-                        getOptionLabelList('[Reposs Item Status]')
+                        getOptionLabelList('[Activity Type]')
+                        getOptionLabelList('[Promise Status]')
                     })
                     .catch(err=>console.log(err))
                 }
@@ -246,17 +258,24 @@ export default {
 
             })
 
+            
+            const paymentPromiseCardHeaderInfo = {
+                paymentPromiseSubject : ref(''),
+                paymentPromiseCustomerNo : ref(''),
+                paymentPromiseContactNo : ref(''),
+                paymentPromiseDescription : ref(''),
+                paymentPromiseOriginatedActivity : ref(''),
+                paymentPromiseAssignedTo : ref(''),
+                paymentPromisePromisedAmount:ref(0),
+                paymentPromiseHonoredAmount:ref(0),
+                paymentPromiseActivityType:ref(0),
+                paymentPromiseStatus:ref(0)
+            }
 
-            const repossessionRequestCardHeaderInfo = {
-                repossessionRequestCustomerNo : ref(''),
-                repossessionRequestDocumentNo : ref(''),
-                repossessionRequestItemNo : ref(''),
-                repossessionRequestSerialNo : ref(''),
-                repossessionRequestSource : ref(0),
-                repossessionRequestMotivation : ref(''),
-                repossessionRequestAcceptanceStatus : ref(0),
-                repossessionRequestType : ref(0),
-                repossessionRequestItemStatus : ref(0),
+            const dateInfo= {
+                paymentPromiseDate: ref(currentDate),
+                paymentPromiseRemindingDate: ref(currentDate),
+                paymentPromiseRemindingDueDate: ref(currentDate),
             }
 
 
@@ -267,15 +286,22 @@ export default {
  /////////////FUNCTIONS//////////////////////////      
 
             function fillCustomerInfoField(customer){
-                repossessionRequestCardHeaderInfo.repossessionRequestCustomerNo.value=customer['No_']
+                
+                paymentPromiseCardHeaderInfo.paymentPromiseCustomerNo.value=customer['No_']
+                paymentPromiseCardHeaderInfo.paymentPromiseContactNo.value=customer['Primary Contact No_']
             }
 
-            function fillItemInfoField(item){
-                repossessionRequestCardHeaderInfo.repossessionRequestItemNo.value=item['Item No_']
+            function fillContactInfoField(contact){
+                paymentPromiseCardHeaderInfo.paymentPromiseContactNo.value=contact['No_']
             }
 
-            function fillInvoiceInfoField(invoice){
-                repossessionRequestCardHeaderInfo.repossessionRequestDocumentNo.value=invoice['Document No_']
+
+            function fillActivityInfoField(activity){
+                paymentPromiseCardHeaderInfo.paymentPromiseOriginatedActivity.value=activity['No_']
+            }
+
+            function fillExternalUserInfoField(user){
+                paymentPromiseCardHeaderInfo.paymentPromiseAssignedTo.value=user['Code']
             }
 
             function displayErrorMessage(errorObject){
@@ -304,13 +330,13 @@ export default {
                 }
             }
 
-            function createRepossessionRequest(rrData){
+            function createpaymentPromise(rrData){
                 axios.post(`http://${hostname}:3000/app/getBCWSResponse?company=${useWebUserInfoStore().activeCompanyId}`,rrData)
                 .then(res => {
                     submitting_message.value=''
                     success_message.value='Enregistrement réussi, vous serez redirigé dans un instant'
                     error_message.value=''
-                    setTimeout(()=> router.push(`/repossessionRequestCard/${res.data.documentNo}`),5000)
+                    setTimeout(()=> router.push(`/paymentPromiseCard/${res.data.documentNo}`),5000)
                 })
                 .catch(err => {
                     displayErrorMessage(err)
@@ -329,58 +355,63 @@ export default {
             function submitForm(){
                 submitting_message.value='Enregistrement en cours'
                 const JSData = {
-                    Parameter:'repossessionRequests_insert',
+                    Parameter:'paymentPromises_insert',
                     webUserName:useWebUserInfoStore().name,
                     'No_':'',
-                    'Customer No_': repossessionRequestCardHeaderInfo.repossessionRequestCustomerNo.value,
-                    'Document No_': repossessionRequestCardHeaderInfo.repossessionRequestDocumentNo.value,
-                    'Item No_':repossessionRequestCardHeaderInfo.repossessionRequestItemNo.value,
-                    'Serial No_':repossessionRequestCardHeaderInfo.repossessionRequestSerialNo.value,
+                    'Subject':paymentPromiseCardHeaderInfo.paymentPromiseSubject.value,
+                    'Customer No_': paymentPromiseCardHeaderInfo.paymentPromiseCustomerNo.value,
+                    'Contact No_': paymentPromiseCardHeaderInfo.paymentPromiseContactNo.value,
+                    'Description':paymentPromiseCardHeaderInfo.paymentPromiseDescription.value,
                     'Created on':new Date().toISOString,
                     'Created by':useWebUserInfoStore().name,
-                    'Reposs Source':repossessionRequestCardHeaderInfo.repossessionRequestSource.value,
-                    'Motivation':repossessionRequestCardHeaderInfo.repossessionRequestMotivation.value,
-                    'Reposs Status':repossessionRequestCardHeaderInfo.repossessionRequestAcceptanceStatus.value,
-                    'Reposs Type':repossessionRequestCardHeaderInfo.repossessionRequestType.value, 
-                    'Reposs Item Status':repossessionRequestCardHeaderInfo.repossessionRequestItemStatus.value
+                    'Promise Date':dateInfo.paymentPromiseDate.value,
+                    'Assigned to':paymentPromiseCardHeaderInfo.paymentPromiseAssignedTo.value,
+                    'Promised amount':paymentPromiseCardHeaderInfo.paymentPromisePromisedAmount.value,
+                    'Honored amount':paymentPromiseCardHeaderInfo.paymentPromiseHonoredAmount.value,
+                    'Originated activity':paymentPromiseCardHeaderInfo.paymentPromiseOriginatedActivity.value, 
+                    'Activity Type':paymentPromiseCardHeaderInfo.paymentPromiseActivityType.value,
+                    'Riminding Date':dateInfo.paymentPromiseRemindingDate.value,
+                    'Reminding Due Date':dateInfo.paymentPromiseRemindingDueDate.value,
+                    'Promise Status':paymentPromiseCardHeaderInfo.paymentPromiseStatus.value
                 }
-                createRepossessionRequest(formatToBCJsonData(JSData))
+                createpaymentPromise(formatToBCJsonData(JSData))
             }
 
 
 
         return{
-            ...repossessionRequestCardHeaderInfo,
+            ...paymentPromiseCardHeaderInfo,
             fillCustomerInfoField,
-            fillItemInfoField,
-            fillInvoiceInfoField,
+            fillContactInfoField,
+            fillActivityInfoField,
+            fillExternalUserInfoField,
             submitForm,
             error_message,
             error_message_code,
             success_message,
             submitting_message,
 
+            ...dateInfo,
 
-            optionLabelListForRepossSource,
-            optionLabelListForRepossStatus,
-            optionLabelListForRepossType,
-            optionLabelListForRepossItemStatus
+
+            optionLabelListForActivityType,
+            optionLabelListForPromiseStatus,
         }
     },
     methods:{
         goBackToList(){
             useNavigationTabStore().setActiveGroup('recovery')
-            useNavigationTabStore().setActiveTab('repossessionRequests')
+            useNavigationTabStore().setActiveTab('paymentPromises')
             this.$router.push('/')
         },
         /////////////////////////methode pour masquer ou afficher le composant info à droite
         hideOrShowComponentInfo(){
             if(this.customerInfoCompMaxWidth=='0px') {
-                useNavigationTabStore().setMaxWidth('newrepossRightInfoMaxWidth','800px')
+                useNavigationTabStore().setMaxWidth('newPayPromiseRightInfoMaxWidth','800px')
                 this.customerInfoCompMaxWidth='800px'
             }
             else {
-                useNavigationTabStore().setMaxWidth('newrepossRightInfoMaxWidth','0px')
+                useNavigationTabStore().setMaxWidth('newPayPromiseRightInfoMaxWidth','0px')
                 this.customerInfoCompMaxWidth='0px'
             }
         },

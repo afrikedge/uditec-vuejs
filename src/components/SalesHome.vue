@@ -15,6 +15,7 @@
 
     import prospects from './LeadList.vue'
     import customers from './CustomerList.vue'
+    import contacts from './ContactList.vue'
     import items from './ItemList.vue'
     import dashboard from './SalesDasboard.vue'
     import saleQuotes from './SaleQuoteList.vue'
@@ -41,6 +42,7 @@
             dashboard,
             customers,
             prospects,
+            contacts,
             items,
             saleQuotes,
             saleOrders,

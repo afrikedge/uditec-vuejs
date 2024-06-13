@@ -17,11 +17,11 @@
                 <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
                     <thead class=" my-2">
                         <tr> 
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Client</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N°</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Nom client</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode vente</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type document</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Document</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Client</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date comptabilisation</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date document</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date d'échéance</th>
@@ -38,25 +38,25 @@
                         </tr>   
                     </thead>
                     <tbody>
-                        <tr id="" v-for="receivable of filteredReceivableList" :key="receivable['Customer No_']" class="is-narrow">
-                            <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/ReceivablesCard/${ receivable['Customer No_'] }`">
+                        <tr id="" v-for="receivable of filteredReceivableList" :key="receivable['Document No_']" class="is-narrow">
+                            <td class="has-text-left has-background-light is-narrow"> 
+                                <router-link :to="`/AssignedDebtCard/${ receivable['Document No_'] }`">
                                     <a href="#" class="has-text-orange">
-                                        {{ receivable['Customer No_'] }} 
+                                        {{ receivable['Document No_'] }} 
                                     </a>
                                 </router-link>
                             </td>
                             <td class="has-text-left has-background-light is-narrow"> {{ receivable['Name'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ receivable['Sales Mode'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ receivable['Document Type'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ receivable['Document No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ receivable['Posting Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ receivable['Document Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ receivable['Due Date'] }}</td>                    
+                            <td class="has-text-left has-background-light is-narrow"> {{ receivable['Customer No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDate(receivable['Posting Date']) }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDate(receivable['Document Date']) }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDate(receivable['Due Date']) }}</td>                    
                             <td class="has-text-left has-background-light is-narrow"> {{ receivable['Description'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ receivable['Original Amount'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ receivable['Remaining Amount'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ receivable['Assigned on'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDateHour(receivable['Assigned on']) }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ receivable['Assigned by'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ receivable['Assigned to'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ receivable['Initial Status'] }}</td>
@@ -229,6 +229,16 @@ export default {
                 useNavigationTabStore().setMaxWidth('customerListRightInfoMaxWidth','0px')
                 this.customerInfoCompMaxWidth='0px'
             }
+        },
+        formatDateHour(date){
+            const dateString = new String(date)
+            if (dateString.includes('1753-')||dateString.includes('1900-')) return ''
+            else return new Date(date).toLocaleDateString() + ' à ' +new Date(date).toLocaleTimeString()
+        },
+        formatDate(date){
+            const dateString = new String(date)
+            if (dateString.includes('1753-')||dateString.includes('1900-')) return ''
+            else return new Date(date).toLocaleDateString()
         },
 
     },

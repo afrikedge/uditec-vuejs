@@ -8,7 +8,8 @@
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
         @onInputSearchData="(eltToSearch)=>this.eltToSearch=eltToSearch"
         componentWithCompInfo="customerListRightInfoMaxWidth"
-        routeForNewCard="NewCustomer"
+        routeForNewCard="newPaymentPromise"
+        :newCardBtnDisabled="false"
         ></customer-list-ribbon>
 
 
@@ -38,7 +39,7 @@
                     <tbody>
                         <tr id="" v-for="promise of filteredpromiseList" :key="promise['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/PromiseToPayCard/${ promise['No_'] }`">
+                                <router-link :to="`/PaymentPromiseCard/${ promise['No_'] }`">
                                     <a href="#" class="has-text-orange">
                                         {{ promise['No_'] }} 
                                     </a>
@@ -52,13 +53,13 @@
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Created by'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Promise Date'] }}</td>                    
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Assigned to'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Promised amount']==0 ? '1.000.000.000 Fcfa' : '50 Fcfa'  }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Honored amount']==0 ? '1.000.000.000.000 Fcfa' : '150 Fcfa' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Promised amount']}}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Honored amount']}}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Originated activity'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Reminding Activity']==0 ?  'IA developper' :'Webmaster' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Reminding Activity']}}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Riminding Date'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ promise['Reminding Due Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Status']==0 ? 'Actif' : 'Non actif' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ promise['Status']}}</td>
                         </tr>
                     </tbody>
                 </table>

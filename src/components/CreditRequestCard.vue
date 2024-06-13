@@ -1188,7 +1188,6 @@ export default {
 
         function setReadOnlyModeIsDisabled(){
             readOnlyModeIsDisabled.value=true
-            console.log(readOnlyModeIsDisabled.value)
         }
 
         function setReadWriteModeIsDisabled(){
@@ -1752,7 +1751,6 @@ export default {
         collapse(id){
             
             const myElt=document.getElementById(id);
-            console.log(myElt.style.maxHeight)
             myElt.style.maxHeight="0px"
         },
         selectOption(currentOpt){

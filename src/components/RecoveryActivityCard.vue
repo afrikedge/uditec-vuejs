@@ -59,14 +59,7 @@
                                 <input-text labelInputText="Activité connexe" :valueInputText="recoveryActivityCard['Linked Activity']" :is_disabled="readOnlyMode"></input-text> 
                                 <input-text labelInputText="Statut" :valueInputText="recoveryActivityCard['Status']" :is_disabled="readOnlyMode"></input-text> 
                                 <input-text labelInputText="Observation" :valueInputText="recoveryActivityCard['Comment']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="N° ligne" :valueInputText="recoveryActivityCard['Line No_']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="N° Document" :valueInputText="recoveryActivityCard['Document No_']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Date comptabilisation" :valueInputText="formatDate(recoveryActivityCard['Posting Date'])" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Date document" :valueInputText="formatDate(recoveryActivityCard['Document Date'])" :is_disabled="readOnlyMode"></input-text> 
-                                <input-text labelInputText="Description" :valueInputText="recoveryActivityCard['Description']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Montant initial" :valueInputText="recoveryActivityCard['Original Amount']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Montant ouvert" :valueInputText="recoveryActivityCard['Remaining Amount']" :is_disabled="readOnlyMode" ></input-text>
-                                <input-text labelInputText="Statut échéance" :valueInputText="recoveryActivityCard['Debt Status']" :is_disabled="readOnlyMode" ></input-text>
+                
                             </div>
                         </div>                    
                     </div>
@@ -126,8 +119,9 @@ export default {
     methods:{
 
         goBackToList(){
-            useNavigationTabStore().setActiveTab('customer')
-            this.$router.push('/CustomerList')
+            useNavigationTabStore().setActiveGroup('recovery')
+            useNavigationTabStore().setActiveTab('recoveryActivities')
+            this.$router.push('/')
         },
         /////////////////////////methode pour masquer ou afficher le composant info à droite
      hideOrShowComponentInfo(){
@@ -160,7 +154,7 @@ export default {
         axios.get(`http://${this.hostname}:3000/app/getRACard/${this.recoveryActivityCardId}`)
         .then(result => {
             console.log(result.data)
-            this.recoveryActivityCard = result.data.recordset[0]
+            this.recoveryActivityCard = result.data[0]
         }).catch(err=>console.log(err))
 
     },

@@ -6,8 +6,9 @@
         componentwithPresentationView="customerListPresentation"
         :hasAThirdPresentation="true"
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+        @onInputSearchData="(eltToSearch)=>this.eltToSearch=eltToSearch"
         componentWithCompInfo="customerListRightInfoMaxWidth"
-        routeForNewCard="NewCustomer"
+        :editCardBtnDisabled="false"
         ></customer-list-ribbon>
 
 
@@ -29,7 +30,7 @@
                         </tr>   
                     </thead>
                     <tbody>
-                        <tr id="" v-for="customer of customerList" :key="customer['No_']" class="is-narrow">
+                        <tr id="" v-for="customer of filteredCustomerList" :key="customer['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
                                 <router-link :to="`/CustomerCard/${ customer['No_'] }`">
                                     <a href="#" class="has-text-orange">
@@ -52,7 +53,7 @@
             </div>
             <div class="column" style="overflow-y: scroll;" v-if="presentationView=='mosaique'">
                 <div class="columns is-multiline">
-                    <div :class="{'column':true, 'is-3':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="customer of customerList" :key="customer['No_']">
+                    <div :class="{'column':true, 'is-3':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="customer of filteredCustomerList" :key="customer['No_']">
                         <div class=" columns p-1 card-is-hoverable">
                             <div class="column is-narrow has-background-white">
                                 <figure class="image is-64x64">
@@ -98,7 +99,7 @@
             </div>
             <div class="column" style="overflow-y: scroll;" v-if="presentationView=='mosaique haute'">
                 <div class="columns is-multiline is-gapless">
-                    <div :class="{'column':true, 'is-2':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="customer of customerList" :key="customer['No_']">
+                    <div :class="{'column':true, 'is-2':customerInfoCompMaxWidth=='0px', 'is-one-third':customerInfoCompMaxWidth=='800px'}" v-for="customer of filteredCustomerList" :key="customer['No_']">
                         <div class="has-background-white m-1">
                             <div class="card-is-hoverable box">
                                 <div class="">
@@ -159,7 +160,7 @@
 import CustomerInfo from './CustomerInfo.vue'
 import CustomerListRibbon from './RibbonForLists.vue'
 import axios from 'axios'
-import { ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 
 
@@ -175,20 +176,38 @@ export default {
         }
     },
     setup() {
+
+        const hostname=window.location.hostname
         const customerList = ref([])
+        const eltToSearch = ref('')
+        const filteredCustomerList = computed(()=>
+        customerList.value
+        .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Name']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['City']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Address']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+            )
+        )
+
+        onMounted (() => {
+            axios.get(`http://${hostname}:3000/app/getCustomerList`)
+            .then((result) => {
+                customerList.value = result.data.recordset;
+            })
+            .catch(err=>console.log(err));
+        })
 
         // expose to template and other options API hooks
         return {
-            customerList
+            eltToSearch,
+            customerList,
+            filteredCustomerList
         }
     },
     data(){
         return {
             //taille (largeur) initiale du composant customerInfo
-            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerListRightInfoMaxWidth,
-            
-            //nom de l'hote dans l'url 
-            hostname:window.location.hostname       
+            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.customerListRightInfoMaxWidth, 
         }
     },
     methods:{
@@ -205,15 +224,6 @@ export default {
         },
 
     },
-    
-    mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getCustomerList`)
-        .then((result) => {
-          this.customerList = result.data.recordset;
-        })
-        .catch(err=>console.log(err));
-      
-    }
 }
 
 </script>

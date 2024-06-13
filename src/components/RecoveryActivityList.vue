@@ -32,19 +32,12 @@
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Activité connexe</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Observation</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° ligne</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° Document</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date comptabilisation</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date document</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant initial</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Montant ouvert</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut échéance</th>
+
                         </tr>   
                     </thead>
                     <tbody>
                         <tr id="" v-for="recoveryActivity of filteredrecoveryActivityList" :key="recoveryActivity['No_']" class="is-narrow">
-                            <td class="has-text-left has-background-light"> 
+                            <td class="has-text-left has-background-light is-narrow"> 
                                 <router-link :to="`/recoveryActivityCard/${ recoveryActivity['No_'] }`">
                                     <a href="#" class="has-text-orange">
                                         {{ recoveryActivity['No_'] }} 
@@ -53,27 +46,19 @@
                             </td>
                             <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Customer No_'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Name'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Activity Type']==0 ? 'webmaster' : 'AI developper' }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Activity Type'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Subject'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Description'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Created on'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDateHour(recoveryActivity['Created on']) }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Created by'] }}</td>                    
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Scheduled Start Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Scheduled End Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Actual Start Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Actual End Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Reminder Date'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDateHour(recoveryActivity['Scheduled Start Date']) }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDateHour(recoveryActivity['Scheduled End Date']) }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{formatDateHour( recoveryActivity['Actual Start Date']) }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDateHour(recoveryActivity['Actual End Date']) }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDateHour(recoveryActivity['Reminder Date']) }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Linked Activity'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Status']==0 ? 'Actif' : 'Non actif' }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Comment'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Line No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Document No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Posting Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Document Date'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Description'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Original Amount'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Remaining Amount'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ recoveryActivity['Debt Status'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -240,6 +225,16 @@ export default {
                 useNavigationTabStore().setMaxWidth('customerListRightInfoMaxWidth','0px')
                 this.customerInfoCompMaxWidth='0px'
             }
+        },
+        formatDateHour(date){
+            const dateString = new String(date)
+            if (dateString.includes('1753-')||dateString.includes('1900-')) return ''
+            else return new Date(date).toLocaleDateString() + ' à ' +new Date(date).toLocaleTimeString()
+        },
+        formatDate(date){
+            const dateString = new String(date)
+            if (dateString.includes('1753-')||dateString.includes('1900-')) return ''
+            else return new Date(date).toLocaleDateString()
         },
 
     },

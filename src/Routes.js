@@ -74,7 +74,6 @@ import RecoveryActivityList from "./components/RecoveryActivityList.vue"
 
 //11-----Formulaire création recouvrement
 import NewRepossessionRequest from "./components/NewRepossessionRequest.vue"
-import NewPaymentPromise from "./components/NewPaymentPromise.vue"
 
 const routes = [
   ///////////////////1
@@ -88,8 +87,8 @@ const routes = [
   {path:'/ItemCard/:id',component:ItemCard,name:'ItemCardPage'},
   {path:'/LeadList',component:LeadList,name:'LeadListPage'},
   {path:'/LeadCard/:id',component:LeadCard,name:'LeadCardPage'},
-  {path:'/ContactList',component:ContactList,name:'ContactListPage'},
-  {path:'/ContactCard/:id',component:ContactCard,name:'ContactCardPage'},
+  {path:'/ContactList/:id',component:ContactList,name:'ContactListPage'},
+  {path:'/ContactCard/:id1/:id2',component:ContactCard,name:'ContactCardPage'},
   {path:'/ShipToAddressList/:id',component:ShipToAddressList,name:'ShipToAddressListPage'},
   {path:'/ShipToAddressCard/:id1/:id2',component:ShipToAddressCard,name:'ShipToAddressCardPage'},
 
@@ -144,7 +143,6 @@ const routes = [
 
 ///////////////////11
   {path:'/NewRepossessionRequest',component:NewRepossessionRequest,name:'NewRepossessionRequestPage'},
-  {path:'/NewPaymentPromise',component:NewPaymentPromise ,name:'NewPaymentPromisePage'},
 
 
 

@@ -8,8 +8,9 @@
         @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
         componentWithCompInfo="leadListRightInfoMaxWidth"
         routeForNewCard="NewLead"
-        :newCardBtnDisabled="false"
-        :editCardBtnDisabled="false"
+        :newCardBtnDisabled="true"
+        :editCardBtnDisabled="true"
+        :readOnlyModeDisabled="true"
         ></prospect-list-ribbon>
 
 

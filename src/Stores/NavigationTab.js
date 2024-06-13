@@ -15,17 +15,14 @@ export const useNavigationTabStore = defineStore('navigationTab', {
             creditRequestCardRightInfoMaxWidth:'800px',
             leadListRightInfoMaxWidth:'800px',
             leadCardRightInfoMaxWidth:'800px',
-            newLeadRightInfoMaxWidth:'800px',
             newquoteRightInfoMaxWidth:'800px',
             newOrderRightInfoMaxWidth:'800px',
             newrepossRightInfoMaxWidth:'800px',
-            newPayPromiseRightInfoMaxWidth:'800px',
 
             quoteListRightInfoMaxWidth:'800px',
             quoteCardRightInfoMaxWidth:'800px',
             orderListRightInfoMaxWidth:'800px',
             orderCardRightInfoMaxWidth:'800px',
-            payPromiseRightInfoMaxWidth:'800px',
         },
         presentationForPageList:{
             customerListPresentation:'list',

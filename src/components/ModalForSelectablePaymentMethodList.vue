@@ -1,7 +1,7 @@
 <template>
     <div :class="{'modal':true , 'is-active': true }" v-if="isActive">
         <div class="modal-background has-background-dark" style="opacity:0.2" @click.prevent="$emit('closeModal')"></div>
-        <div class="modal-content box shadow has-background-light" style=" background-color: rgba(255,255,255,1);border: none;">
+        <div class="modal-content box w-75 h-50 shadow has-background-light" style=" background-color: rgba(255,255,255,1);border: none;">
 
             <div class="has-text-left mb-5 columns">
                 <div>

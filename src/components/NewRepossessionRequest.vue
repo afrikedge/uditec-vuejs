@@ -113,22 +113,19 @@
             @onGettingLineFromSelectableCustomerListModal="(elt)=>fillCustomerInfoField(elt)">
         </modal-for-selectable-customer-list>
 
+        <modal-for-selectable-item-list 
+            v-if="activeModalForSelectableElementList=='itemList'" 
+            :isActive="activeModalForSelectableElementList=='itemList'" 
+            @closeModal="activeModalForSelectableElementList=''"
+            @onGettingLineFromSelectableItemListModal="(elt)=>fillItemInfoField(elt)">
+        </modal-for-selectable-item-list>
 
         <modal-for-selectable-invoice-list 
             v-if="activeModalForSelectableElementList=='invoiceList'" 
             :isActive="activeModalForSelectableElementList=='invoiceList'" 
-            :customerNo="repossessionRequestCustomerNo"
             @closeModal="activeModalForSelectableElementList=''" 
-            @onGettingLineFromSelectableInvoiceListModal="(elt)=>fillInvoiceInfoField(elt)">
+            @onGettingLineFromSelectableLocationListModal="(elt)=>fillIDocInfoField(elt)">
         </modal-for-selectable-invoice-list>
-
-        <modal-for-selectable-invoice-line 
-            v-if="activeModalForSelectableElementList=='itemList'" 
-            :isActive="activeModalForSelectableElementList=='itemList'"
-            :documentNo="repossessionRequestDocumentNo" 
-            @closeModal="activeModalForSelectableElementList=''"
-            @onGettingLineFromSelectableInvoiceLineModal="(elt)=>fillItemInfoField(elt)">
-        </modal-for-selectable-invoice-line>
 
 
 
@@ -143,9 +140,8 @@ import inputText from './input/input-text.vue'
 import inputSelect from './input/input-select.vue'
 import inputSelectBasic1 from './input/input-select-basic1.vue'
 import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
-import ModalForSelectableInvoiceList from './ModalForSelectableInvoiceList.vue'
-import ModalForSelectableInvoiceLine from './ModalForSelectableInvoiceLine.vue'
-import { onMounted, ref,  } from 'vue'
+import ModalForSelectableItemList from './ModalForSelectableItemList.vue'
+import { onMounted, ref } from 'vue'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import  axios  from 'axios'
@@ -163,8 +159,7 @@ export default {
         inputSelect,
         inputSelectBasic1,
         ModalForSelectableCustomerList,
-        ModalForSelectableInvoiceList,
-        ModalForSelectableInvoiceLine
+        ModalForSelectableItemList
     },
     data(){
         return{
@@ -174,7 +169,7 @@ export default {
             height:'700px',
 
             //taille (largeur) initiale du composant custumerInfo
-            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.newrepossRightInfoMaxWidth,
+            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.newquoteRightInfoMaxWidth,
 
             //indique si les onglets de la page sont réduits ou pas
             onglet1_expanded:true,
@@ -271,11 +266,11 @@ export default {
             }
 
             function fillItemInfoField(item){
-                repossessionRequestCardHeaderInfo.repossessionRequestItemNo.value=item['Item No_']
+                repossessionRequestCardHeaderInfo.repossessionRequestItemNo.value=item['No_']
             }
 
-            function fillInvoiceInfoField(invoice){
-                repossessionRequestCardHeaderInfo.repossessionRequestDocumentNo.value=invoice['Document No_']
+            function fillDocInfoField(doc){
+                repossessionRequestCardHeaderInfo.repossessionRequestDocumentNo.value=doc['No_']
             }
 
             function displayErrorMessage(errorObject){
@@ -342,7 +337,7 @@ export default {
                     'Motivation':repossessionRequestCardHeaderInfo.repossessionRequestMotivation.value,
                     'Reposs Status':repossessionRequestCardHeaderInfo.repossessionRequestAcceptanceStatus.value,
                     'Reposs Type':repossessionRequestCardHeaderInfo.repossessionRequestType.value, 
-                    'Reposs Item Status':repossessionRequestCardHeaderInfo.repossessionRequestItemStatus.value
+                    'Reposs Item Status':repossessionRequestCardHeaderInfo.repossessionRequestItemNo.value,
                 }
                 createRepossessionRequest(formatToBCJsonData(JSData))
             }
@@ -353,7 +348,7 @@ export default {
             ...repossessionRequestCardHeaderInfo,
             fillCustomerInfoField,
             fillItemInfoField,
-            fillInvoiceInfoField,
+            fillDocInfoField,
             submitForm,
             error_message,
             error_message_code,

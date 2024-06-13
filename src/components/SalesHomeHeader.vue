@@ -60,19 +60,19 @@
         <div class="has-text-left my-2">
             <a href="#"  @click="store.setActiveGroup('sales')" class=" m-2" :class="{'has-text-orange':store.activeGroup=='sales'}">
                 <span class="subtitle is-6 mr-1">Ventes</span>
-                <span class="icon is-small" :class="{'has-text-grey-lighter':store.activeGroup!=='sales'}"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
+                <span class="icon is-small"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
             </a>
             <a href="#" @click="store.setActiveGroup('inventory')" class="m-2" :class="{'has-text-orange':store.activeGroup=='inventory'}">
                 <span class="subtitle is-6 mr-1">Stock</span>
-                <span class="icon is-small" :class="{'has-text-grey-lighter':store.activeGroup!=='inventory'}"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
+                <span class="icon is-small"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
             </a>
             <a href="#" @click="store.setActiveGroup('recovery')" class="m-2" :class="{'has-text-orange':store.activeGroup=='recovery'}">
                 <span class="subtitle is-6 mr-1">Recouvrement</span>
-                <span class="icon is-small" :class="{'has-text-grey-lighter':store.activeGroup!=='recovery'}"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
+                <span class="icon is-small"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
             </a>
             <a href="#" @click="store.setActiveGroup('others')" class="m-2" :class="{'has-text-orange':store.activeGroup=='others'}"> 
                 <span class="subtitle is-6 mr-1">Autre</span>
-                <span class="icon is-small" :class="{'has-text-grey-lighter':store.activeGroup!=='others'}"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
+                <span class="icon is-small"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
             </a>
         </div>
 

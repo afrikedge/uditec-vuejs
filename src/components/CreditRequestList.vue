@@ -35,7 +35,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr id="" v-for="creditRequest of filteredCRList" :key="creditRequest['No_']">
+                        <tr id="" v-for="creditRequest of creditRequestList" :key="creditRequest['No_']">
                             <td class="has-text-left has-background-light is-narrow"> 
                                 <router-link :to="`/creditRequestCard/${creditRequest['No_']}`">
                                     <a href="#" class="has-text-orange">
@@ -64,7 +64,7 @@
                     <span class="subtitle is-7">{{ error_fetching_crl_list }}</span>
                 </div>
                 <div class="columns is-multiline">
-                    <div :class="{'column':true, 'is-3':creditRequestInfoCompMaxWidth=='0px', 'is-one-third':creditRequestInfoCompMaxWidth=='800px'}" v-for="creditRequest of  filteredCRList" :key="creditRequest['No_']">
+                    <div :class="{'column':true, 'is-3':creditRequestInfoCompMaxWidth=='0px', 'is-one-third':creditRequestInfoCompMaxWidth=='800px'}" v-for="creditRequest of  creditRequestList" :key="creditRequest['No_']">
                         <div class=" columns p-1  card-is-hoverable">
                             <div class="column has-background-white card-is-hoverable">
                                 <p class="has-text-left ">
@@ -132,7 +132,7 @@ export default {
         const error_fetching_crl_list = ref('')
         const creditRequestList = ref([])
         const eltToSearch = ref('')
-        const filteredCRList = computed(()=>
+        const filteredSQList = computed(()=>
         creditRequestList.value
         .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
                 || new String(row['Sell-to Customer Name']).toLowerCase().includes(eltToSearch.value.toLowerCase())
@@ -185,7 +185,7 @@ export default {
         return {
             error_fetching_crl_list,
             eltToSearch,
-            filteredCRList,
+            filteredSQList,
             creditRequestList,
             getCreditRequestList,
             formatDate

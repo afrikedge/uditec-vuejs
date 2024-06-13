@@ -7,7 +7,7 @@
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
                 <Customer-Card-Header   :soNo="repossessionCardHeader['No_']" :soDesc="repossessionCardHeader['Motivation']" pageTitle="Fiche demande repossession" 
-                @onGoingBackToList='goBackToList'/>
+                />
             </div>
             
 <!---------Composant rubban fiche client----------------------->      
@@ -93,19 +93,19 @@
                                 <input-text labelInputText="Créé par" :valueInputText="repossessionCardHeader['Created by']" :is_disabled="true"></input-text> 
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Origine" :valueInputText="repossSourceLabel" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text> 
-                                <input-select-basic-1 labelInputText="Origine" v-model="repossessionCardHeader['Reposs Source']" :option-list="optionLabelListForRepossSource" v-else></input-select-basic-1> 
+                                <input-text labelInputText="Origine" :valueInputText="tttt.Description" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text> 
+                                <input-select-basic-1 labelInputText="Origine" v-model="repossessionCardHeader['Source']" :option-list="optionLabelListForRepossSource" v-else></input-select-basic-1> 
                                 
                                 <input-text labelInputText="Motif" v-model="repossessionCardHeader['Motivation']" :valueInputText="repossessionCardHeader['Motivation']"  :is_disabled="!readOnlyModeIsDisabled"></input-text>
                                 
-                                <input-text labelInputText="Statut Acceptation" :valueInputText="repossStatusLabel" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Statut Acceptation" v-model="repossessionCardHeader['Reposs Status']" :option-list="optionLabelListForRepossStatus" v-else></input-select-basic-1> 
+                                <input-text labelInputText="Statut Acceptation" :valueInputText="repossessionCardHeader['Acceptance Status']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Statut Acceptation" v-model="repossessionCardHeader['Acceptance Status']" :option-list="optionLabelListForRepossStatus" v-else></input-select-basic-1> 
 
-                                <input-text labelInputText="Type" :valueInputText="repossTypeLabel" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Type" v-model="repossessionCardHeader['Reposs Type']" :option-list="optionLabelListForRepossType" v-else></input-select-basic-1> 
+                                <input-text labelInputText="Type" :valueInputText="repossessionCardHeader['Type']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Type" v-model="repossessionCardHeader['Type']" :option-list="optionLabelListForRepossType" v-else></input-select-basic-1> 
 
-                                <input-text labelInputText="Statut Article" :valueInputText="repossItemStatusLabel" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
-                                <input-select-basic-1 labelInputText="Statut Article" v-model="repossessionCardHeader['Reposs Item Status']" :option-list="optionLabelListForRepossItemStatus" v-else></input-select-basic-1> 
+                                <input-text labelInputText="Statut Article" :valueInputText="repossessionCardHeader['Item Status']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Statut Article" v-model="repossessionCardHeader['Item Status']" :option-list="optionLabelListForRepossItemStatus" v-else></input-select-basic-1> 
 
                             </div>
                         </div>                    
@@ -129,7 +129,7 @@ import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import inputSelectBasic1 from './input/input-select-basic1.vue'
 import axios from 'axios'
-import { onMounted,ref, watch} from 'vue'
+import { onMounted,ref,computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
@@ -161,38 +161,27 @@ export default {
         const optionLabelListForRepossType = ref([])
         const optionLabelListForRepossItemStatus = ref([])
 
-        const currentOptionLabel = {
-            repossSourceLabel:ref(''),
-            repossStatusLabel:ref(''),
-            repossTypeLabel:ref(''),
-            repossItemStatusLabel:ref('')
-        }
+        const getLabelForRepossSource = computed(()=> {
+            return optionLabelListForRepossSource.value.filter(row => row['Value']== repossessionCardHeader.value['Source'])
+        } )
 
-        function getOptionLabel(list,value,attribute){
-            list.forEach(element => {
-                if(element['Value']==value)
-                currentOptionLabel[attribute].value = element['Description']
-            });
-        }
+        const tttt = computed(()=>{
+            return getLabelForRepossSource.value
+        })
 
         function getOptionLabelList(field){
             axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
             .then(result => {
                 if (field=='[Reposs Source]')
                     optionLabelListForRepossSource.value=result.data.recordset
-                    getOptionLabel(optionLabelListForRepossSource.value,repossessionCardHeader.value['Reposs Source'],'repossSourceLabel')
-                    
                 if (field=='[Reposs Status]')
                     optionLabelListForRepossStatus.value=result.data.recordset
-                    getOptionLabel(optionLabelListForRepossStatus.value,repossessionCardHeader.value['Reposs Status'],'repossStatusLabel')
-
                 if (field=='[Reposs Type]')
                     optionLabelListForRepossType.value=result.data.recordset
-                    getOptionLabel(optionLabelListForRepossType.value,repossessionCardHeader.value['Reposs Type'],'repossTypeLabel')
-
                 if (field=='[Reposs Item Status]')
                     optionLabelListForRepossItemStatus.value=result.data.recordset
-                    getOptionLabel(optionLabelListForRepossItemStatus.value,repossessionCardHeader.value['Reposs Item Status'],'repossItemStatusLabel')
+    
+                    console.log(result.data.recordset)
     
             }).catch(err=>console.log(err))
         }
@@ -207,17 +196,8 @@ export default {
             .then(result => {
                 console.log(result)
                  repossessionCardHeader.value = result.data
-                 getOptionLabelList('[Reposs Source]')
-                getOptionLabelList('[Reposs Status]')
-                getOptionLabelList('[Reposs Type]')
-                getOptionLabelList('[Reposs Item Status]')
             }).catch(err=>console.log(err))
         }
-
-        watch(success_message, () => {
-            readOnlyModeIsDisabled.value=false
-            getRRCardInfo()
-        })
 
         function setReadOnlyModeIsDisabled(){
             readOnlyModeIsDisabled.value=true
@@ -270,7 +250,6 @@ export default {
         function formatToBCJsonData(data){
             const JSONFormatedData = JSON.stringify(data).split('"').join('\\"')
             const JSONDataToSend = '{'+ '"inputJson":'+'"'+JSONFormatedData+'"' +'}'
-            console.log(JSONDataToSend)
             return {data:JSONDataToSend}
         }
 
@@ -298,7 +277,10 @@ export default {
         onMounted(() => {
             if (webUserInfo.name.value){
                 getRRCardInfo()
-                
+                getOptionLabelList('[Reposs Source]')
+                getOptionLabelList('[Reposs Status]')
+                getOptionLabelList('[Reposs Type]')
+                getOptionLabelList('[Reposs Item Status]')
             }else{
                 axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
                 .then(res=>{
@@ -306,7 +288,10 @@ export default {
                     webUserInfo.name.value=useWebUserInfoStore().name
                     webUserInfo.company.value=useWebUserInfoStore().activeCompanyId
                     getRRCardInfo()
-                   
+                    getOptionLabelList('[Reposs Source]')
+                    getOptionLabelList('[Reposs Status]')
+                    getOptionLabelList('[Reposs Type]')
+                    getOptionLabelList('[Reposs Item Status]')
                 })
                 .catch(err=>console.log(err))
             }
@@ -330,7 +315,7 @@ export default {
             optionLabelListForRepossStatus,
             optionLabelListForRepossType,
             optionLabelListForRepossItemStatus,
-            ...currentOptionLabel
+            tttt
         }
     },
     data(){

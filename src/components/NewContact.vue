@@ -4,8 +4,7 @@
         <div id="scrollBlock" class="modal-card box shadow is-rounded h-100" style="width: 90%">
 <!---------Composant entête fiche----------------------->
             <div id="card-header-comp">
-                <contact-card-Header :soDesc="contactName" pageTitle="Fiche contact" 
-                @onGoingBackToList="goBackToList" />
+                <contact-card-Header :soDesc="contactName" pageTitle="Fiche contact" @onGoingBackToList="goBackToList" />
             </div>
   
 <!---------Composant rubban fiche client----------------------->
@@ -82,7 +81,7 @@
                                 
                                 <input-text labelInputText="Nom" v-model="contactSurname" ></input-text>
                                 
-                                <input-text labelInputText="Nom Complet" :valueInputText="contactName" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Nom Complet" v-model="contactName"></input-text>
                               
                                 <input-text labelInputText="Adresse : Ligne 1" v-model="contactAddress"></input-text>
                             </div>
@@ -96,8 +95,6 @@
                                 <input-text labelInputText="Téléphone" v-model="contactPhoneNo"></input-text>
                                 
                                 <input-text labelInputText="Téléphone Mobile" v-model="contactMobilePhoneNo"></input-text>
-                                
-                                <input-text labelInputText="E-mail" v-model="contactEmail"></input-text>
                                 
                                 <input-text labelInputText="Fonction" v-model="contactJobTitle"></input-text>
                             </div>
@@ -123,9 +120,8 @@
   import inputText from "./input/input-text.vue";
   import inputSelect from './input/input-select.vue'
   import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
-  import { computed, onBeforeMount, ref } from 'vue'
+  import { ref } from 'vue'
   import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
-  import { useNavigationTabStore } from "@/Stores/NavigationTab";
   import { useRouter } from 'vue-router'
   import  axios  from 'axios'
 
@@ -134,7 +130,7 @@
   
   
   export default {
-    name: "new-contact",
+    name: "contact-card",
     components: {
       ContactCardHeader,
       inputText,
@@ -154,11 +150,6 @@
       }
     },
     methods: {
-        goBackToList(){
-            useNavigationTabStore().setActiveGroup('sales')
-            useNavigationTabStore().setActiveTab('contacts')
-            this.$router.push('/')
-        },
       
       expand(id) {
         const myElt = document.getElementById(id);
@@ -187,18 +178,20 @@
 
         //variable de success serveur
         let success_message=ref('')
-        const contactName = computed(() => {
-            return contactCardInfo.contactFirstName.value + ' ' + contactCardInfo.contactMiddleName.value + ' ' + contactCardInfo.contactSurname.value
-        })
 
+        const webUserInfo = {
+            customerNo:useWebUserInfoStore().defaultCustomerNo,
+            company:useWebUserInfoStore().activeCompanyId,
+            name:useWebUserInfoStore().name
+        }
 
         const contactCardInfo = {
-          contactCustomerNo : ref(useWebUserInfoStore().defaultCustomerNo),
+          contactCustomerNo : ref(webUserInfo.customerNo),
           contactSalutationCode : ref(''),
           contactFirstName : ref(''),
           contactMiddleName : ref(''),
           contactSurname : ref(''),
-          //contactName : ref(''),
+          contactName : ref(''),
           contactAddress : ref(''),
           contactAddress2 : ref(''),
           contactPostCode : ref(''),
@@ -206,49 +199,39 @@
           contactPhoneNo : ref(''),
           contactMobilePhoneNo : ref(''),
           contactJobTitle : ref(''),
-          contactEmail: ref(''),
           }
           
 
           function fillCustomerInfoField(customer){
               contactCardInfo.contactCustomerNo.value=customer['No_']                
           }
-          
-        //fonction pour gérer les erreurs lors de l'appel d'un service de BC
-        function displayErrorMessage(errorObject){
-            if(errorObject.response && errorObject.response.status){
-                switch (errorObject.response.status){
-                    case 401: 
-                        submitting_message.value=''
-                        error_message.value= errorObject.response.data;break;
-                    case 400:
-                        submitting_message.value='' 
-                        error_message.value= errorObject.response.data
-                        error_message_code.value= errorObject.code;break;
-                    case 404:
-                        submitting_message.value=''
-                        error_message.value=errorObject.response.data.error.message
-                        error_message_code.value= errorObject.response.data.error.code;break;
-                    default:
-                        submitting_message.value=''
-                        error_message.value=errorObject.response
-                }
-            }else{
-                error_message.value = errorObject.message
-                error_message_code.value = errorObject.code
-            }
-        }
 
-          //fonction pour formater les données à envoyer aux service de BC
-        function formatToBCJsonData(data){
-            const JSONFormatedData = JSON.stringify(data).split('"').join('\\"')
-            const JSONDataToSend = '{'+ '"inputJson":'+'"'+JSONFormatedData+'"' +'}'
-            console.log(JSONDataToSend)
-            return {data:JSONDataToSend}
-        }
+          function displayErrorMessage(errorObject){
+              if(errorObject.response && errorObject.response.status){
+                  switch (errorObject.response.status){
+                      case 401: 
+                          submitting_message.value=''
+                          error_message.value= errorObject.response.data;break;
+                      case 400:
+                          submitting_message.value='' 
+                          error_message.value= errorObject.response.data
+                          error_message_code.value= errorObject.code;break;
+                      case 404:
+                          submitting_message.value=''
+                          error_message.value=errorObject.response.data.error.message
+                          error_message_code.value= errorObject.response.data.error.code;break;
+                      default:
+                          submitting_message.value=''
+                          error_message.value=errorObject.response
+                  }
+              }else{
+                  error_message.value = errorObject.message
+                  error_message_code.value = errorObject.code
+              }
+          }
 
           function createContact(sqData){
-              axios.post(`http://${hostname}:3000/app/getBCWSResponse?company=${useWebUserInfoStore().activeCompanyId}`,sqData)
+              axios.post(`http://${hostname}:3000/app/getBCWSResponse?company=${webUserInfo.company}`,sqData)
               .then(res => {
                   submitting_message.value=''
                   success_message.value='Enregistrement réussi, vous serez redirigé dans un instant'
@@ -260,44 +243,38 @@
               })
           }
 
+          function formatToBCJsonData(data){
+                
+                const JSONFormatedData = JSON.stringify(data).split('"').join('\\"')
+                const JSONDataToSend = '{'+ '"inputJson":'+'"'+JSONFormatedData+'"' +'}'
+                console.log(JSONDataToSend)
+                return {data:JSONDataToSend}
+            }
+
             function submitForm(){
                 submitting_message.value='Enregistrement en cours'
                 const JSData = {
                     Parameter:'contacts_insert',
-                    webUserName:useWebUserInfoStore().name,
+                    webUserName:webUserInfo.name,
                     ContactNo:'',
-                    'Customer No_' : contactCardInfo.contactCustomerNo.value,
-                    'Salutation Code' : contactCardInfo.contactSalutationCode.value,
-                    'No_' : '',
-                    'First Name' : contactCardInfo.contactFirstName.value,
-                    'Middle Name' : contactCardInfo.contactMiddleName.value,
-                    'Surname' : contactCardInfo.contactSurname.value,
-                    'Name' :contactName.value,
-                    'Image' : '',
-                    'Job Title' : contactCardInfo.contactJobTitle.value,
-                    'Address' : contactCardInfo.contactAddress.value,
-                    'Address 2' : contactCardInfo.contactAddress2.value,
-                    'Post Code' : contactCardInfo.contactPostCode.value,
-                    'City' : contactCardInfo.contactCity.value,
-                    'Phone No_' : contactCardInfo.contactPhoneNo.value,
-                    'Mobile Phone No_' : contactCardInfo.contactMobilePhoneNo.value,
-                    'E-Mail' : contactCardInfo.contactEmail.value,
+                    contactCustomerNo : ref(webUserInfo.customerNo),
+                    contactSalutationCode : contactCardInfo.contactSalutationCode.value,
+                    contactFirstName : contactCardInfo.contactFirstName.value,
+                    contactMiddleName : contactCardInfo.contactMiddleName.value,
+                    contactSurname : contactCardInfo.contactSurname.value,
+                    contactName : contactCardInfo.contactName.value,
+                    contactAddress : contactCardInfo.contactAddress.value,
+                    contactAddress2 : contactCardInfo.contactAddress2.value,
+                    contactPostCode : contactCardInfo.contactPostCode.value,
+                    contactCity : contactCardInfo.contactCity.value,
+                    contactPhoneNo : contactCardInfo.contactPhoneNo.value,
+                    contactMobilePhoneNo : contactCardInfo.contactMobilePhoneNo.value,
+                    contactJobTitle : contactCardInfo.contactJobTitle.value
                 }
                 createContact(formatToBCJsonData(JSData))
             }
 
-        onBeforeMount(() => {
-            if(useWebUserInfoStore().name==''){
-                axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
-                .then(res=>{
-                    useWebUserInfoStore().fillWebUserInfo(res.data.recordset[0])
-                })
-                .catch(err=>console.log(err))
-            }
-        })
-
           return{
-                contactName,
               ...contactCardInfo,
               submitting_message,
               error_message,

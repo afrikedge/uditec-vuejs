@@ -121,9 +121,8 @@ export default {
     methods:{
 
         goBackToList(){
-            useNavigationTabStore().setActiveGroup('recovery')
-            useNavigationTabStore().setActiveTab('assignedDebts')
-            this.$router.push('/')
+            useNavigationTabStore().setActiveTab('customer')
+            this.$router.push('/CustomerList')
         },
         /////////////////////////methode pour masquer ou afficher le composant info à droite
      hideOrShowComponentInfo(){
@@ -155,8 +154,7 @@ export default {
     mounted(){
         axios.get(`http://${this.hostname}:3000/app/getADCard/${this.receivableCardId}`)
         .then(result => {
-            console.log(result)
-            this.ReceivedCard = result.data
+            this.ReceivedCard = result.data.recordset[0]
         }).catch(err=>console.log(err))
 
     },

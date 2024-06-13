@@ -12,13 +12,13 @@
       <!---------Composant entête fiche----------------------->
       <div id="card-header-comp">
         <contact-card-Header
-          :soNo="contactCardId"
+          :soNo="contactCardId2"
           :soDesc="ContactCardHeader.Name"
           pageTitle="Fiche contact"
         />
       </div>
 
-      <!---------Composant rubban fiche contact----------------------->
+      <!---------Composant rubban fiche client----------------------->
       <contact-card-ribbon
       @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
       componentWithCompInfo="contactCardRightInfoMaxWidth"
@@ -27,7 +27,7 @@
       :readOnlyModeDisabled="true"
       ></contact-card-ribbon>
 
-      <!---------Section formulaire fiche contact----------------------->
+      <!---------Section formulaire fiche client----------------------->
       <div id="content-comp" class="columns mt-2" style="overflow-y: scroll">
         <div class="column" style="overflow-y: scroll">
           <!---------sous-Section ongle 1 formulaire fiche client----------------------->
@@ -152,7 +152,7 @@
           
         </div>
 
-        <!---------composant info contact----------------------->
+        <!---------composant info client----------------------->
         <customer-info class="contact-info"></customer-info>
       </div>
     </div>
@@ -188,7 +188,8 @@ export default {
 
   data() {
     return {
-      contactCardId: this.$route.params.id,
+      contactCardId1: this.$route.params.id1,
+      contactCardId2: this.$route.params.id2,
       contactInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.contactCardRightInfoMaxWidth,
       //indique si les onglets sont réduits ou non
       onglet1_expanded: true,
@@ -231,9 +232,10 @@ export default {
   },
   mounted() {
     axios
-      .get(`http://${this.hostname}:3000/app/getContactCard/${this.contactCardId}`)
+      .get(
+        `http://${this.hostname}:3000/app/getContactCard/${this.contactCardId1}/${this.contactCardId2}`
+      )
       .then((result) => {
-        console.log(result)
         this.ContactCardHeader = result.data.recordset[0];
       })
       .catch((err) => console.error(err));

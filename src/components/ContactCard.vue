@@ -54,19 +54,19 @@
                               
                               <input-text labelInputText="Prénom" :valueInputText="ContactCard['First Name']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                               <input-text labelInputText="Prénom" v-model="ContactCard['First Name']"  v-else></input-text>
-                             
                               
-                              
-                          </div>
-                          <div class="column">
-                             
                               <input-text labelInputText="Autre nom" :valueInputText="ContactCard['Middle Name']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                               <input-text labelInputText="Autre nom" v-model="ContactCard['Middle Name']"  v-else></input-text>
+                             
                               
                               <input-text labelInputText="Nom" :valueInputText="ContactCard['Surname']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                               <input-text labelInputText="Nom" v-model="ContactCard['Surname']"  v-else></input-text>
                               
                               <input-text labelInputText="Nom complet" :valueInputText="ContactCard['Name']" :is_disabled="true" ></input-text>
+                              
+                              
+                          </div>
+                          <div class="column">
 
                               <input-text labelInputText="Photo" :valueInputText="ContactCard['Image']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
                               <input-text labelInputText="Photo" v-model="ContactCard['Image']" v-else></input-text> 
@@ -74,6 +74,15 @@
                               <input-text labelInputText="Fonction" :valueInputText="ContactCard['Job Title']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
                               <input-text labelInputText="Fonction" v-model="ContactCard['Job Title']" v-else></input-text> 
                              
+                              <input-text labelInputText="NIF" :valueInputText="ContactCard['NIF']" :is_disabled="true" ></input-text>
+
+                              <input-text labelInputText="STAT" :valueInputText="ContactCard['STAT']" :is_disabled="true" ></input-text>
+
+                              <input-text labelInputText="RCS" :valueInputText="ContactCard['RCS']" :is_disabled="true" ></input-text>
+
+                              <input-text labelInputText="CIF" :valueInputText="ContactCard['CIF']" :is_disabled="true" ></input-text>
+
+                              <input-text labelInputText="N° indentification" :valueInputText="ContactCard['ID Number']" :is_disabled="true" ></input-text>
                           </div>
                       </div>                    
                   </div>

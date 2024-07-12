@@ -135,9 +135,12 @@
                                 <input-text labelInputText="Date livraison promise" :valueInputText="formatDate(saleOrderCardHeader['Promised Delivery Date'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-date labelInputText="Date livraison promise" v-model="promisedDeliveryDate" v-else></input-date>
                                 
+                                <input-date labelInputText="Date d'échéance" :valueInputText="formatDate(saleOrderCardHeader[''])" v-model="promisedDeliveryDate" :is_disabled="!readOnlyModeIsDisabled"></input-date>
+                                
                                 <input-text labelInputText="Mode de règlement" :valueInputText="saleOrderCardHeader['Payment Method Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select labelInputText="Mode de règlement" v-model="saleOrderCardHeader['Payment Method Code']" @openModal="activeModalForSelectableElementList='paymentMethodList'" v-else></input-select>
-                            
+                                
+
                                 <!---input-text labelInputText="Statut" inputTextColor="has-text-primary" inputTextWeight="has-text-weight-bold" :valueInputText="saleOrderCardHeader['Status']==0?'Ouvert':saleOrderCardHeader['Status']==1?'Lancé':'Approbaion en attente'" :is_disabled="true"></input-text--->
                                 
                                 <input-text labelInputText="Statut de traitement" inputTextColor="has-text-danger" inputTextWeight="has-text-weight-bold" :valueInputText="getStatusLabel" :is_disabled="true" v-if="saleOrderCardHeader['Processing Status']==3 ||saleOrderCardHeader['Processing Status']==4"></input-text>
@@ -222,9 +225,10 @@
                         <div class="columns mt-3" id="line_total" v-if="onglet2_expanded">
                                 <div class="column">
                                     <input-text1 :is_disabled="true" :valueInputText="saleOrderCardHeader['Total VAT']" labelInputText="Montant TVA"></input-text1>
+                                    <input-text1 :is_disabled="true" :valueInputText="saleOrderCardHeader['Total Amount']" labelInputText="Montant HT"></input-text1>
                                 </div>
                                 <div class="column">
-                                    <input-text1 :is_disabled="true" :valueInputText="saleOrderCardHeader['Total Amount']" labelInputText="Montant HT"></input-text1>
+                                    <input-text1 :is_disabled="true" :valueInputText="saleOrderCardHeader['']" labelInputText="Montant acompte TTC"></input-text1>
                                     <input-text1 :is_disabled="true" :valueInputText="saleOrderCardHeader['Total Amount Including VAT']" labelInputText="Montant TTC"></input-text1>
                                 </div>
                         </div>                
@@ -527,6 +531,8 @@
                                 <input-text labelInputText="Condition de paiement" :valueInputText="saleOrderCardHeader['Payment Terms Code']" :is_disabled="true"></input-text>
                                 
                                 <input-text labelInputText="% Acompte" :valueInputText="saleOrderCardHeader['Prepayment _']" :is_disabled="true"></input-text>
+
+                                <input-text labelInputText="Crédit disponible" v-model="saleOrderCardHeader['Available credit']" :is_disabled="!readOnlyModeIsDisabled"></input-text>
                             </div>
                         </div>                    
                     </div>

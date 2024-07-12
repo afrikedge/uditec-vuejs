@@ -34,10 +34,9 @@
             :newCardBtnIsDisabled="false"
             :editCardBtnIsDisabled="false"
             :printCardBtnIsDisabled="creditRequestCardHeader['Status']!==1"
-            :convertQuoteBtnIsDisabled="true"
+            :convertQuoteBtnIsDisabled="creditRequestCardHeader['Status']!==0"
             :readOnlyModeIsDisabled="readOnlyModeIsDisabled"
             :cancelEditCardBtnIsDisabled="false"
-            :requestForApprovalBtnIsDisabled="false"
             :reopenBtnIsDisabled="false"
             :documentStatus="creditRequestCardHeader['Status']"
             :newContactBtnIsDisabled="true"
@@ -130,13 +129,12 @@
                                 <input-text labelInputText="Code magasin" :valueInputText="creditRequestCardHeader['Location Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select labelInputText="Code magasin" v-model="creditRequestCardHeader['Location Code']" @openModal="activeModalForSelectableElementList='locationList'" v-else></input-select>
                                 
-                            </div>
-                            <div class="column">
                                 <input-text labelInputText="Date de la demande" :valueInputText="formatDate(creditRequestCardHeader['Document Date'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-date labelInputText="Date de la demande" v-model="documentDate" v-else></input-date>
-                                
+                               
                                 <input-text labelInputText="Mode de règlement" :valueInputText="creditRequestCardHeader['Payment Method Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select labelInputText="Mode de règlement" v-model="creditRequestCardHeader['Payment Method Code']" @openModal="activeModalForSelectableElementList='paymentMethodList'" v-else></input-select>
+                                
                                 
                                 <input-text labelInputText="% Acompte" :valueInputText="creditRequestCardHeader['Prepayment _']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-number labelInputText="% Acompte" v-model="creditRequestCardHeader['Prepayment _']" v-else></input-number>
@@ -144,8 +142,24 @@
                                 <input-text labelInputText="Mode livraison" :valueInputText="creditRequestCardHeader['Shipment Method Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select labelInputText="Mode livraison" v-model="creditRequestCardHeader['Shipment Method Code']" @openModal="activeModalForSelectableElementList='shipmentMethodList'" v-else></input-select>
                                 
+                            </div>
+                            <div class="column">
                                 <input-text labelInputText="Adresse de livraison" :valueInputText="creditRequestCardHeader['Ship-to Code']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select labelInputText="Adresse de livraison" v-model="creditRequestCardHeader['Ship-to Code']"  @openModal="activeModalForSelectableElementList='addressList'" v-else></input-select>
+                                
+                                <input-text labelInputText="Avis Recouvrement" :valueInputText="creditRequestCardHeader['Collection advice']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Avis Recouvrement" v-model="creditRequestCardHeader['Collection advice']" :option-list="`optionLabelListForCollectionAdvice`" v-else></input-select-basic-1> 
+
+
+                                <input-text labelInputText="Commentaires recouvrement" v-model="creditRequestCardHeader['comment']" :valueInputText="creditRequestCardHeader['comment']" :is_disabled="!readOnlyModeIsDisabled"></input-text>
+                               
+                                <input-text labelInputText="Avis Responsable" :valueInputText="creditRequestCardHeader['Responsible advice']" :is_disabled="true" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-select-basic-1 labelInputText="Avis Responsable" v-model="creditRequestCardHeader['Responsible advice']" :option-list="`optionLabelListForReponsibleAdvice`" v-else></input-select-basic-1> 
+
+
+                                <input-text labelInputText="Commentaires Responsable" v-model="creditRequestCardHeader['comment']" :valueInputText="creditRequestCardHeader['comment']" :is_disabled="!readOnlyModeIsDisabled"></input-text>
+                                
+                                <input-text labelInputText="Commentaires enquêteur" v-model="creditRequestCardHeader['comment']" :valueInputText="creditRequestCardHeader['comment']" :is_disabled="!readOnlyModeIsDisabled"></input-text>
                             </div>
                         </div>                    
                     </div>
@@ -257,11 +271,12 @@
                         </div>
                         <div class="columns mt-3" id="line_total" v-if="onglet3_expanded">
                                 <div class="column">
-                                </div>
-                                <div class="column">
                                     <input-text1 :is_disabled="true" :valueInputText="creditRequestCardHeader['Total Amount']" labelInputText="Montant HT"></input-text1>
                                     <input-text1 :is_disabled="true" :valueInputText="creditRequestCardHeader['Total VAT']" labelInputText="Montant TVA"></input-text1>
+                                </div>
+                                <div class="column">
                                     <input-text1 :is_disabled="true" :valueInputText="creditRequestCardHeader['Total Amount Including VAT']" labelInputText="Montant TTC"></input-text1>
+                                    <input-text1 :is_disabled="true" :valueInputText="creditRequestCardHeader['']" labelInputText="Montant acompte TTC"></input-text1>
                                 </div>
                         </div>                
                     </div>
@@ -496,7 +511,7 @@
                                 </form>
                             </div>
                             <button class=" modal-close is-large has-background-dark is-large is-danger" aria-label="close" @click.prevent="addItemModalShowned=false"></button>
-                        </div>
+                    </div>
                     </div>              
                     <br><br>
 
@@ -546,7 +561,7 @@
                                 <input-text labelInputText="Mensualité" :valueInputText="creditRequestCardHeader['Installment']" :is_disabled="true"></input-text>
                                 <input-text labelInputText="Dernière mensualité" :valueInputText="creditRequestCardHeader['Final installment']" :is_disabled="true"></input-text>
                             </div>
-                        </div>                    
+                    </div>                    
                     </div>
                     <br><br>
 
@@ -622,10 +637,10 @@
                             <div class="column">
                                 <input-text1 :is_disabled="true" :valueInputText="creditRequestCardHeader['Weighed Point Total']" labelInputText="Total points"></input-text1>
                             </div>
-                        </div>                
+                    </div>                
                     </div>          
 
-<!---------sous-Section onglet 5 formulaire fiche demande de credit en lecture/ecriture----------------------->                         
+<!---------sous-Section onglet 6 formulaire fiche demande de credit en lecture/ecriture----------------------->                         
                     <div id="scoring" v-else>
                         <div :class="{'has-background-white':onglet5_expanded}">
                             <div :class="{'columns':!onglet5_expanded,'p-3':onglet5_expanded,'has-border-bottom-grey':onglet5_expanded,'has-border-bottom':!onglet5_expanded}">
@@ -839,11 +854,11 @@
                                 </form>
                             </div>
                             <button class=" modal-close is-large has-background-dark is-large is-danger" aria-label="close" @click.prevent="addItemModalShowned=false"></button>
-                        </div>
+                    </div>
                     </div>              
                     <br><br>
 
-<!---------sous-Section onglet 6 formulaire fiche demande de credit----------------------->                         
+<!---------sous-Section onglet 7 formulaire fiche demande de credit----------------------->                         
                     <div id="amortissement">
                         <div :class="{'has-background-light':onglet6_expanded}">
                             <div :class="{'columns':!onglet6_expanded,'p-3':onglet6_expanded,'has-border-bottom-grey':onglet6_expanded,'has-border-bottom':!onglet6_expanded}">
@@ -895,7 +910,7 @@
                                 </table>
                             </div>
                             <div v-if="creditRequestAmortization.length==0">Il n'y'a rien à afficher</div>     
-                        </div>              
+                    </div>              
                     </div>                         
                     <br><br>
                 </div>
@@ -1024,6 +1039,7 @@ import inputText1 from './input/input-text1.vue'
 import inputNumber from './input/input-number.vue'
 import inputSelect from './input/input-select.vue'
 import inputSelectBasic from './input/input-select-basic.vue'
+import inputSelectBasic1 from './input/input-select-basic1.vue'
 import inputDate from './input/input-date.vue'
 import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
 import ModalForSelectableCampaignList from './ModalForSelectableCampaignList.vue'
@@ -1057,6 +1073,7 @@ export default {
         inputDate,
         inputSelect,
         inputSelectBasic,
+        inputSelectBasic1,
         CRCardRibbon,
         ReportViewer,
         ModalForSelectableCustomerList,
@@ -1080,6 +1097,11 @@ export default {
         const creditRequestCardLines = ref([])
         const creditRequestCardScoring = ref([])
         const creditRequestAmortization = ref([])
+        
+        const optionLabelListForCollectionAdvice = ref([])
+        const optionLabelListForReponsibleAdvice = ref([])
+
+
         const readOnlyModeIsDisabled = ref(false)
         const isItemInfoToFill = ref(false)
 
@@ -1139,9 +1161,13 @@ export default {
         onMounted(()=>{
             if(webUserInfo.respCenter.value){
                 getCRCardInfo()
+                getOptionLabelList('[Collection advice]')
+                getOptionLabelList('[Responsible advice]')
                 
             }else{
                 getWebUserInfo()
+                getOptionLabelList('[Collection advice]')
+                getOptionLabelList('[Responsible advice]')
             }
         })
 
@@ -1185,6 +1211,21 @@ export default {
                 }
             })
         }
+
+        function getOptionLabelList(field){
+            axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
+            .then(result => {
+                if (field=='[Collection advice]')
+                optionLabelListForCollectionAdvice.value=result.data.recordset
+                if (field=='[Responsible advice]')
+                optionLabelListForReponsibleAdvice.value=result.data.recordset
+                
+
+                    console.log(result.data.recordset)
+    
+            }).catch(err=>console.log(err))
+        }
+
 
         function setReadOnlyModeIsDisabled(){
             readOnlyModeIsDisabled.value=true
@@ -1630,6 +1671,9 @@ export default {
             creditRequestCardScoring,
             creditRequestAmortization,
             readOnlyModeIsDisabled,
+
+            optionLabelListForCollectionAdvice,
+            optionLabelListForReponsibleAdvice,
             setReadOnlyModeIsDisabled,
             setReadWriteModeIsDisabled,
             ...dateInfo,
@@ -1668,6 +1712,8 @@ export default {
             reportViewerShowned2:false,
             reportViewerShowned3:false,
             reportViewerShowned4:false,
+
+            
 
             //taille (largeur) initiale du composant customerInfo
             creditRequestInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.creditRequestCardRightInfoMaxWidth,

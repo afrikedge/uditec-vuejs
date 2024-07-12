@@ -12,11 +12,6 @@
             <item-card-ribbon
                 @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
                 componentWithCompInfo="itemCardRightInfoMaxWidth"
-                :newCardBtnDisabled="false"
-                :editCardBtnDisabled="false"
-                :printCardBtnDisabled="false"
-                :convertQuoteBtnDisabled="false"
-                :readOnlyModeDisabled="false"
                 :checkItemAvailabilityBtnIsDisabled="false"
             ></item-card-ribbon>
 

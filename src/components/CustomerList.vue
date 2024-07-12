@@ -16,16 +16,17 @@
                 <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
                     <thead class=" my-2">
                         <tr> 
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Code client</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Nom du client</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N°</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Nom</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Forme juridique</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode d’identification</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode vente</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Gestionnaire(Code vendeur)</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Ville</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Téléphone</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Adresse:Ligne 1</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Contact principal</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Groupe client</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Délai de paiement</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode de livraison</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Catégorie TVA</th>
+                           
+                            
                         </tr>   
                     </thead>
                     <tbody>
@@ -37,15 +38,15 @@
                                     </a>
                                 </router-link>
                             </td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ customer['Name'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ customer['City'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ customer['Phone No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ customer['Address'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ customer['Primary Contact No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ customer['Customer Posting Group'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ customer['Payment Terms Code'] }}</td>                    
-                            <td class="has-text-left has-background-light is-narrow"> {{ customer['Shipment Method Code'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ customer['VAT Bus_Posting Group'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow">{{ customer['Name']  }}</td>
+                                <td class="has-text-left has-background-light is-narrow">{{ customer['Customer Type']  }}</td>
+                                <td class="has-text-left has-background-light is-narrow">{{ customer['Legal Status']  }}</td>
+                                <td class="has-text-left has-background-light is-narrow">{{ customer['Identification Mode']  }}</td>
+                                <td class="has-text-left has-background-light is-narrow"> {{ customer['Sales Mode'] }}</td>
+                                <td class="has-text-left has-background-light is-narrow"> {{customer['Salesperson Code']}}</td>
+                                <td class="has-text-left has-background-light is-narrow"> {{customer['City']}}</td>
+                                <td class="has-text-left has-background-light is-narrow"> {{customer['Phone No_']}}</td>
+                                
                         </tr>
                     </tbody>
                 </table>

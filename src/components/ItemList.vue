@@ -16,18 +16,17 @@
                 <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
                     <thead class=" my-2">
                         <tr> 
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="width: 200px;">N°</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="width: 100px;"> Code catégorie</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="width: 250px;">Description catégorie</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow">Description de l’article </th>
-                            <!----------th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description de recherche</th---->
-                            <!----------th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Unité de base</th------->
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Unité de vente</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;" >Poids brut</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;" >Poids net</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;" >Volume unitaire</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;" >Mode de livraison par  défaut </th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;" >Code barre</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="width: 200px;">N°</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="width: 100px;">Désignation</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="width: 250px;">Code catégorie</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="width: 250px;">Description catégorie</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="width: 100px;">Unité de vente</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="width: 100px;">Prix unitaire</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Mode livraison</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;" >Poids brut</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;" >Poids net</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;" >Volume unitaire</th>
+                            
                         </tr>   
                     </thead>
                     <tbody>
@@ -40,27 +39,23 @@
                                 </router-link>
                             </td>
 
+                            <td class="has-text-left has-background-light py-2"> {{item['Description']}}</td>
+
                             <td class="has-text-left has-background-light py-2"> {{item['Item Category Code']}}</td>
 
-                            <td class="has-text-left has-background-light py-2"> {{item['Item Category Name']}}</td>
-
-                            <td class="has-text-left has-background-light py-2 is-narrow"> {{item['Description']}}</td>
-
-                            <!------td class="has-text-left has-background-light">  {{item['Search Description']}}</td---------->
-
-                            <!------td class="has-text-left has-background-light"> {{item['Base Unit of Measure']}}</td---------->
+                            <td class="has-text-left has-background-light py-2 is-narrow"> {{item['Item Category Name']}}</td>
 
                             <td class="has-text-left has-background-light py-2"> {{item['Sales Unit of Measure']}}</td>  
                             
+                            <td class="has-text-left has-background-light py-2"> {{item['']}}</td>
+
+                            <td class="has-text-left has-background-light py-2"> {{item['Shipment Method']}}</td>
+
                             <td class="has-text-left has-background-light py-2"> {{item['Gross Weight']}}</td>
 
                             <td class="has-text-left has-background-light py-2"> {{item['Net Weight']}}</td>
 
                             <td class="has-text-left has-background-light py-2"> {{item['Unit Volume']}}</td>
-
-                            <td class="has-text-left has-background-light py-2"> {{item['Shipment Method']}}</td>
-
-                            <td class="has-text-left has-background-light py-2"> {{item['Bar Code']}}</td>
                 
                         </tr>
                     </tbody>

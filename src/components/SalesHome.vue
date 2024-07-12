@@ -28,7 +28,7 @@
     import assignedDebt from './AssignedDebtList.vue'
     import paymentPromise from "./PaymentPromiseList.vue"
     import recoveryActivity from "./RecoveryActivityList.vue"
-
+    import transportOrder from "./TransportOrderList.vue"
 
     import axios from 'axios'
     import { onMounted } from 'vue'
@@ -47,6 +47,7 @@
             saleOrders,
             repossessionRequests,
             debtCollection,
+            transportOrder,
             assignedDebt,
             paymentPromise,
             recoveryActivity,

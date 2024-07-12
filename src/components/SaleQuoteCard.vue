@@ -216,10 +216,11 @@
                         </div>
                         <div class="columns mt-3" id="line_total" v-if="onglet2_expanded">
                                 <div class="column">
+                                    <input-text1 :is_disabled="true" :valueInputText="saleQuoteCardHeader['Total VAT']" labelInputText="Montant TVA"></input-text1>
+                                    <input-text1 :is_disabled="true" :valueInputText="saleQuoteCardHeader['Total Amount']" labelInputText="Montant HT"></input-text1>
                                 </div>
                                 <div class="column">
-                                    <input-text1 :is_disabled="true" :valueInputText="saleQuoteCardHeader['Total Amount']" labelInputText="Montant HT"></input-text1>
-                                    <input-text1 :is_disabled="true" :valueInputText="saleQuoteCardHeader['Total VAT']" labelInputText="Montant TVA"></input-text1>
+                                    <input-text1 :is_disabled="true" :valueInputText="saleQuoteCardHeader['']" labelInputText="Montant acompte TTC"></input-text1>
                                     <input-text1 :is_disabled="true" :valueInputText="saleQuoteCardHeader['Total Amount Including VAT']" labelInputText="Montant TTC"></input-text1>
                                 </div>
                         </div>                
@@ -492,9 +493,10 @@
                                 
                                 <input-text labelInputText="Mode de vente" :valueInputText="saleQuoteCardHeader['Sales Mode']" :is_disabled="true"></input-text>
                                 
-                                <input-text labelInputText="Groupe tarifaire" :valueInputText="saleQuoteCardHeader['Customer Price Group']" :is_disabled="true"></input-text>
                             </div>
                             <div class="column">                                
+                                <input-text labelInputText="Groupe tarifaire" :valueInputText="saleQuoteCardHeader['Customer Price Group']" :is_disabled="true"></input-text>
+
                                 <input-text labelInputText="Catégorie TVA" :valueInputText="saleQuoteCardHeader['VAT Bus_ Posting Group']" :is_disabled="true"></input-text>
                                 
                                 <input-text labelInputText="Condition de paiement" :valueInputText="saleQuoteCardHeader['Payment Terms Code']" :is_disabled="true"></input-text>

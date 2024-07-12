@@ -29,7 +29,10 @@
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Code vendeur</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Code campagne</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Code magasin</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Crédit disponible</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Date commande</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Date d'échéance</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Montant acompte TTC</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Montant HT</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Montant TTC</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Statut traitement</th>
@@ -50,7 +53,10 @@
                             <td class="has-text-left has-background-light is-narrow"> {{ saleOrder['Salesperson Code'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ saleOrder['Campaign No_'] }}</td>
                             <td class="has-text-left has-background-light is-narrow"> {{ saleOrder['Location Code'] }}</td>                
+                            <td class="has-text-left has-background-light is-narrow"> {{ saleOrder['Available credit'] }}</td>                
                             <td class="has-text-left has-background-light is-narrow"> {{ formatDate(saleOrder['Document Date']) }}</td>                
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDate(saleOrder['Document Date']) }}</td>                
+                            <td class="has-text-left has-background-light is-narrow"> {{ saleOrder[''] }}</td>                
                             <td class="has-text-left has-background-light is-narrow"> {{ saleOrder['Total Amount'] }}</td>                
                             <td class="has-text-left has-background-light is-narrow"> {{ saleOrder['Total Amount Including VAT'] }}</td>                
                             <td class="has-text-left has-background-light is-narrow has-text-danger" v-if="saleOrder['Processing Status']==3 ||saleOrder['Processing Status']==4"> {{ getLabel(saleOrder['Processing Status']) }}</td>                

@@ -68,7 +68,7 @@
                 <div class="column" style="overflow-y: scroll;">
 
 <!---------sous-Section ongle 1 formulaire fiche demande remise----------------------->                         
-                        <div id="general">
+                    <div id="general">
                             <div class="columns has-border-bottom">
                                 <div class="column p-0 has-text-left has-text-weight-bold">
                                     <a @click="collapse('general_content');onglet1_expanded=!onglet1_expanded" v-if="!onglet1_expanded">
@@ -90,15 +90,16 @@
                                     <input-text labelInputText="Crée le" :valueInputText="formatDateHour(discountCard['Created on'])" :is_disabled="true"></input-text>
                                 </div>
                                 <div class="column">
-
+                                    
                                     <input-text labelInputText="Crée par" :valueInputText="discountCard['Created by']" :is_disabled="true"></input-text>
                                     <input-text labelInputText="Remise demandée (%)" v-model="discountCard['Description']" :valueInputText="discountCard['Requested Discount']" :is_disabled="!readOnlyModeIsDisabled" :is_readOnly="true"></input-text>
                                     <input-text labelInputText="Remise accordé  (%)" :valueInputText="discountCard['Approuved Discount']" :is_disabled="true"></input-text>
                                     <input-text labelInputText="Statut" :valueInputText="discountCard['Approval Status']" :is_disabled="true"></input-text>
+                                   
                                 </div>
                             </div>                    
-                        </div>
-                        <br><br>
+                    </div>
+                    <br><br>
 
 <!---------sous-Section ongle 2 formulaire fiche demande remise----------------------->   
                     <div id="tracking" v-if="!readOnlyModeIsDisabled">
@@ -151,7 +152,15 @@
                                 </table>
                             </div>     
                         </div>
-                                       
+                        <div class="columns mt-3" id="tracking_total" v-if="onglet2_expanded">
+                                <div class="column">
+                                   
+                                </div>
+                                <div class="column">
+                                    <input-text1 :is_disabled="true" :valueInputText="discountCard['']" labelInputText="Montant acompte TTC"></input-text1>
+                                  
+                                </div>
+                        </div>              
                     </div>  
                     <br><br>
 
@@ -173,6 +182,7 @@ import CustomerCardHeader from './HeaderForCard.vue'
 import CustomerInfo from './CustomerInfo.vue'
 import CustomerCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
+import inputText1 from './input/input-text1.vue'
 import axios from 'axios'
 import { onBeforeMount,onMounted,ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -185,6 +195,7 @@ export default {
     components:{
         CustomerCardHeader,CustomerInfo,
         inputText,
+        inputText1,
         CustomerCardRibbon,
     },
     setup(){

@@ -21,14 +21,15 @@
                         <tr> 
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N°</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Nom</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Adresse</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Forme juridique</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode d’identification</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Mode vente</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Gestionnaire(Code vendeur)</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Ville</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">N° téléphone</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code vendeur</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Adresse e-mail</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code postal</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type prospect</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Pays/région</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Téléphone</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Status</th>
+                            
 
                         </tr>
                     </thead>
@@ -42,14 +43,15 @@
                                     </router-link>
                                 </td>
                                 <td class="has-text-left has-background-light is-narrow">{{ Lead['Name']  }}</td>
-                                <td class="has-text-left has-background-light is-narrow"> {{ Lead['Address'] }}</td>
+                                <td class="has-text-left has-background-light is-narrow">{{ Lead['Lead Type']  }}</td>
+                                <td class="has-text-left has-background-light is-narrow">{{ Lead['Legal Status']  }}</td>
+                                <td class="has-text-left has-background-light is-narrow">{{ Lead['Identification Mode']  }}</td>
+                                <td class="has-text-left has-background-light is-narrow"> {{ Lead['Sales Mode'] }}</td>
+                                <td class="has-text-left has-background-light is-narrow"> {{Lead['Salesperson Code']}}</td>
                                 <td class="has-text-left has-background-light is-narrow"> {{Lead['City']}}</td>
                                 <td class="has-text-left has-background-light is-narrow"> {{Lead['Phone No_']}}</td>
-                                <td class="has-text-left has-background-light is-narrow"> {{Lead['Salesperson Code']}}</td>
-                                <td class="has-text-left has-background-light is-narrow"> {{Lead['E-Mail']}}</td>                
-                                <td class="has-text-left has-background-light is-narrow"> {{Lead['Post Code']}}</td>                
-                                <td class="has-text-left has-background-light is-narrow"> {{Lead['Type']==0 ? 'valide' : 'Non valide'}}</td>                
-                                <td class="has-text-left has-background-light is-narrow"> {{Lead['County']}}</td>                
+                                <td class="has-text-left has-background-light is-narrow"> {{ Lead['Approval Status'] }}</td>
+                                             
                             
                             </tr>
                     </tbody>

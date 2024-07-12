@@ -31,6 +31,7 @@
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Magasin par défaut</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Date du devis</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Date fin validité</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Montant acompte TTC</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Montant HT</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Montant TTC</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Statut</th>
@@ -53,6 +54,7 @@
                             <td class="has-text-left has-background-light is-narrow"> {{ saleQuote['Location Code'] }}</td>                
                             <td class="has-text-left has-background-light is-narrow"> {{ formatDate(saleQuote['Document Date']) }}</td>                
                             <td class="has-text-left has-background-light is-narrow"> {{ formatDate(saleQuote['Quote Valid Until Date']) }}</td>                               
+                            <td class="has-text-left has-background-light is-narrow"> {{ saleQuote[''] }}</td>                               
                             <td class="has-text-left has-background-light is-narrow"> {{ saleQuote['Total Amount'] }}</td>                               
                             <td class="has-text-left has-background-light is-narrow"> {{ saleQuote['Total Amount Including VAT'] }}</td>                               
                             <td class="has-text-left has-background-light is-narrow has-text-primary has-text-weight-bold"> {{ saleQuote['Status']==0?'Ouvert':saleQuote['Status']==1?'Lancé':'En attente appprobation' }}</td>                               

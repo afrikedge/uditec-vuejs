@@ -17,14 +17,15 @@
               <table class="table  is-narrow is-hoverable is-fullwidth tableFixHead">
                   <thead class=" my-2">
                       <tr> 
-                          <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Code contact</th>
-                          <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">N° Client</th>
+                          <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Code</th>
                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Titre</th>
-                          <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Prénom</th>
                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Nom complet</th>
                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Ville</th>
                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Téléphone</th>
+                          <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Téléphone Mobile</th>
                           <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">E-mail</th>
+                          <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Fonction</th>
+                          
                       </tr>   
                   </thead>
                   <tbody>
@@ -36,13 +37,13 @@
                                   </a>
                               </router-link>
                           </td>
-                          <td class="has-text-left has-background-light is-narrow"> {{ contact['Customer No_']}}</td>
                           <td class="has-text-left has-background-light is-narrow"> {{ contact['Salutation Code'] }}</td>
-                          <td class="has-text-left has-background-light is-narrow"> {{ contact['First Name']}}</td>
                           <td class="has-text-left has-background-light is-narrow"> {{ contact['Name'] }}</td>
                           <td class="has-text-left has-background-light is-narrow"> {{ contact['City'] }}</td>
                           <td class="has-text-left has-background-light is-narrow"> {{ contact['Phone No_'] }}</td>
+                          <td class="has-text-left has-background-light is-narrow"> {{ contact['Mobile Phone No_'] }}</td>
                           <td class="has-text-left has-background-light is-narrow"> {{ contact['E-Mail'] }}</td>
+                          <td class="has-text-left has-background-light is-narrow"> {{ contact['Job Title'] }}</td>
                          
                       </tr>
                   </tbody>
@@ -218,8 +219,8 @@ export default {
   mounted(){
       axios.get(`http://${this.hostname}:3000/app/getContactList/${this.contactId}`)
       .then((result) => {
+          console.log(result.data.recordset)
         this.contactList = result.data.recordset;
-        console.log(result.data)
       })
       .catch(err=>console.log(err));
     

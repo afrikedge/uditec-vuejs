@@ -91,6 +91,11 @@ import CreditContractList from "./components/CreditContractList.vue"
 import CreditContractCard from "./components/CreditContractCard.vue"
 import NewCreditContract from "./components/NewCreditContract.vue"
 
+//12-----Bon de transport
+import TransportOrderList from "./components/TransportOrderList.vue"
+import TransportOrderCard from "./components/TransportOrderCard.vue"
+import NewTransportOrder from "./components/NewTransportOrder.vue"
+
 const routes = [
   ///////////////////1
   {path:'/login',component:Login,name:'login'},
@@ -176,7 +181,10 @@ const routes = [
   {path:'/CreditContractList',component:CreditContractList,name:'CreditContractListPage'},
   {path:'/CreditContractCard',component:CreditContractCard,name:'CreditContractCardPage'},
   {path:'/NewCreditContract',component:NewCreditContract,name:'NewCreditContractPage'},
-  
+
+  {path:'/TransportOrderList',component:TransportOrderList,name:'TransportOrderListPage'},
+  {path:'/TransportOrderCard/:id',component:TransportOrderCard,name:'TransportOrderCardPage'},
+  {path:'/NewTransportOrder',component:NewTransportOrder,name:'NewTransportOrderPage'},
 
 
 

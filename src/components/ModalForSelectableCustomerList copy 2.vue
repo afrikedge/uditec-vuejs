@@ -71,7 +71,7 @@ export default{
     name:'modal-for-selectable--list',
     props:['getAction','listTitle','cardTitle'],
     data(){
-    return{
+        return{
             ModalForSelectableElementListShowned:true,
             elementList:[]
         }

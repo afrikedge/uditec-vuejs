@@ -123,6 +123,8 @@
                                 <input-text labelInputText="Activité connexe" v-model="LeadCard['Linked Activity']" :valueInputText="LeadCard['Linked Activity']" :is_disabled="!readOnlyModeIsDisabled" :is_readOnly="true"></input-text> 
                                 <input-text labelInputText="Statut" inputTextColor="has-text-primary" inputTextWeight="has-text-weight-bold" :valueInputText="LeadCard['Status']==0?'Ouvert':LeadCard['Status']==1?'Lancé':'Approbation en attente'" :is_disabled="true"></input-text>
                                 <input-text labelInputText="Observation" v-model="LeadCard['Comment']" :valueInputText="LeadCard['Comment']" :is_disabled="!readOnlyModeIsDisabled" :is_readOnly="true"></input-text>
+                                
+                                <input-text labelInputText="groupe tarifaire" v-model="LeadCard['Customer Price Group']" :valueInputText="LeadCard['Customer Price Group']" :is_disabled="!readOnlyModeIsDisabled" :is_readOnly="true"></input-text>
                             
                             </div>
                         </div>                    

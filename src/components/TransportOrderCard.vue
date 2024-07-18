@@ -57,32 +57,37 @@
                                 <input-text labelInputText="Véhicule" :valueInputText="transportCard['Vehicle No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select labelInputText="Véhicule" v-model="transportCard['Vehicle No_']" @openModal="activeModalForSelectableElementList='vehicleList';" v-else></input-select>
                                 
-                                <input-text labelInputText="Chauffeur" :valueInputText="transportCard['Driver No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
-                                <input-select labelInputText="Chauffeur" v-model="transportCard['Driver No_']" @openModal="activeModalForSelectableElementList='driverList';" v-else></input-select>
+                                <input-text labelInputText="Chauffeur" :valueInputText="transportCard[' Driver No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text> 
+                                <input-select labelInputText="Chauffeur" v-model="transportCard[' Driver No_']" @openModal="activeModalForSelectableElementList='driverList';" v-else></input-select>
 
                                 <input-text labelInputText="Trajet" :valueInputText="transportCard['Route No_']" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-select labelInputText="Trajet" v-model="transportCard['Route No_']" @openModal="activeModalForSelectableElementList='routeList';" v-else></input-select>
 
-                                <input-date labelInputText="Date départ prévue" :v-model="DepartureDatePlanned" :is_disabled="!readOnlyModeIsDisabled"></input-date>
+                                <input-text labelInputText="Date départ prévue" :valueInputText="formatDate(transportCard['Departure Date (Planned)'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-date labelInputText="Date départ prévue " v-model="DepartureDatePlanned" v-else></input-date>
 
-                                <input-text labelInputText="Heure de départ prévue" :valueInputText="transportCard['Departure Time (Planned)']" :is_disabled="!readOnlyModeIsDisabled"></input-text>
+                                <input-text labelInputText="Heure de départ prévue" :valueInputText="formatDateHour(transportCard['Departure Time (Planned)'])" :is_disabled="!readOnlyModeIsDisabled"></input-text>
 
                                 <input-text labelInputText="Durée prévue" :valueInputText="transportCard['Duration (Planned)']" :is_disabled="!readOnlyModeIsDisabled"></input-text>
                                 
                                 
                             </div>
                             <div class="column">
-                                <input-date labelInputText="Date retour prévue" :v-model="PlannedReturnDate" :is_disabled="!readOnlyModeIsDisabled"></input-date>
+                                
+                                <input-text labelInputText="Date retour prévue" :valueInputText="formatDate(transportCard['Return Date (Planned)'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-date labelInputText="Date retour prévue " v-model="PlannedReturnDate" v-else></input-date>
 
-                                <input-text labelInputText="Heure retour prévue" :valueInputText="transportCard['Return Time (Planned)']" :is_disabled="!readOnlyModeIsDisabled"></input-text>  
+                                <input-text labelInputText="Heure retour prévue" :valueInputText="formatDateHour(transportCard['Return Time (Planned)'])" :is_disabled="!readOnlyModeIsDisabled"></input-text>  
 
-                                <input-date labelInputText="Date départ réelle" :v-model="actualDepartureDate" :is_disabled="!readOnlyModeIsDisabled"></input-date>
+                                <input-text labelInputText="Date départ réelle" :valueInputText="formatDate(transportCard['Departure Date (Actual)'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-date labelInputText="Date départ réelle" v-model="actualDepartureDate" v-else></input-date>
 
-                                <input-text labelInputText="Heure de départ réelle" :valueInputText="transportCard['Departure Time (Actual)']" :is_disabled="!readOnlyModeIsDisabled"></input-text>
+                                <input-text labelInputText="Heure de départ réelle" :valueInputText="formatDateHour(transportCard['Departure Time (Actual)'])" :is_disabled="!readOnlyModeIsDisabled"></input-text>
 
-                                <input-date labelInputText="Date retour réelle" :v-model="actualReturnDate" :is_disabled="!readOnlyModeIsDisabled"></input-date>
+                                <input-text labelInputText="Date retour réelle" :valueInputText="formatDate(transportCard['Return Date (Actual)'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-date labelInputText="Date retour réelle" v-model="actualReturnDate" v-else></input-date>
 
-                                <input-text labelInputText="Heure retour réelle" :valueInputText="transportCard['Return Time (Actual)']" :is_disabled="!readOnlyModeIsDisabled"></input-text> 
+                                <input-text labelInputText="Heure retour réelle" :valueInputText="formatDateHour(transportCard['Return Time (Actual)'])" :is_disabled="!readOnlyModeIsDisabled"></input-text> 
                                 <input-text labelInputText="Durée réelle" :valueInputText="transportCard['Duration (Actual)']" :is_disabled="!readOnlyModeIsDisabled"></input-text> 
                                 <input-text labelInputText="Volume utile" :valueInputText="transportCard['Useful volume (cbm)']" :is_disabled="true"></input-text> 
                                 <input-text labelInputText="Charge utile" :valueInputText="transportCard['Payload (kg)']" :is_disabled="true"></input-text> 
@@ -308,7 +313,7 @@ export default {
         const route = useRoute()
 
         //indique la route active
-        const transportdocumentNo = ref('')
+        const transportorderNo = ref('')
 
         const dateInfo = {
             DepartureDatePlanned: ref(''),
@@ -331,10 +336,10 @@ export default {
           
         function getTransportCardInfo(){
          
-            axios.get(`http://${hostname}:3000/app/getRevisionRequestCard?documentNo=${transportdocumentNo.value}`)
+            axios.get(`http://${hostname}:3000/app/getTransportOrderCard?orderNo=${transportorderNo.value}`)
             .then(result => {
-                
-                transportCard.value = result.data[0];
+                console.log(result.data)
+                transportCard.value = result.data.result[0];
                 getOrderInfo();
                 dateInfo.DepartureDatePlanned.value = getISODate(transportCard.value["Departure Date (Planned)"])
                 dateInfo.PlannedReturnDate.value = getISODate(transportCard.value["Return Date (Planned)"])
@@ -412,8 +417,8 @@ export default {
         })
 
         onBeforeMount(()=>{
-            if(route.query.documentNo){
-                transportdocumentNo.value = route.query.documentNo
+            if(route.query.orderNo){
+                transportorderNo.value = route.query.orderNo
                 
             }
         })

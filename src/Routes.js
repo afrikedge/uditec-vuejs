@@ -96,6 +96,14 @@ import TransportOrderList from "./components/TransportOrderList.vue"
 import TransportOrderCard from "./components/TransportOrderCard.vue"
 import NewTransportOrder from "./components/NewTransportOrder.vue"
 
+//13-----Demande de service
+import ServiceRequestList from "./components/ServiceRequestList.vue"
+import ServiceRequestCard from "./components/ServiceRequestCard.vue"
+import NewServiceRequest from "./components/NewServiceRequest.vue"
+
+//14-----Trajet
+import RouteCard from "./components/RouteCard.vue"
+
 const routes = [
   ///////////////////1
   {path:'/login',component:Login,name:'login'},
@@ -182,11 +190,16 @@ const routes = [
   {path:'/CreditContractCard',component:CreditContractCard,name:'CreditContractCardPage'},
   {path:'/NewCreditContract',component:NewCreditContract,name:'NewCreditContractPage'},
 
+   ///////////////////13
   {path:'/TransportOrderList',component:TransportOrderList,name:'TransportOrderListPage'},
-  {path:'/TransportOrderCard/:id',component:TransportOrderCard,name:'TransportOrderCardPage'},
+  {path:'/TransportOrderCard',component:TransportOrderCard,name:'TransportOrderCardPage'},
   {path:'/NewTransportOrder',component:NewTransportOrder,name:'NewTransportOrderPage'},
 
+  {path:'/ServiceRequestList',component:ServiceRequestList,name:'ServiceRequestListPage'},
+  {path:'/ServiceRequestCard',component:ServiceRequestCard,name:'ServiceRequestCardPage'},
+  {path:'/NewServiceRequest',component:NewServiceRequest,name:'NewServiceRequestPage'},
 
+  {path:'/RouteCard/:id',component:RouteCard,name:'RouteCardPage'},
 
 ];
 

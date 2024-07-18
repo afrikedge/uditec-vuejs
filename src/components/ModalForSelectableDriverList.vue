@@ -6,7 +6,7 @@
             <div class="has-text-left mb-5 columns">
                 <div>
                     <span class="subtitle  has-text-left column is-narrow">
-                        Conducteur |
+                        Chauffeur |
                     </span>
                 </div>
                 <input-search class="column is-narrow" v-model="eltToSearch"> </input-search>

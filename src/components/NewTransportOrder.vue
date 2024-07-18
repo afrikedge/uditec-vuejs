@@ -77,10 +77,10 @@
                             <div class="column">
                                 
                                 <input-text v-model="transportOrderNumber" labelInputText="Numéro"></input-text>
-                                <input-select v-model="transportOrderCarrier" labelInputText="Transporteur" @openModal="activeModalForSelectableElementList='customerList'"></input-select>
-                                <input-select v-model="transportOrderCarrier" labelInputText="Véhicule" @openModal="activeModalForSelectableElementList='customerList'"></input-select>
-                                <input-select v-model="transportOrderDriver" labelInputText="Chauffeur " @openModal="activeModalForSelectableElementList='customerList'"></input-select>
-                                <input-select v-model="transportOrderJourney" labelInputText="Trajet" @openModal="activeModalForSelectableElementList='customerList'"></input-select>
+                                <input-select v-model="transportOrderCarrier" labelInputText="Transporteur" @openModal="activeModalForSelectableElementList='carrierList'"></input-select>
+                                <input-select v-model="transportOrderVehicle" labelInputText="Véhicule" @openModal="activeModalForSelectableElementList='vehicleList'"></input-select>
+                                <input-select v-model="transportOrderDriver" labelInputText="Chauffeur " @openModal="activeModalForSelectableElementList='driverList'"></input-select>
+                                <input-select v-model="transportOrderJourney" labelInputText="Trajet" @openModal="activeModalForSelectableElementList='routeList'"></input-select>
                                 <input-date v-model="transportOrderStartDate" labelInputText="Date départ prévue"  :is_disabled="false"></input-date>
                                 
                                 <input-text v-model="transportOrderStartHours" labelInputText="Heure de départ prévue"></input-text>
@@ -383,13 +383,34 @@
         </div>
 
 <!---------------------------------------------->
-        <modal-for-selectable-customer-list 
-            v-if="activeModalForSelectableElementList=='customerList'"  
-            :isActive="activeModalForSelectableElementList=='customerList'" 
-            @closeModal="activeModalForSelectableElementList=''" 
-            @onGettingLineFromSelectableCustomerListModal="(elt)=>fillCustomerInfoField(elt)">
-        </modal-for-selectable-customer-list>
 
+        <modal-for-selectable-carrier-list 
+            v-if="activeModalForSelectableElementList=='carrierList'" 
+            :isActive="activeModalForSelectableElementList=='carrierList'" 
+            @closeModal="activeModalForSelectableElementList=''" 
+            @onGettingLineFromSelectableCarrierListModal="(elt)=>fillCarrierInfoField(elt)">
+        </modal-for-selectable-carrier-list>
+        
+        <modal-for-selectable-route-list 
+            v-if="activeModalForSelectableElementList=='routeList'" 
+            :isActive="activeModalForSelectableElementList=='routeList'" 
+            @closeModal="activeModalForSelectableElementList=''" 
+            @onGettingLineFromSelectableRouteListModal="(elt)=>fillRouteInfoField(elt)">
+        </modal-for-selectable-route-list>
+
+        <modal-for-selectable-driver-list 
+            v-if="activeModalForSelectableElementList=='driverList'" 
+            :isActive="activeModalForSelectableElementList=='driverList'" 
+            @closeModal="activeModalForSelectableElementList=''" 
+            @onGettingLineFromSelectableDriverListModal="(elt)=>fillDriverInfoField(elt)">
+        </modal-for-selectable-driver-list>
+
+        <modal-for-selectable-vehicle-list 
+            v-if="activeModalForSelectableElementList=='vehicleList'" 
+            :isActive="activeModalForSelectableElementList=='vehicleList'" 
+            @closeModal="activeModalForSelectableElementList=''" 
+            @onGettingLineFromSelectableVehicleListModal="(elt)=>fillVehicleInfoField(elt)">
+        </modal-for-selectable-vehicle-list>
 
        
 
@@ -405,7 +426,10 @@ import NewTOCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import inputSelect from './input/input-select.vue'
 import inputDate from './input/input-date.vue'
-import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
+import ModalForSelectableCarrierList from './ModalForSelectableCarrierList.vue'
+import ModalForSelectableRouteList from './ModalForSelectableRouteList.vue'
+import ModalForSelectableDriverList from './ModalForSelectableDriverList.vue'
+import ModalForSelectableVehicleList from './ModalForSelectableVehicleList.vue'
 import { onMounted, ref } from 'vue'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
@@ -422,7 +446,10 @@ export default {
         orderInfo,
         inputText,
         inputSelect,
-        ModalForSelectableCustomerList,
+        ModalForSelectableCarrierList,
+        ModalForSelectableRouteList,
+        ModalForSelectableDriverList,
+        ModalForSelectableVehicleList,
         inputDate
     },
     data(){

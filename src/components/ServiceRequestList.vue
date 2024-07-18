@@ -1,14 +1,14 @@
 <template>
     <div class="my-5 mx-5">
         
-        <transport-list-ribbon 
-        pageTitle="Bon de transport"
-        componentwithPresentationView="customerListPresentation"
-        :hasAThirdPresentation="true"
-        @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
-        @onInputSearchData="(eltToSearch)=>this.eltToSearch=eltToSearch"
-        componentWithCompInfo="customerListRightInfoMaxWidth"
-        ></transport-list-ribbon>
+        <service-list-ribbon
+            pageTitle="Demande Service"
+            componentwithPresentationView="customerListPresentation"
+            :hasAThirdPresentation="true"
+            @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
+            @onInputSearchData="(eltToSearch)=>this.eltToSearch=eltToSearch"
+            componentWithCompInfo="customerListRightInfoMaxWidth"
+        ></service-list-ribbon>
 
 
         <div class="has-background-light columns" style="height: 750px;">
@@ -18,48 +18,48 @@
                         <tr> 
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Numéro</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Statut</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Transporteur</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Véhicule</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Chauffeur</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Trajet</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Date départ prévue</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Durée prévue</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Date retour prévue</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Client</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Sous garantie</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Contrat</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Article</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Référence</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Crée le</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow" style="min-width: 100px;">Crée par</th>
                            
                         </tr>   
                     </thead>
                     <tbody>
-                        <tr id="" v-for="transport of filteredtransportList" :key="transport['No_']" class="is-narrow">
+                        <tr id="" v-for="service of filteredserviceList" :key="service['No_']" class="is-narrow">
                             <td class="has-text-left has-background-light"> 
-                                <router-link :to="`/TransportOrderCard?orderNo=${ transport['No_'] }`">
+                                <router-link :to="`/ServiceRequestCard?serviceNo=${ service['No_'] }`">
                                     <a href="#" class="has-text-orange">
-                                        {{ transport['No_'] }} 
+                                        {{ service['No_'] }} 
                                     </a>
                                 </router-link>
                             </td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ transport['TransportOrder Status'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ transport['Carrier No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ transport['Vehicle No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ transport[' Driver No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ transport['Route No_'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ formatDateHour(transport['Departure Date (Planned)']) }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ transport['Duration (Planned)'] }}</td>
-                            <td class="has-text-left has-background-light is-narrow"> {{ formatDateHour(transport['Return Date (Planned)']) }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ service['Service Request Status'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ service['Customer No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ service['Warranty Status'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ service['Contrat No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ service['Item No_'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ service['Reference'] }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ formatDateHour(service['Created On']) }}</td>
+                            <td class="has-text-left has-background-light is-narrow"> {{ service['Created By'] }}</td>
                            
                         </tr>
                     </tbody>
                 </table>
             </div>
             
-            <transport-info class="transport-info"></transport-info>
+            <service-info class="service-info"></service-info>
         </div>
     </div>
     
 </template>
 
 <script scoped>
-import TransportInfo from './CustomerInfo.vue'
-import transportListRibbon from './RibbonForLists.vue'
+import ServiceInfo from './CustomerInfo.vue'
+import serviceListRibbon from './RibbonForLists.vue'
 import axios from 'axios'
 import {computed ,ref } from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
@@ -67,9 +67,9 @@ import { useNavigationTabStore } from '@/Stores/NavigationTab'
 
 export default {
 
-    name:'transport-order-list',
+    name:'service-order-list',
     components:{
-        TransportInfo,transportListRibbon
+        ServiceInfo,serviceListRibbon
     },
     computed:{
         presentationView(){
@@ -77,10 +77,10 @@ export default {
         }
     },
     setup() {
-        const  transportList = ref([])
+        const  serviceList = ref([])
         const eltToSearch = ref('')
-        const filteredtransportList = computed(()=>
-        transportList.value
+        const filteredserviceList = computed(()=>
+        serviceList.value
         .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value)
                  || new String(row['Carrier']).toLowerCase().includes(eltToSearch.value)
                  || new String(row['Vehicle']).toLowerCase().includes(eltToSearch.value)
@@ -89,9 +89,9 @@ export default {
      )
         // expose to template and other options API hooks
         return {
-            transportList,
+            serviceList,
             eltToSearch,
-            filteredtransportList
+            filteredserviceList
         }
     },
     data(){
@@ -128,10 +128,10 @@ export default {
     },
     
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getTransportOrderList`)
+        axios.get(`http://${this.hostname}:3000/app/getServiceRequestList`)
         .then((result) => {
             console.log(result.data.result[0])
-          this.transportList = result.data.result;
+          this.serviceList = result.data.result;
          
         })
         .catch(err=>console.log(err));
@@ -142,7 +142,7 @@ export default {
 </script>
 
 <style scoped>
-.transport-info{
+.service-info{
     max-width: v-bind(customerInfoCompMaxWidth);
     transition: max-width 0.5s;
 }

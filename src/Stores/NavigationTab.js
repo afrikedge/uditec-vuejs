@@ -21,6 +21,7 @@ export const useNavigationTabStore = defineStore('navigationTab', {
             quoteCardRightInfoMaxWidth:'800px',
             orderListRightInfoMaxWidth:'800px',
             orderCardRightInfoMaxWidth:'800px',
+            routeCardRightInfoMaxWidth:'800px',
         },
         presentationForPageList:{
             customerListPresentation:'list',
@@ -30,6 +31,7 @@ export const useNavigationTabStore = defineStore('navigationTab', {
             leadListPresentation:'list',
             quoteListPresentation:'list',
             orderListPresentation:'list',
+            routeListPresentation:'list',
        }
     }),
     // getters: {

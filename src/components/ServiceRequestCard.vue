@@ -85,7 +85,7 @@
                     </div>
                     <br><br>
 <!---------sous-Section ongle 2 formulaire fiche  demande service----------------------->
-                    <div id="movement" v-if="!readOnlyModeIsDisabled">
+                    <div id="movement">
                         <div :class="{'has-background-light':onglet2_expanded}">
                             <div :class="{'columns':!onglet2_expanded,'p-3':onglet2_expanded,'has-border-bottom-grey':onglet2_expanded,'has-border-bottom':!onglet2_expanded}">
                                 <div class="column p-0 has-text-left has-text-weight-bold">
@@ -139,7 +139,7 @@
                     </div>  
                     <br><br>
 <!---------sous-Section ongle 3 formulaire fiche demande service----------------------->
-                    <div id="replacementpiece" v-if="!readOnlyModeIsDisabled">
+                    <div id="replacementpiece">
                         <div :class="{'has-background-light':onglet3_expanded}">
                             <div :class="{'columns':!onglet3_expanded,'p-3':onglet3_expanded,'has-border-bottom-grey':onglet3_expanded,'has-border-bottom':!onglet3_expanded}">
                                 <div class="column p-0 has-text-left has-text-weight-bold">
@@ -191,7 +191,7 @@
                     </div>  
                     <br><br>
 <!---------sous-Section ongle 4 formulaire fiche demande service----------------------->
-                    <div id="imperfectpiece" v-if="!readOnlyModeIsDisabled">
+                    <div id="imperfectpiece">
                         <div :class="{'has-background-light':onglet4_expanded}">
                             <div :class="{'columns':!onglet4_expanded,'p-3':onglet4_expanded,'has-border-bottom-grey':onglet4_expanded,'has-border-bottom':!onglet4_expanded}">
                                 <div class="column p-0 has-text-left has-text-weight-bold">
@@ -243,7 +243,7 @@
                     </div>  
                     <br><br>
 <!---------sous-Section ongle 5 formulaire fiche demande service----------------------->
-                    <div id="valorization" v-if="!readOnlyModeIsDisabled">
+                    <div id="valorization">
                         <div :class="{'has-background-light':onglet5_expanded}">
                             <div :class="{'columns':!onglet5_expanded,'p-3':onglet5_expanded,'has-border-bottom-grey':onglet5_expanded,'has-border-bottom':!onglet5_expanded}">
                                 <div class="column p-0 has-text-left has-text-weight-bold">
@@ -291,7 +291,7 @@
                     </div>  
                     <br><br>
 <!---------sous-Section ongle 6 formulaire fiche demande service----------------------->
-                    <div id="assignment" v-if="!readOnlyModeIsDisabled">
+                    <div id="assignment">
                         <div :class="{'has-background-light':onglet6_expanded}">
                             <div :class="{'columns':!onglet6_expanded,'p-3':onglet6_expanded,'has-border-bottom-grey':onglet6_expanded,'has-border-bottom':!onglet2_expanded}">
                                 <div class="column p-0 has-text-left has-text-weight-bold">

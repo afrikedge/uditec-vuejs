@@ -114,7 +114,7 @@ export default{
         }
     },
     beforeMount(){
-        axios.get(`http://${this.hostname}:3000/app/getTransportOrderList`)
+        axios.get(`http://${this.hostname}:3000/app/getVehiculeList`)
         .then(result => {
             console.log(result)
             this.elementList=result.data.recordset

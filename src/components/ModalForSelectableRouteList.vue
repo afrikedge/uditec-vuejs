@@ -26,7 +26,14 @@
                 <table class="table  is-narrow is-hoverable is-fullwidth">
                     <thead class=" my-2">
                         <tr> 
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Identifiant</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Description</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Statut</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Zone départ</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Zone arrivée</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Kilométrage total</th>
+                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Durée moyenne</th>
                        
                         </tr>
                     </thead>
@@ -40,6 +47,13 @@
                                         </a>
                                     </router-link>
                                 </td>
+                                <td class="has-text-left is-narrow"> {{ elt['Description'] }} </td> 
+                                <td class="has-text-left is-narrow"> {{ elt['Route Type'] }} </td> 
+                                <td class="has-text-left is-narrow"> {{ elt['Route Status'] }} </td> 
+                                <td class="has-text-left is-narrow"> {{ elt['Departure Zone'] }} </td> 
+                                <td class="has-text-left is-narrow"> {{ elt['Arrival Zone'] }} </td> 
+                                <td class="has-text-left is-narrow"> {{ elt['Total Distance(Km)'] }} </td> 
+                                <td class="has-text-left is-narrow"> {{ elt['Average Duration'] }} </td> 
                                                  
                             </tr>
                     </tbody>
@@ -93,10 +107,10 @@ export default{
         }
     },
     beforeMount(){
-        axios.get(`http://${this.hostname}:3000/app/getTransportOrderList`)
+        axios.get(`http://${this.hostname}:3000/app/getRouteList`)
         .then(result => {
             console.log(result)
-            this.elementList=result.data.recordset
+            this.elementList=result.data.result
         }).catch(err=>console.log(err))
 
     }

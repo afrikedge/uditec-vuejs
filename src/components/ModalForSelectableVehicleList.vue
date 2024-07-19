@@ -117,7 +117,7 @@ export default{
         axios.get(`http://${this.hostname}:3000/app/getVehiculeList`)
         .then(result => {
             console.log(result)
-            this.elementList=result.data.recordset
+            this.elementList=result.data.result
         }).catch(err=>console.log(err))
 
     }

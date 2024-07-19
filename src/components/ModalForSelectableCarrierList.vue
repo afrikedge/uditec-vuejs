@@ -77,10 +77,8 @@ export default{
 
         const filteredCarrierList = computed(()=>
             elementList.value
-            .filter((row) => new String(row['Code']).toLowerCase().includes(eltToSearch.value)
+            .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value)
                 || new String(row['Name']).toLowerCase().includes(eltToSearch.value)
-                || new String(row['Identification N°']).toLowerCase().includes(eltToSearch.value)
-                || new String(row['License N°']).toLowerCase().includes(eltToSearch.value)
             )
         )
         
@@ -92,7 +90,7 @@ export default{
         axios.get(`http://${this.hostname}:3000/app/getCarrierList`)
         .then(result => {
             console.log(result)
-            this.elementList=result.data.recordset
+            this.elementList=result.data.result
         }).catch(err=>console.log(err))
 
     }

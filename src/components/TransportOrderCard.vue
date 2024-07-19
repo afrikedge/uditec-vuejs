@@ -77,16 +77,16 @@
                                 <input-text labelInputText="Date retour prévue" :valueInputText="formatDate(transportCard['Return Date (Planned)'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-date labelInputText="Date retour prévue " v-model="PlannedReturnDate" v-else></input-date>
 
-                                <input-time labelInputText="Heure retour prévue" :valueInputText="formatDateHour(transportCard['Return Time (Planned)'])" :is_disabled="!readOnlyModeIsDisabled"></input-time>  
+                                <input-time labelInputText="Heure retour prévue" :valueInputText="formatTime(transportCard['Return Time (Planned)'])" :is_disabled="!readOnlyModeIsDisabled"></input-time>  
 
                                 <input-text labelInputText="Date départ réelle" :valueInputText="formatDate(transportCard['Departure Date (Actual)'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-date labelInputText="Date départ réelle" v-model="actualDepartureDate" v-else></input-date>
 
-                                <input-time labelInputText="Heure de départ réelle" :valueInputText="formatDateHour(transportCard['Departure Time (Actual)'])" :is_disabled="!readOnlyModeIsDisabled"></input-time>
+                                <input-time labelInputText="Heure de départ réelle" :valueInputText="formatTime(transportCard['Departure Time (Actual)'])" :is_disabled="!readOnlyModeIsDisabled"></input-time>
                                 <input-text labelInputText="Date retour réelle" :valueInputText="formatDate(transportCard['Return Date (Actual)'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-date labelInputText="Date retour réelle" v-model="actualReturnDate" v-else></input-date>
 
-                                <input-time labelInputText="Heure retour réelle" :valueInputText="formatDateHour(transportCard['Return Time (Actual)'])" :is_disabled="!readOnlyModeIsDisabled"></input-time> 
+                                <input-time labelInputText="Heure retour réelle" :valueInputText="formatTime(transportCard['Return Time (Actual)'])" :is_disabled="!readOnlyModeIsDisabled"></input-time> 
                                 <input-time labelInputText="Durée réelle" :valueInputText="transportCard['Duration (Actual)']" :is_disabled="!readOnlyModeIsDisabled"></input-time> 
                                 <input-text labelInputText="Volume utile" :valueInputText="transportCard['Useful volume (cbm)']" :is_disabled="true"></input-text> 
                                 <input-text labelInputText="Charge utile" :valueInputText="transportCard['Payload (kg)']" :is_disabled="true"></input-text> 
@@ -280,6 +280,7 @@ import ModalForSelectableVehicleList from './ModalForSelectableVehicleList.vue'
 import inputText from './input/input-text.vue'
 import inputSelect from './input/input-select.vue'
 import inputDate from './input/input-date.vue'
+import inputTime from './input/input-time.vue'
 import axios from 'axios'
 import { onMounted,onBeforeMount,ref,watch } from 'vue'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
@@ -294,6 +295,7 @@ export default {
         TransportCardRibbon,
         inputSelect,
         inputDate,
+        inputTime,
         ModalForSelectableCarrierList,
         ModalForSelectableRouteList,
         ModalForSelectableDriverList,
@@ -487,6 +489,12 @@ export default {
                 if (dateString.includes('1753-')||dateString.includes('1900-')) return ''
                 else return new Date(date).toLocaleDateString() + ' à ' +new Date(date).toLocaleTimeString()
             }else{ return ''}
+        },
+        formatTime(date){
+            
+            const dateString = new String(date)
+            if (dateString.includes('1753-')) return ''
+            else return new Date(date).toLocaleTimeString()
         },
         expand(id){
             const myElt=document.getElementById(id);

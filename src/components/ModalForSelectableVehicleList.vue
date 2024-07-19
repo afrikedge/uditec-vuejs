@@ -47,24 +47,24 @@
 
                             <tr :id="elt['Registration N°']" v-for="(elt,index) of filteredVehiculeList" :key="index" @click="$emit('onGettingLineFromSelectableVehiculeListModal',elt);$emit('closeModal')">
                                 <td class="has-text-left is-narrow"> 
-                                    <router-link :to="`/TransportOrderCard/${ elt['Registration N°'] }`">
+                                    <router-link :to="`/TransportOrderCard/${ elt['Registration No_'] }`">
                                         <a href="#" class="has-text-orange">
-                                            {{ elt['Registration N°'] }} 
+                                            {{ elt['Registration No_'] }} 
                                         </a>
                                     </router-link>
                                 </td>
                                 <td class="has-text-left is-narrow"> {{ elt['Vehicle Type'] }} </td> 
                                 <td class="has-text-left is-narrow"> {{ elt['Brand'] }} </td> 
-                                <td class="has-text-left is-narrow"> {{ elt['Model'] }} </td> 
+                                <td class="has-text-left is-narrow"> {{ elt['Mode'] }} </td> 
                                 <td class="has-text-left is-narrow"> {{ elt['Useful length (m)'] }} </td> 
                                 <td class="has-text-left is-narrow"> {{ elt['Useful width (m)'] }} </td> 
                                 <td class="has-text-left is-narrow"> {{ elt['Useful height (m)'] }} </td> 
                                 <td class="has-text-left is-narrow"> {{ elt['Useful volume (cbm)'] }} </td> 
                                 <td class="has-text-left is-narrow"> {{ elt['Payload (kg)'] }} </td> 
-                                <td class="has-text-left is-narrow"> {{ elt['Carrier N°'] }} </td> 
-                                <td class="has-text-left is-narrow"> {{ elt['Default Drive N°'] }} </td> 
+                                <td class="has-text-left is-narrow"> {{ elt['Carrier No_'] }} </td> 
+                                <td class="has-text-left is-narrow"> {{ elt['Default Driver No_'] }} </td> 
                                 <td class="has-text-left is-narrow"> {{ elt['Vehicle Status'] }} </td> 
-                                <td class="has-text-left is-narrow"> {{ elt['Fixed Asset N°'] }} </td> 
+                                <td class="has-text-left is-narrow"> {{ elt['Fixed Asset No_'] }} </td> 
                                 
                                                  
                             </tr>
@@ -101,7 +101,7 @@ export default{
 
         const filteredVehiculeList = computed(()=>
             elementList.value
-            .filter((row) => new String(row['Registration N°']).toLowerCase().includes(eltToSearch.value)
+            .filter((row) => new String(row['Registration No_']).toLowerCase().includes(eltToSearch.value)
                 || new String(row['Vehicle Type']).toLowerCase().includes(eltToSearch.value)
                 || new String(row['Brand']).toLowerCase().includes(eltToSearch.value)
                 || new String(row['Model']).toLowerCase().includes(eltToSearch.value)

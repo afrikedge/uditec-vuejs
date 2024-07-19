@@ -43,10 +43,10 @@
                                         </a>
                                     </router-link>
                                 </td>
-                                <td class="has-text-left is-narrow"> {{ elt['Identification N°'] }} </td>                
+                                <td class="has-text-left is-narrow"> {{ elt['Identification No_'] }} </td>                
                                 <td class="has-text-left is-narrow"> {{ elt['Name'] }}</td>                
-                                <td class="has-text-left is-narrow"> {{ elt['License N°'] }}</td>                
-                                <td class="has-text-left is-narrow"> {{ formatDate(elt['Expiration Date']) }}</td>                       
+                                <td class="has-text-left is-narrow"> {{ elt['License No_'] }}</td>                
+                                <td class="has-text-left is-narrow"> {{ formatDate(elt['Licence Expiration Date']) }}</td>                       
                             </tr>
                     </tbody>
                 </table>
@@ -90,8 +90,8 @@ export default{
             elementList.value
             .filter((row) => new String(row['Code']).toLowerCase().includes(eltToSearch.value)
                 || new String(row['Name']).toLowerCase().includes(eltToSearch.value)
-                || new String(row['Identification N°']).toLowerCase().includes(eltToSearch.value)
-                || new String(row['License N°']).toLowerCase().includes(eltToSearch.value)
+                || new String(row['Identification No_']).toLowerCase().includes(eltToSearch.value)
+                || new String(row['License No_']).toLowerCase().includes(eltToSearch.value)
             )
         )
         
@@ -103,7 +103,7 @@ export default{
         axios.get(`http://${this.hostname}:3000/app/getDriverList`)
         .then(result => {
             console.log(result)
-            this.elementList=result.data.recordset
+            this.elementList=result.data.result
         }).catch(err=>console.log(err))
 
     }

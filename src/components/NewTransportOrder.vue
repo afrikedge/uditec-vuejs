@@ -83,22 +83,22 @@
                                 <input-select v-model="transportOrderJourney" labelInputText="Trajet" @openModal="activeModalForSelectableElementList='routeList'"></input-select>
                                 <input-date v-model="transportOrderStartDate" labelInputText="Date départ prévue"  :is_disabled="false"></input-date>
                                 
-                                <input-text v-model="transportOrderStartHours" labelInputText="Heure de départ prévue"></input-text>
+                                <input-time v-model="transportOrderStartHours" labelInputText="Heure de départ prévue"></input-time>
                                 <input-text v-model="transportOrderPlannedDuration" labelInputText="Durée prévue"></input-text>
                                 
                             </div>
                             <div class="column">
                                 <input-date v-model="transportOrderReturnDate" labelInputText="Date retour prévue"  :is_disabled="false"></input-date>
                                 
-                                <input-text v-model="transportOrderReturnHours" labelInputText="Heure retour prévue"></input-text>
+                                <input-time v-model="transportOrderReturnHours" labelInputText="Heure retour prévue"></input-time>
                                 
                                 <input-date v-model="transportOrderActualDate" labelInputText="Date départ réelle"  :is_disabled="false"></input-date>
                                 
-                                <input-text v-model="transportOrderActualHours" labelInputText="Heure de départ réelle"></input-text>
+                                <input-time v-model="transportOrderActualHours" labelInputText="Heure de départ réelle"></input-time>
                                 
                                 <input-date v-model="transportOrderActualReturnDate" labelInputText="Date retour réelle"  :is_disabled="false"></input-date>
                                 
-                                <input-text v-model="transportOrderActualReturnHours" labelInputText="Heure retour réelle"></input-text>
+                                <input-time v-model="transportOrderActualReturnHours" labelInputText="Heure retour réelle"></input-time>
                                 
                                 <input-text v-model="transportOrderActualDuration" labelInputText="Durée réelle"></input-text>
                                
@@ -426,6 +426,7 @@ import NewTOCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import inputSelect from './input/input-select.vue'
 import inputDate from './input/input-date.vue'
+import inputTime from './input/input-time.vue'
 import ModalForSelectableCarrierList from './ModalForSelectableCarrierList.vue'
 import ModalForSelectableRouteList from './ModalForSelectableRouteList.vue'
 import ModalForSelectableDriverList from './ModalForSelectableDriverList.vue'
@@ -446,11 +447,12 @@ export default {
         orderInfo,
         inputText,
         inputSelect,
+        inputDate,
+        inputTime,
         ModalForSelectableCarrierList,
         ModalForSelectableRouteList,
         ModalForSelectableDriverList,
-        ModalForSelectableVehicleList,
-        inputDate
+        ModalForSelectableVehicleList
     },
     data(){
         return{

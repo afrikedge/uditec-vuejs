@@ -23,14 +23,14 @@
                                 </span>
                             </div>
                             <div class="control ">
-                                <a href="#" class="button is-small has-border-bottom-orange" @click="searchInput_isDisabled=true">
+                                <a href="#" class=" button is-small has-border-bottom-orange" @click="searchInput_isDisabled=true">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-close"></i>
                                     </span>
                                 </a>
                             </div>
                         </div>
-                    </div> 
+                    </div>
 
                     <div class="column is-narrow" v-else>
                         <a href="#" class="px-3 py-3" @click="searchInput_isDisabled=false;searchInput_data=''">
@@ -39,75 +39,7 @@
                             </span>
                             <span class="subtitle is-6">Rechercher</span>
                         </a>
-                    </div> 
-
-                   
-                   <!-- <div class="column is-narrow" v-if="!searchInput_isDisabled">
-                            <div class="field px-2 has-addons">
-                                <div class="control custom-select is-small has-border-bottom-orange">
-                                    <div class="custom-select-trigger">
-                                        <span>{{  selectedOptionLabel }}</span>
-                                        <span class="icon">
-                                             <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                        </span>
-                                    </div>
-                                    <div class="custom-options">
-                                        <li class="has-text-orange" disabled>Champs visibles</li>
-                                        <li  class="custom-option"
-                                            v-for="option in options" 
-                                            :key="option.value"  
-                                            :data-value="option.value" 
-                                            @click="selectOption(option.value)">
-                                            {{ option.label }}
-                                        </li>
-                                    </div> 
-                                </div>
-                                <div class="control ">
-                                    <a href="#" class="button is-small has-border-bottom-orange" @click="searchInput_isDisabled=true">
-                                        <span class="icon is-small is-left">
-                                            <i class="fas fa-close"></i>
-                                        </span>
-                                    </a>
-                                </div>
-                            </div>
-                    </div> 
-                    <div class="column is-narrow" v-else>
-                            <a href="#" class="px-3 py-3" @click="searchInput_isDisabled=false;searchInput_data=''">
-                                <span class="icon">
-                                    <i class="fas fa-plus"></i>
-                                </span>
-                                <span class="subtitle is-6">Filtre...</span>
-                            </a>
-                    </div> 
-                    
-                    <div class="column is-narrow" v-for="(criterion, index) in searchCriteria" :key="index">
-                        <div class="field px-2 has-addons">
-                                <div class="control">
-                                    <span>{{ getColumnLabel(criterion.column) }}</span>
-                                </div>
-                                <div class="control has-icons-left has-a-size" v-if="criterion.column !='Processing Status'">
-                                    <input :type="getInput(criterion.column)" v-model="searchInput_data"  @input.prevent="$emit('onInputSearchData',searchInput_data)" class="input is-small has-border-bottom-orange" placeholder="Rechercher...">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-search"></i>
-                                    </span>
-                                </div>
-                                <div class="control " v-else>
-                                    <select v-model="searchInput_data" class=" has-a-size has-border-bottom-orange">
-                                        <option v-for="(label, value) in optionLabelList" :key="value" :value="value">
-                                            {{ label.Description }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="control">
-                                    <a href="#" class="button is-small has-border-bottom-orange" @click="removeSearchCriterion(index)">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-close"></i>
-                                    </span>
-                                    </a>
-                                </div>
-                        </div>
-                    </div> -->
-
+                    </div>
 
 
                     <div class="column is-narrow" v-if="newCardBtnDisabled==false">
@@ -164,7 +96,7 @@
                         </a>
                     </div----------------------------------------------------------->
 
-                    <div class="column is-narrow">
+                    <!------------------div class="column is-narrow">
                         <div :class="{'dropdown':true,'is-active':expandedOrCollapsedBtn=='actionBtn'}" style="border-radius: 0">
                             <div class="dropdown-trigger">
                                 <a href="#" class="px-3 py-3"  aria-haspopup="true" aria-controls="dropdown-menu" @click="expand_collapse_ReportBtn('actionBtn')">
@@ -176,16 +108,16 @@
                             </div>
                             <div class="dropdown-menu mt-2 shadow" id="dropdown-menu" role="menu" style="padding: 0;border: 0;">
                                 <div class="dropdown-content"  style="padding: 0;">
-                                    <a href="#" class="dropdown-item">
-                                        Dropdown item
-                                    </a>
-                                    <a href="#" class="dropdown-item">
-                                        Active dropdown item
-                                    </a>
+                                <a href="#" class="dropdown-item">
+                                    Dropdown item
+                                </a>
+                                <a href="#" class="dropdown-item">
+                                    Active dropdown item
+                                </a>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div----------------------->
 
                     <!----------------------div class="column is-narrow">
                         <div :class="{'dropdown':true, 'is-active':expandedOrCollapsedBtn=='navigateBtn'}" style="border-radius: 0">
@@ -301,8 +233,6 @@
 </template>
 <script>
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
-import { ref, computed } from 'vue'
-
 
 export default {
     name:'ribbon-for-list',
@@ -316,99 +246,14 @@ export default {
     'newCardBtnDisabled',
     'printCardBtnDisabled',
     'convertQuoteBtnDisabled',
-    'displayCardBtnDisabled',
-    'optionLabelList'],
-
-    setup() {
-        const newSearchColumn = ref('');
-        const saleOrderList = ref([]);
-        const searchCriteria = ref([]);
-         //permet d'afficher la zone de recherche
-        const searchInput_isDisabled = ref(true);
-        const selectedOption = ref('');
-
-        
-        const options = ref([
-            { label: 'N°', value: 'No_' },
-            { label: 'Code client', value: 'Sell-to Customer No_' },
-            { label: 'Nom du client', value: 'Sell-to Customer Name' },
-            { label: 'Code vendeur', value: 'Salesperson Code' },
-            { label: 'Code magasin', value: 'Location Code' },
-            { label: 'Date commande', value: 'Document Date' },
-            { label: 'Montant HT', value: 'Total Amount' },
-            { label: 'Statut traitement', value: 'Processing Status' },
-        ]);
-
-        const selectOption = (value) => {
-            newSearchColumn.value = value;
-            addSearchCriterion();
-        };
-       
-        const selectedOptionLabel = computed(() =>{
-            const selected = options.value.find(option => option.value === selectedOption.value);
-            return selected;
-        })
-
-        const addSearchCriterion = () => {
-            if (newSearchColumn.value) {
-                searchCriteria.value.push({ column: newSearchColumn.value, value: '' });
-                newSearchColumn.value = '';
-                searchInput_isDisabled.value = true;
-            }
-        }
-
-        const removeSearchCriterion = (index) => {
-            searchCriteria.value.splice(index, 1)
-        }
-
-        const getColumnLabel = (column) => {
-            const labels = {
-                'No_': 'N°',
-                'Sell-to Customer No_': 'Code client',
-                'Sell-to Customer Name': 'Nom du client',
-                'Salesperson Code': 'Code vendeur',
-                'Location Code': 'Code magasin',
-                'Document Date': 'Date commande',
-                'Total Amount': 'Montant HT',
-                'Processing Status': 'Statut traitement'
-            }
-            return labels[column]
-        }
-
-        const getInput = (column) => {
-            switch (column) {
-                case 'Document Date':
-                return 'date'
-                case 'Total Amount':
-                return 'number'
-                default:
-                return 'text'
-            }
-        }
-
-       
-        return {
-            newSearchColumn,
-            saleOrderList,
-            searchCriteria,
-            addSearchCriterion,
-            removeSearchCriterion,
-            getColumnLabel,
-            getInput,
-            searchInput_isDisabled,
-            options,
-            selectOption,
-            selectedOption,
-            selectedOptionLabel
-     
-        }
-    },
+    'displayCardBtnDisabled'],
     data(){
         return {
             //permet de manipuler l'affichage des boutons dropdown
             expandedOrCollapsedBtn:'',
 
-           
+            //permet d'afficher la zone de recherche
+            searchInput_isDisabled:true,
             //indique la variable qui contiendra les données à rechercher
             searchInput_data:'',
 
@@ -426,7 +271,6 @@ export default {
         presentationView(){
             return useNavigationTabStore().presentationForPageList[this.componentwithPresentationView]
         }
-       
     },
     methods:{
         expand_collapse_ReportBtn(currentBtn){
@@ -436,11 +280,8 @@ export default {
         selectPresentationView(presentation){
             useNavigationTabStore().setPresentation(this.componentwithPresentationView,presentation)
             this.presentationViewDropdownActive=!this.presentationViewDropdownActive
-        },
-    },
-
-    
-
+        }
+}
     
 }
 </script>
@@ -461,52 +302,6 @@ span i{
 
 .has-background-orange{
     background-color: #ff4500;
-}
-
-.has-text-orange{
-    color:3px solid orange;
-}
-
-.custom-select {
-  position: relative;
-}
-
-.custom-select-trigger {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: white;
-  padding: 10px;
-  cursor: pointer;
-  border: 1px solid #ccc;
-}
-
-.custom-option {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.custom-option:hover {
-  background-color: #ffa500;
-}
-
-.arrow {
-  border: solid black;
-  border-width: 0 1px 1px 0;
-  display: inline-block;
-  padding: 3px;
-  transform: rotate(45deg);
-}
-
-li {
-    list-style: none;
-    background:#f2f2f2;
-    overflow-y: auto;
-}
-
-.has-a-size {
- width: 200px;
- height: 1.85rem;
 }
 
 

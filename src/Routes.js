@@ -24,6 +24,7 @@ import SaleOrderCard from './components/SaleOrderCard.vue'
 import SaleQuoteCard from './components/SaleQuoteCard.vue'
 import SaleOrderCard1 from './components/SaleOrderCard1.vue'
 import SaleOrderList from './components/SaleOrderList.vue'
+import AcuseList from "./components/AcuseList.vue"
 import SaleQuoteList from './components/SaleQuoteList.vue'
 import PrintableOrderLayout from './components/PrintableOrderLayout.vue'
 import PrintableOrderLayout1 from './components/PrintableOrderLayout1.vue'
@@ -103,6 +104,7 @@ import NewServiceRequest from "./components/NewServiceRequest.vue"
 
 //14-----Trajet
 import RouteCard from "./components/RouteCard.vue"
+import FilterForSearch from "./components/FilterForSearch.vue"
 
 const routes = [
   ///////////////////1
@@ -128,6 +130,7 @@ const routes = [
   {path:'/saleOrderCard/:id',component:SaleOrderCard,name:'SaleOrderCard'},
   {path:'/saleOrderCard1/:id',component:SaleOrderCard1,name:'SaleOrderCard1'},
   {path:'/saleOrderList',component:SaleOrderList,name:'SaleOrderList'},
+  {path:'/AcuseList',component:AcuseList,name:'AcuseListPage'},
   {path:'/saleOrderOverview/:id',component:PrintableOrderLayout,name:'PrintableOrderLayout'},
   {path:'/saleOrderOverview1/:id',component:PrintableOrderLayout1,name:'PrintableOrderLayout1'},
   {path:'/SaleQuoteCard/:id',component:SaleQuoteCard,name:'SaleQuoteCardPage'},
@@ -200,7 +203,7 @@ const routes = [
   {path:'/NewServiceRequest',component:NewServiceRequest,name:'NewServiceRequestPage'},
 
   {path:'/RouteCard/:id',component:RouteCard,name:'RouteCardPage'},
-
+  {path:'/FilterForSearch',component:FilterForSearch,name:'FilterForSearchPage'},
 ];
 
 const router = createRouter({

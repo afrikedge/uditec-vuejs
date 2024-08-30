@@ -77,7 +77,8 @@
                                 <input-text labelInputText="Date retour prévue" :valueInputText="formatDate(transportCard['Return Date (Planned)'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-date labelInputText="Date retour prévue " v-model="PlannedReturnDate" v-else></input-date>
 
-                                <input-time labelInputText="Heure retour prévue" :valueInputText="formatTime(transportCard['Return Time (Planned)'])" :is_disabled="!readOnlyModeIsDisabled"></input-time>  
+                                <input-text labelInputText="Heure retour prévue" :valueInputText="formatTime(transportCard['Return Time (Planned)'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
+                                <input-time labelInputText="Heure retour prévue" :valueInputText="formatTime(transportCard['Return Time (Planned)'])" v-else></input-time>  
 
                                 <input-text labelInputText="Date départ réelle" :valueInputText="formatDate(transportCard['Departure Date (Actual)'])" :is_disabled="!readOnlyModeIsDisabled" v-if="!readOnlyModeIsDisabled"></input-text>
                                 <input-date labelInputText="Date départ réelle" v-model="actualDepartureDate" v-else></input-date>

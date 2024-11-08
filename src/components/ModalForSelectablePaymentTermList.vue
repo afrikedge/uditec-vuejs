@@ -67,13 +67,19 @@ export default{
     setup(props){
         const eltToSearch = ref('')
         const elementList = ref([])
+        
+        const filteredPaymentTermList = computed(()=> {
 
-        const filteredPaymentTermList = computed(()=>
-            elementList.value
-            .filter((row) => (new String(row['Code']).toLowerCase().includes(eltToSearch.value.toLowerCase())
-                || new String(row['Description']).toLowerCase().includes(eltToSearch.value.toLowerCase()))
-                && row['Sales Mode'] == props.salesMode 
-            )
+            if(props.salesMode) return elementList.value
+                .filter((row) => (new String(row['Code']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                    || new String(row['Description']).toLowerCase().includes(eltToSearch.value.toLowerCase()))
+                    && row['Sales Mode'] == props.salesMode )
+            else return elementList.value
+                .filter((row) => (new String(row['Code']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                    || new String(row['Description']).toLowerCase().includes(eltToSearch.value.toLowerCase()))
+                )
+        }
+            
         )
         
         return {
@@ -81,7 +87,7 @@ export default{
         }
     },
     beforeMount(){
-        axios.get(`http://${this.hostname}:3000/app/getPaymentTermList`)
+        axios.get(`http://${this.hostname}:5000/app/getPaymentTermList`)
         .then(result => {
             this.elementList=result.data
         }).catch(err=>console.log(err))

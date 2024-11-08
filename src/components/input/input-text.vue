@@ -8,7 +8,7 @@
             <div class="field">
                 <p :class="{'control':true,'is-expanded':true,'is-loading':is_loading}">
                     <input :disabled="props.is_disabled" :class="['input',props.inputTextColor,props.inputTextWeight]" type="text" :value="props.valueInputText" v-if="props.is_disabled==true">
-                    <input class="input " type="text" v-model="model" :readonly="props.is_readOnly" v-else>
+                    <input class="input" :maxlength="props.maxLength" type="text" v-model="model" :readonly="props.is_readOnly" v-else>
                 </p>
             </div>
         </div>
@@ -18,7 +18,7 @@
 <script setup>
 import { defineModel, defineProps } from 'vue';
 const model = defineModel()
-const props = defineProps(['labelInputText','valueInputText','is_disabled','is_readOnly','inputTextColor','inputTextWeight','is_loading'])
+const props = defineProps(['labelInputText','valueInputText','is_disabled','is_readOnly','inputTextColor','inputTextWeight','is_loading','maxLength'])
 
 </script>
 

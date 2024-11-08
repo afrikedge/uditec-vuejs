@@ -16,7 +16,7 @@
                     <span class="has-text-orange"> {{ soNo }} </span>  -
                     <span>{{ soDesc }}</span>
                 </div>
-                <div class="column has-text-right">
+                <div class="column has-text-right is-narrow">
                     <a href="#" @click.prevent="goHome">
                         <span class="icon-text has-text-grey-lighter  p-2 " >
                             <span class="icon">

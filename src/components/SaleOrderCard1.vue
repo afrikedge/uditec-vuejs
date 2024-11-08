@@ -439,7 +439,7 @@ export default {
             formData.append('document', JSON.stringify(DocumentDetail));
             
 
-            axios.post(`http://${this.hostname}:3000/app/upload`,
+            axios.post(`http://${this.hostname}:5000/app/upload`,
                 formData,
                 {
                     headers: {
@@ -461,14 +461,14 @@ export default {
 
     },
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getSOCard/${this.id}`)
+        axios.get(`http://${this.hostname}:5000/app/getSOCard/${this.id}`)
         .then(result => {
             //console.log(this.$route)
             this.soHeader = result.data[0],
             this.soLine = result.data[1]
         }).catch(err=>console.log(err))
 
-        axios.get(`http://${this.hostname}:3000/app/docLink/${this.id}`)
+        axios.get(`http://${this.hostname}:5000/app/docLink/${this.id}`)
         .then(result => {
             const docLinks = result.data.docLink
             console.log(docLinks)
@@ -483,7 +483,7 @@ export default {
     },
     watch:{
         uploadSuccess_occur(){
-            axios.get(`http://${this.hostname}:3000/app/docLink/${this.id}`)
+            axios.get(`http://${this.hostname}:5000/app/docLink/${this.id}`)
             .then(result => {
                 const docLinks = result.data.docLink
                 console.log(docLinks)

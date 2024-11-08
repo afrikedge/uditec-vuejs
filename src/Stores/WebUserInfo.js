@@ -2,10 +2,12 @@ import { defineStore } from 'pinia'
 
 export const useWebUserInfoStore = defineStore('webUser', {
     state: () => ({ name:'',
+        fullName:'',
         responsibilityCenter:'',
         activeCompanyId:'',
         defaultCustomerNo:'',
         defaultCustomerName:'',
+        userProfile:'',
 
         defaultLanguage:'FRA',
 
@@ -25,7 +27,10 @@ export const useWebUserInfoStore = defineStore('webUser', {
         defaultLocation:'',
         defaultSalesPersonCode:'',
         defaultSalesChannel:'',
-        defaultStoreCode:''
+        defaultStoreCode:'',
+        responsibilityCenterName:'',
+        defaultUserPriceGroup:'',
+        defaultUserPromotion:''
       }),
     getters: {
       getWebUser: (state) => state
@@ -33,6 +38,7 @@ export const useWebUserInfoStore = defineStore('webUser', {
     actions: {
       fillWebUserInfo(data) {
         this.name=data["Code"]
+        this.fullName=data["Name"]
         this.responsibilityCenter=data["Responsibility Center"]
         this.activeCompanyId=data["Default Company Id"]
         this.defaultCustomerName=data["Default Customer Name"]
@@ -41,6 +47,10 @@ export const useWebUserInfoStore = defineStore('webUser', {
         this.defaultSalesPersonCode=data["Sales Person Code"]
         this.defaultSalesChannel=data["Sales Channel"]
         this.defaultStoreCode=data["Store Code"]
+        this.responsibilityCenterName=data["Resp. Center Name"]
+        this.defaultUserPriceGroup = data['Customer Price Group']
+        this.userProfile = data['User Profile']
+        this.defaultUserPromotion = data['Current Promotion']
       },
       fillWebUserCustomerInfo(customer){
         this.defaultCustomerContactCode=customer['Primary Contact No_']

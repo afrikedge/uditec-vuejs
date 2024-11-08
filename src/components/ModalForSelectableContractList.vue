@@ -18,7 +18,7 @@
                     <thead class=" my-2">
                         <tr> 
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Code</th>
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type de compte</th>
+                            <!---th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Type de compte</th---->
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date début OP</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Durée OP (Mois)</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Date fin OP</th>
@@ -29,10 +29,10 @@
 
                             <tr :id="elt['No_']" v-for="(elt,index) of filteredContractList" :key="index" @click="$emit('onGettingLineFromSelectableContractListModal',elt);$emit('closeModal')">
                                 <td class="has-text-left is-narrow"> {{ elt['No_'] }} </td>
-                                <td class="has-text-left is-narrow"> {{ elt['Account Type'] }}</td>
-                                <td class="has-text-left is-narrow"> {{ elt['OP Starting Date'] }} </td>                
+                                <!----td class="has-text-left is-narrow"> {{ elt['Account Type'] }}</td---->
+                                <td class="has-text-left is-narrow"> {{ formatDate(elt['OP Starting Date']) }} </td>                
                                 <td class="has-text-left is-narrow"> {{ elt['OP Duration (Month)'] }}</td>                
-                                <td class="has-text-left is-narrow"> {{ elt['OP Ending Date'] }}</td>                
+                                <td class="has-text-left is-narrow"> {{ formatDate(elt['OP Ending Date']) }}</td>                
                                 <td class="has-text-left is-narrow"> {{ elt['Duration (Month)'] }}</td>                
                             </tr>
                     </tbody>
@@ -75,12 +75,25 @@ export default{
         }
     },
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getCUCList?customerId=${this.customerNo}`)
-        .then(result => {
-            this.elementList=result.data.recordset
-        }).catch(err=>console.log(err))
+        if(this.customerNo){
+            axios.get(`http://${this.hostname}:5000/app/getCUCList?customerId=${this.customerNo}`)
+            .then(result => {
+                this.elementList=result.data
+            }).catch(err=>console.log(err))
+        }
 
     },
+    methods:{
+        formatDate(date){
+            if(date){
+                const dateString = new String(date)
+                if (dateString.includes('1753-')) return ''
+                else return new Date(date).toLocaleDateString()
+            }else{
+                return ''
+            }
+        },
+    }
 
 }
 

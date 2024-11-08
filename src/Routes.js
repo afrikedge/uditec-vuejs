@@ -1,23 +1,27 @@
 import { createWebHistory, createRouter } from "vue-router"
 
+
 //1-----composants primaire
 import SalesHome from './components/SalesHome'
 import Login from './components/LoginPage'
+import SPT2Login from './components/SPT2_LoginPage'
+
+import PrintableSPT2OrderLayout from "./components/PrintableSPT2OrderLayout.vue"
 
 //2-----compsants de fichiers maitres 
 import CustomerList from './components/CustomerList.vue'
 import CustomerCard from './components/CustomerCard.vue'
 import ItemList from './components/ItemList.vue'
 import ItemCard from './components/ItemCard.vue'
-import LeadList from './components/LeadList.vue'
+import LeadList from './components/LeadList1.vue'
 import LeadCard from './components/LeadCard.vue'
 import ContactList from './components/ContactList.vue'
 import ContactCard from './components/ContactCard.vue'
 import ShipToAddressList from './components/ShipToAddressList.vue'
 import ShipToAddressCard from './components/ShipToAddressCard.vue'
 
-//3-----composants annexes fichiers maitres
-import ItemAvailibilityPerStore from './components/ItemAvailabilityPerStore.vue'
+
+
 
 //4-----composant de document vente
 import SaleOrderCard from './components/SaleOrderCard.vue'
@@ -44,10 +48,12 @@ import NewSaleOrder from './components/NewSaleOrder.vue'
 //7-----Autres
 import RevisionRequestList from './components/RevisionRequestList.vue'
 import RevisionRequestCard from './components/RevisionRequestCard.vue'
-import DiscountRequestList from './components/RevisionRequestList.vue'
-import DiscountRequestCard from './components/RevisionRequestCard.vue'
-import ReleaseRequestList from './components/RevisionRequestList.vue'
-import ReleaseRequestCard from './components/RevisionRequestCard.vue'
+import DiscountRequestList from './components/DiscountRequestList.vue'
+import DiscountRequestCard from './components/DiscountRequestCard.vue'
+import ReleaseRequestList from './components/ReleaseRequestList.vue'
+import ReleaseRequestCard from './components/ReleaseRequestCard.vue'
+import PaymentValidationRequestList from './components/PaymentValidationRequestList.vue'
+import PaymentValidationRequestCard from './components/PaymentValidationRequestCard.vue'
 
 
 //8-----Sport2000
@@ -66,6 +72,9 @@ import RepossessionRequestList from "./components/RepossessionRequestList.vue"
 import AssignedDebtCard from "./components/AssignedDebtCard.vue"
 import AssignedDebtList from "./components/AssignedDebtList.vue"
 
+import AssignedCustomerList from "./components/AssignedCustomerList.vue"
+import AssignedCustomerCard from "./components/AssignedCustomerCard.vue"
+
 import PaymentPromiseCard from "./components/PaymentPromiseCard.vue"
 import PaymentPromiseList from "./components/PaymentPromiseList.vue"
 
@@ -74,10 +83,20 @@ import RecoveryActivityList from "./components/RecoveryActivityList.vue"
 
 //11-----Formulaire création recouvrement
 import NewRepossessionRequest from "./components/NewRepossessionRequest.vue"
+import NewPaymentPromise from "./components/NewPaymentPromise.vue"
+import NewRecoveryActivity from "./components/NewRecoveryActivity.vue"
+
+//12-----contrat d'achat groupé
+import CreditContractList from "./components/CreditContractList.vue"
+import CreditContractCard from "./components/CreditContractCard.vue"
+import NewCreditContract from "./components/NewCreditContract.vue"
+
 
 const routes = [
   ///////////////////1
+  {path:'/PrintableSPT2OrderLayout',component:PrintableSPT2OrderLayout,name:'PrintableSPT2OrderLayout'},
   {path:'/login',component:Login,name:'login'},
+  {path:'/SP2000/login',component:SPT2Login,name:'SPT2login'},
   {path:'/',component:SalesHome,name:'SalesHome'},
 
   ///////////////////2
@@ -87,13 +106,11 @@ const routes = [
   {path:'/ItemCard/:id',component:ItemCard,name:'ItemCardPage'},
   {path:'/LeadList',component:LeadList,name:'LeadListPage'},
   {path:'/LeadCard/:id',component:LeadCard,name:'LeadCardPage'},
-  {path:'/ContactList/:id',component:ContactList,name:'ContactListPage'},
-  {path:'/ContactCard/:id1/:id2',component:ContactCard,name:'ContactCardPage'},
+  {path:'/ContactList',component:ContactList,name:'ContactListPage'},
+  {path:'/ContactCard/:id',component:ContactCard,name:'ContactCardPage'},
   {path:'/ShipToAddressList/:id',component:ShipToAddressList,name:'ShipToAddressListPage'},
   {path:'/ShipToAddressCard/:id1/:id2',component:ShipToAddressCard,name:'ShipToAddressCardPage'},
 
-  ///////////////////3
-  {path:'/ItemAvailibilityPerStore/:id',component:ItemAvailibilityPerStore,name:'ItemAvailibilityPerStorePage'},
 
   ///////////////////4
   {path:'/saleOrderCard/:id',component:SaleOrderCard,name:'SaleOrderCard'},
@@ -116,15 +133,17 @@ const routes = [
   {path:'/NewSaleOrder',component:NewSaleOrder,name:'NewSaleOrderPage'},
 
   ///////////////////7
-  {path:'/RevisionRequestCard/:id',component:RevisionRequestCard,name:'RevisionRequestCardPage'},
+  {path:'/RevisionRequestCard',component:RevisionRequestCard,name:'RevisionRequestCardPage'},
   {path:'/RevisionRequestList',component:RevisionRequestList,name:'RevisionRequestListPage'},
-  {path:'/DiscountRequestCard/:id',component:DiscountRequestCard,name:'DiscountRequestCardPage'},
+  {path:'/DiscountRequestCard',component:DiscountRequestCard,name:'DiscountRequestCardPage'},
   {path:'/DiscountRequestList',component:DiscountRequestList,name:'DiscountRequestListPage'},
-  {path:'/ReleaseRequestCard/:id',component:ReleaseRequestCard,name:'ReleaseRequestCardPage'},
+  {path:'/ReleaseRequestCard',component:ReleaseRequestCard,name:'ReleaseRequestCardPage'},
   {path:'/ReleaseRequestList',component:ReleaseRequestList,name:'ReleaseRequestListPage'},
+  {path:'/PaymentValidationRequestList',component:PaymentValidationRequestList,name:'PaymentValidationRequestListPage'},
+  {path:'/PaymentValidationRequestCard',component:PaymentValidationRequestCard,name:'PaymentValidationRequestCardPage'},
 
   ///////////////////8
-  {path:'/STP2_Sales',component:SPT2_SalesContainer,name:'SPT2_SalesContainerPage'},
+  {path:'/SP2000',component:SPT2_SalesContainer,name:'SPT2_SalesContainerPage'},
   
   ///////////////////9
   {path:'/CreditRequestCard/:id',component:CreditRequestCard,name:'CreditRequestCardPage'},
@@ -136,6 +155,8 @@ const routes = [
   {path:'/RepossessionRequestList',component:RepossessionRequestList,name:'RepossessionRequestListPage'},
   {path:'/AssignedDebtCard/:id',component:AssignedDebtCard,name:'AssignedDebtCardPage'},
   {path:'/AssignedDebtList',component:AssignedDebtList,name:'AssignedDebtListPage'},
+  {path:'/AssignedCustomerList',component:AssignedCustomerList,name:'AssignedCustomerListPage'},
+  {path:'/AssignedCustomerCard',component:AssignedCustomerCard,name:'AssignedCustomerCardPage'},
   {path:'/PaymentPromiseCard/:id',component:PaymentPromiseCard,name:'PaymentPromiseCardPage'},
   {path:'/PaymentPromiseList',component:PaymentPromiseList,name:'PaymentPromiseListPage'},
   {path:'/RecoveryActivityCard/:id',component:RecoveryActivityCard,name:'RecoveryActivityCardPage'},
@@ -143,9 +164,13 @@ const routes = [
 
 ///////////////////11
   {path:'/NewRepossessionRequest',component:NewRepossessionRequest,name:'NewRepossessionRequestPage'},
+  {path:'/NewPaymentPromise',component:NewPaymentPromise ,name:'NewPaymentPromisePage'},
+  {path:'/NewRecoveryActivity',component:NewRecoveryActivity ,name:'NewRecoveryActivityPage'},
 
-
-
+   ///////////////////12
+   {path:'/CreditContractList',component:CreditContractList,name:'CreditContractListPage'},
+   {path:'/CreditContractCard',component:CreditContractCard,name:'CreditContractCardPage'},
+   {path:'/NewCreditContract',component:NewCreditContract,name:'NewCreditContractPage'},
 ];
 
 const router = createRouter({

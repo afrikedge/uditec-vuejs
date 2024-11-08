@@ -65,6 +65,14 @@
                     <span class="subtitle is-6">Imprimer</span>
                 </a>
             </div>
+            <div class="column  is-narrow" v-if="printProformaBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onPrintingProforma')">
+                    <span class="icon">
+                        <i class="fas fa-print"></i>
+                    </span>
+                    <span class="subtitle is-6">Proforma</span>
+                </a>
+            </div>
 
             <div class="column  is-narrow" v-if="processCardBtnIsDisabled==false">
                 <a href="#" class="px-3 py-3" @click.prevent="$emit('onProcessingCard')">
@@ -72,6 +80,15 @@
                         <i class="fas fa-thumbs-up"></i>
                     </span>
                     <span class="subtitle is-6">Traiter</span>
+                </a>
+            </div>
+
+            <div class="column  is-narrow" v-if="transmitBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('ontransmittingStatusCard')">
+                    <span class="icon">
+                        <i class="fas fa-thumbs-up"></i>
+                    </span>
+                    <span class="subtitle is-6">Transmettre</span>
                 </a>
             </div>
 
@@ -84,7 +101,16 @@
                 </a>
             </div>
 
-            <div class="column is-narrow" v-if="newContactBtnIsDisabled==false">
+            <div class="column  is-narrow" v-if="convertLeadBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onConvertingLead')">
+                    <span class="icon">
+                        <i class="fas fa-check"></i>
+                    </span>
+                    <span class="subtitle is-6">Convertir</span>
+                </a>
+            </div>
+
+            <!------div class="column is-narrow" v-if="newContactBtnIsDisabled==false">
                 <a href="#" class="px-3 py-3" @click.prevent="$emit('onCreatingCustomerContactCard')">
                     <span class="icon">
                         <i class="fas fa-address-book"></i>
@@ -109,6 +135,24 @@
                     </span>
                     <span class="subtitle is-6">Créer adresse de livraison</span>
                 </a>
+            </div----->
+
+            <div class="column is-narrow" v-if="contactListBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onGettingContactList')">
+                    <span class="icon">
+                        <i class="fas fa-address-book"></i>
+                    </span>
+                    <span class="subtitle is-6">Contacts</span>
+                </a>
+            </div>
+
+            <div class="column is-narrow" v-if="shipToAddressListBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onGettingShipToAddressList')">
+                    <span class="icon">
+                        <i class="fas fa-address-book"></i>
+                    </span>
+                    <span class="subtitle is-6">Adresses de livraison</span>
+                </a>
             </div>
 
             <div class="column  is-narrow" v-if="checkItemAvailabilityBtnIsDisabled==false">
@@ -122,14 +166,15 @@
 
 
 
-            <div class="column  is-narrow" v-if="transmitBtnIsDisabled==false">
+            <!---div class="column  is-narrow" v-if="transmitBtnIsDisabled==false">
                 <a href="#" class="px-3 py-3" @click.prevent="$emit('onCheckingItemAvailability')">
                     <span class="icon">
                         <i class="fas fa-question"></i>
                     </span>
                     <span class="subtitle is-6">Transmettre</span>
                 </a>
-            </div>
+            </div---->
+
             <div class="column  is-narrow" v-if="refreshBtnIsDisabled==false">
                 <a href="#" class="px-3 py-3" @click.prevent="$emit('onCheckingItemAvailability')">
                     <span class="icon">
@@ -138,7 +183,17 @@
                     <span class="subtitle is-6">Actualiser</span>
                 </a>
             </div>
-            <div class="column  is-narrow" v-if="printVisitCardBtnIsDisabled==false">
+
+            <div class="column  is-narrow" v-if="calculateDurationBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onCalculatingDuration')">
+                    <span class="icon">
+                        <i class="fas fa-question"></i>
+                    </span>
+                    <span class="subtitle is-6">Calculer Durée AGDP</span>
+                </a>
+            </div>
+
+            <!----div class="column  is-narrow" v-if="printVisitCardBtnIsDisabled==false">
                 <a href="#" class="px-3 py-3" @click.prevent="$emit('onPrintingVisitCard')">
                     <span class="icon">
                         <i class="fas fa-question"></i>
@@ -169,15 +224,53 @@
                     </span>
                     <span class="subtitle is-6">Imprimer Contrat NAN</span>
                 </a>
-            </div>
+            </div---->
             <div class="column  is-narrow" v-if="simulateCreditBtnIsDisabled==false">
                 <a href="#" class="px-3 py-3" @click.prevent="$emit('onSimulatingCredit')">
                     <span class="icon">
-                        <i class="fas fa-question"></i>
+                        <i class="fas fa-calculator"></i>
                     </span>
                     <span class="subtitle is-6">Simuler crédit</span>
                 </a>
             </div>
+
+
+            <div class="column  is-narrow" v-if="validateBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onValidatingCard')">
+                    <span class="icon">
+                        <i class="fas fa-check"></i>
+                    </span>
+                    <span class="subtitle is-6">Valider</span>
+                </a>
+            </div>
+
+            <div class="column  is-narrow" v-if="validateWithCondBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onValidatingWithCondCard')">
+                    <span class="icon">
+                        <i class="fas fa-check"></i>
+                    </span>
+                    <span class="subtitle is-6">Valider sous conditions</span>
+                </a>
+            </div>
+
+            <div class="column  is-narrow" v-if="rejectBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onRejectingCard')">
+                    <span class="icon">
+                        <i class="fas fa-xmark"></i>
+                    </span>
+                    <span class="subtitle is-6">Rejeter</span>
+                </a>
+            </div>
+
+            <div class="column  is-narrow" v-if="calculateCreditLimitBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('oncalculatingCreditLimit')">
+                    <span class="icon">
+                        <i class="fas fa-calculator"></i>
+                    </span>
+                    <span class="subtitle is-6">Calculer plafond</span>
+                </a>
+            </div>
+
             <div class="column  is-narrow" v-if="closeBtnIsDisabled==false">
                 <a href="#" class="px-3 py-3" @click.prevent="$emit('onCheckingItemAvailability')">
                     <span class="icon">
@@ -194,6 +287,79 @@
                     <span class="subtitle is-6">Archiver</span>
                 </a>
             </div>
+            <div class="column  is-narrow" v-if="extendOperationEndDateBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onExtendingOperationEndDate')">
+                    <span class="icon">
+                        <i class="fas fa-calendar-days"></i>
+                    </span>
+                    <span class="subtitle is-6">Prolonger date fin opération</span>
+                </a>
+            </div>
+
+
+
+
+
+
+
+
+
+
+            <div class="column  is-narrow" v-if="revisionRequestBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onGettingRevisionRequestList')">
+                    <span class="icon">
+                        <i class="fas fa-edit"></i>
+                    </span>
+                    <span class="subtitle is-6">Demandes révisions</span>
+                </a>
+            </div>
+
+            <div class="column  is-narrow" v-if="createRevisionRequestBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onCreatingRevisionRequest')">
+                    <span class="icon">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span class="subtitle is-6">Demande révision</span>
+                </a>
+            </div>
+
+            <div class="column  is-narrow" v-if="unlockingRequestBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onSubmittingSOUnlockingRequest')">
+                    <span class="icon">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span class="subtitle is-6">Demande déblocage</span>
+                </a>
+            </div>
+
+            <div class="column  is-narrow" v-if="paymentRequestBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onGettingPaymentRequestList')">
+                    <span class="icon">
+                        <i class="fas fa-check"></i>
+                    </span>
+                    <span class="subtitle is-6">Demandes validation paiement</span>
+                </a>
+            </div>
+
+            <div class="column  is-narrow" v-if="assignedDebtBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onGettingAssignedDebtList')">
+                    <span class="icon">
+                        <i class="fas fa-coins"></i>
+                    </span>
+                    <span class="subtitle is-6">Créances</span>
+                </a>
+            </div>
+
+            <div class="column  is-narrow" v-if="discountRequestBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onSubmittingDiscountRequest')">
+                    <span class="icon">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span class="subtitle is-6">Demande remise</span>
+                </a>
+            </div>
+
+            
     
             <!--------------------div class="column is-narrow">
                 <a href="#" class="px-3 py-3">
@@ -213,28 +379,55 @@
                 </a>
             </div------------------------------------------------------->
 
-            <!----------------------div class="column is-narrow">
-                <div :class="{'dropdown':true,'is-active':expandedOrCollapsedBtn=='actionBtn'}" style="border-radius: 0">
+            <div class="column is-narrow" v-if="printCRCardBtnIsDisabled==false" >
+                <div :class="{'dropdown':true,'is-active':expandedOrCollapsedBtnRef=='actionBtn'}" style="border-radius: 0">
                     <div class="dropdown-trigger">
                         <a href="#" class="px-3 py-3"  aria-haspopup="true" aria-controls="dropdown-menu" @click="expand_collapse_ReportBtn('actionBtn')">
-                        <span class="subtitle is-6">Traitement</span>
-                        <span class="icon" style="padding:;">
+                        <span class="subtitle is-6">Imprimer</span>
+                        <span class="icon" >
                             <i class="fa fa-angle-down" aria-hidden="true"></i>
                         </span>
                         </a>
                     </div>
                     <div class="dropdown-menu mt-2 shadow" id="dropdown-menu" role="menu" style="padding: 0;border: 0;">
                         <div class="dropdown-content"  style="padding: 0;">
-                        <a href="#" class="dropdown-item">
-                            Dropdown item
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            Active dropdown item
-                        </a>
+                            <a href="#" class="dropdown-item" v-if="printVisitCardBtnIsDisabled==false" @click.prevent="()=>{$emit('onPrintingVisitCard');expandedOrCollapsedBtnRef=''}">
+                                <span class="icon">
+                                    <i class="fas fa-print"></i>
+                                </span>
+                                <span class="subtitle is-6">Imprimer fiche de visite</span>
+                            </a>
+                            <a href="#" class="dropdown-item" v-if="printComityCardBtnIsDisabled==false" @click.prevent="()=>{$emit('onPrintingComityCard');expandedOrCollapsedBtnRef=''}">
+                                <span class="icon">
+                                    <i class="fas fa-print"></i>
+                                </span>
+                                <span class="subtitle is-6">Imprimer fiche comité</span>                        
+                            </a>
+                            <a href="#" class="dropdown-item" v-if="saleContractBtnIsDisabled==false" @click.prevent="()=>{$emit('onPrintingSaleContract');expandedOrCollapsedBtnRef=''}">
+                                <span class="icon">
+                                    <i class="fas fa-print"></i>
+                                </span>
+                                <span class="subtitle is-6">Imprimer contrat vente credit</span>
+                            </a>
+                            <a href="#" class="dropdown-item" v-if="nantContractBtnIsDisabled==false" @click.prevent="()=>{$emit('onPrintingNantContract');expandedOrCollapsedBtnRef=''}">
+                                <span class="icon">
+                                    <i class="fas fa-print"></i>
+                                </span>
+                                <span class="subtitle is-6">Imprimer Contrat NAN</span>
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div---------------------->
+            </div>
+
+            <div class="column  is-narrow" v-if="customerHistoryBtnIsDisabled==false">
+                <a href="#" class="px-3 py-3" @click.prevent="$emit('onGettingCustomerHistory')">
+                    <span class="icon">
+                        <i class="fas fa-clock-rotate-left"></i>
+                    </span>
+                    <span class="subtitle is-6">Historique client</span>
+                </a>
+            </div>
 
             <!-------------------------div class="column is-narrow">
                 <div :class="{'dropdown':true, 'is-active':expandedOrCollapsedBtn=='navigateBtn'}" style="border-radius: 0">
@@ -303,7 +496,7 @@
          </a>
          <a href="#" class="mx-2" @click.prevent="$emit('onHidingOrShowingComponentInfo')">
              <span class="icon">
-                 <i :class="{'fas':true, 'fa-info-circle':componentInfoIsExpanded,'fa-info':!componentInfoIsExpanded}"></i>
+                 <i :class="{'fas':true, 'fa-info-circle':componentInfoIsExpanded==true,'fa-info':componentInfoIsExpanded==false}"></i>
              </span>
          </a>
 
@@ -317,12 +510,14 @@ export default {
 name:'customer-card-ribbon',
 components:{
 },
-props:['routeForNewCard',
+props:['routeForNewCard','expandedOrCollapsedBtn',
 'componentWithCompInfo',
 'newCardBtnIsDisabled',
 'editCardBtnIsDisabled',
 'printCardBtnIsDisabled',
+'printCRCardBtnIsDisabled',
 'convertQuoteBtnIsDisabled',
+'convertLeadBtnIsDisabled',
 'processCardBtnIsDisabled',
 'readOnlyModeIsDisabled',
 'requestForApprovalBtnIsDisabled',
@@ -334,6 +529,7 @@ props:['routeForNewCard',
 'newLeadBtnIsDisabled',
 'cancelEditCardBtnIsDisabled',
 
+'extendOperationEndDateBtnIsDisabled',
 'archiveBtnIsDisabled',
 'closeBtnIsDisabled',
 'refreshBtnIsDisabled',
@@ -343,26 +539,53 @@ props:['routeForNewCard',
 'printVisitCardBtnIsDisabled',
 'saleContractBtnIsDisabled',
 'nantContractBtnIsDisabled',
+'printProformaBtnIsDisabled',
 
-],
 
+'calculateCreditLimitBtnIsDisabled',
+'rejectBtnIsDisabled',
+'validateWithCondBtnIsDisabled',
+'validateBtnIsDisabled',
+
+'revisionRequestBtnIsDisabled',
+'createRevisionRequestBtnIsDisabled',
+'unlockingRequestBtnIsDisabled',
+'discountRequestBtnIsDisabled',
+'paymentRequestBtnIsDisabled',
+
+'assignedDebtBtnIsDisabled',
+
+'contactListBtnIsDisabled',
+'shipToAddressListBtnIsDisabled',
+
+'calculateDurationBtnIsDisabled',
+'customerHistoryBtnIsDisabled',
+]
+,
 data(){
     return {
         //permet de manipuler l'affichage des boutons dropdown
-        expandedOrCollapsedBtn:'',
+        expandedOrCollapsedBtnRef:this.expandedOrCollapsedBtn,
 
+    }
+},
+watch:{
+    expandedOrCollapsedBtn(){
+        this.expandedOrCollapsedBtnRef = ''
     }
 },
 computed:{
     /////////////////////////propriété calculé pour changer l'icone info s'il est cliqué dessus
     componentInfoIsExpanded(){
-        return useNavigationTabStore().tabRightInfo[this.componentWithCompInfo]=='0px'?false:true
+        if (useNavigationTabStore().tabRightInfo)
+            return useNavigationTabStore().tabRightInfo[this.componentWithCompInfo]=='0px'?false:true
+        else return false
     }
 },
 methods:{
     expand_collapse_ReportBtn(currentBtn){
-        if (this.expandedOrCollapsedBtn ==currentBtn) this.expandedOrCollapsedBtn= ''
-        else this.expandedOrCollapsedBtn= currentBtn
+        if (this.expandedOrCollapsedBtnRef ==currentBtn) this.expandedOrCollapsedBtnRef= ''
+        else this.expandedOrCollapsedBtnRef= currentBtn
     }
 
 }

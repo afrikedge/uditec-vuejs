@@ -171,7 +171,7 @@ export default {
         }
     },
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/${this.idRoute}`)
+        axios.get(`http://${this.hostname}:5000/app/${this.idRoute}`)
         .then(result => {
             this.soHeader = result.data[0],
             this.soLine = result.data[1]

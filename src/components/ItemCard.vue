@@ -4,19 +4,14 @@
         <div id="scrollBlock" class="modal-card box shadow is-rounded h-100" style="width: 96%;">
 <!---------Composant entête fiche----------------------->
             <div id="card-header-comp">
-                <item-card-Header :soNo="itemCardId" :soDesc="itemCardHeader['Description']" pageTitle="Fiche article"
+                <item-card-Header :soNo="itemCardHeader['No_']" :soDesc="itemCardHeader['Description']" pageTitle="Fiche article"
                 @onGoingBackToList='goBackToList'/>
             </div>
 
 <!---------Composant rubban fiche client----------------------->
             <item-card-ribbon
-                @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
-                componentWithCompInfo="itemCardRightInfoMaxWidth"
-                :newCardBtnDisabled="false"
-                :editCardBtnDisabled="false"
-                :printCardBtnDisabled="false"
-                :convertQuoteBtnDisabled="false"
-                :readOnlyModeDisabled="false"
+                @onCheckingItemAvailability="showItemAvaibilityInfoModal"
+                :checkItemAvailabilityBtnIsDisabled="false"
             ></item-card-ribbon>
 
 <!---------Section formulaire fiche article----------------------->
@@ -30,7 +25,7 @@
                                 <a @click="collapse('general_content');onglet1_expanded = !onglet1_expanded;" v-if="onglet1_expanded">
                                     <span>Général</span>
                                 </a>
-                                <a @click="expand('general_content');onglet1_expanded = !onglet1_expanded;" v-if="!onglet1_expanded">
+                                <a @click="expand('general_content');onglet1_expanded = !onglet1_expanded;" v-else>
                                     <span>Général</span>
                                     <span class="icon">
                                       <i class="fas fa-angle-right"></i>
@@ -48,20 +43,21 @@
                         </div>
                         <div id="general_content" class="columns">
                             <div class="column">
-                                <input-text labelInputText="Code catégorie " :valueInputText="itemCardHeader['Item Category Code']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Description catégorie" :valueInputText="itemCardHeader['Item Category Name']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Code article" :valueInputText="itemCardId" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Description de l’article" :valueInputText="itemCardHeader['Description']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Description de recherche" :valueInputText="itemCardHeader['Search Description']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Unité de base" :valueInputText="itemCardHeader['Base Unit of Measure']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Code catégorie " :valueInputText="itemCardHeader['Item Category Code']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Description catégorie" :valueInputText="itemCardHeader['Item Category Name']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Code article" :valueInputText="itemCardHeader['No_']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Description de l’article" :valueInputText="itemCardHeader['Description']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Description de recherche" :valueInputText="itemCardHeader['Search Description']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Unité de base" :valueInputText="itemCardHeader['Base Unit of Measure']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Prix de base" :valueInputText="formatAmount(itemCardHeader['Unit Price'])" :is_disabled="true"></input-text>
                             </div>
                             <div class="column">
-                                <input-text labelInputText="Unité de vente" :valueInputText="itemCardHeader['Sales Unit of Measure']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Poids brut" :valueInputText="itemCardHeader['Gross Weight']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Poids net " :valueInputText="itemCardHeader['Net Weight']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Volume unitaire" :valueInputText="itemCardHeader['Unit Volume']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Mode de livraison par défaut" :valueInputText="itemCardHeader['Shipment Method']" :is_disabled="readOnlyMode"></input-text>
-                                <input-text labelInputText="Code barre" :valueInputText="itemCardHeader['Bar Code']" :is_disabled="readOnlyMode"></input-text>
+                                <input-text labelInputText="Unité de vente" :valueInputText="itemCardHeader['Sales Unit of Measure']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Poids brut" :valueInputText="itemCardHeader['Gross Weight']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Poids net " :valueInputText="itemCardHeader['Net Weight']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Volume unitaire" :valueInputText="itemCardHeader['Unit Volume']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Mode de livraison par défaut" :valueInputText="itemCardHeader['Shipment Method']" :is_disabled="true"></input-text>
+                                <input-text labelInputText="Code barre" :valueInputText="itemCardHeader['Bar Code']" :is_disabled="true"></input-text>
                             </div>
                         </div>
                     </div>
@@ -73,7 +69,7 @@
                                 <a @click="collapse('availability_content');onglet2_expanded = !onglet2_expanded;" v-if="onglet2_expanded">
                                     <span>Disponibilité article</span>
                                 </a>
-                                <a @click="expand('availability_content');onglet2_expanded = !onglet2_expanded;" v-if="!onglet2_expanded">
+                                <a @click="expand('availability_content');onglet2_expanded = !onglet2_expanded;" v-else>
                                     <span>Disponibilité article</span>
                                     <span class="icon">
                                       <i class="fas fa-angle-right"></i>
@@ -82,66 +78,70 @@
                             </div>
 
                         </div>
-                        <div id="availability_content" class="columns mt-5">
-                            <div class="column is-1 box mx-2">
-                                <div class="has-text-left" style="height:100px">
-                                    <span class="subtitle">Stock en magasin</span>
+                        <div id="availability_content" class="columns s-variable mt-5 is-mobile is-multiline">
+                            <div class="column has-background-orange is-1 mx-1 mb-1" style="height:150px;width:150px">
+                                <div class="has-text-left" style="min-height: 50px;">
+                                    <span class="subtitle is-6 has-text-white">Stock en magasin</span>
                                 </div>
                                 <div class="has-text-right">
-                                    <span class="subtitle is-1 has-text-orange">{{ itemInStockLocation  }}</span>
+                                    <span class="subtitle is-2 has-text-white">{{ itemInStockLocation  }}</span>
                                 </div>
                             </div>
-                            <div class="column is-1 box mx-2">
-                                <div class="has-text-left" style="height:100px">
-                                    <span class="subtitle">Sur commande en magasin</span>
+                            <div class="column has-background-orange is-1 mx-1" style="height:150px;width:150px">
+                                <div class="has-text-left" style="min-height: 50px;">
+                                    <span class="subtitle is-6 has-text-white">Sur commande en magasin</span>
                                 </div>
                                 <div class="has-text-right">
-                                    <span class="subtitle is-1 has-text-orange">{{ itemOnSalesLocation }}</span>
+                                    <span class="subtitle is-2 has-text-white">{{ itemOnSalesLocation }}</span>
                                 </div>
                             </div>
-                            <div class="column is-1 box mx-2">
-                                <div class="has-text-left" style="height:100px">
-                                    <span class="subtitle">Disponible en magasin</span>
+                            <div class="column has-background-orange is-1 mx-1" style="height:150px;width:150px">
+                                <div class="has-text-left" style="min-height: 50px;">
+                                    <span class="subtitle is-6 has-text-white">Stock sur ordre de transfert</span>
                                 </div>
                                 <div class="has-text-right">
-                                    <span class="subtitle is-1 has-text-orange">{{ itemAvailableInLocation }}</span>
+                                    <span class="subtitle is-2 has-text-white">{{ itemOnTransferLocation }}</span>
                                 </div>
                             </div>
-                            <div class="column is-1 box mx-2">
-                                <div class="has-text-left" style="height:100px">
-                                    <span class="subtitle">Stock</span><br>
-                                    <span class="subtitle">global</span>
+                            <div class="column has-background-orangered is-1 mx-1" style="height:150px;width:150px">
+                                <div class="has-text-left" style="min-height: 50px;">
+                                    <span class="subtitle is-6 has-text-white">Disponible en magasin</span>
                                 </div>
                                 <div class="has-text-right">
-                                    <span class="subtitle is-1 has-text-orange">{{ itemInStockGlobal }}</span>
+                                    <span class="subtitle is-2 has-text-white">{{ itemAvailableInLocation }}</span>
                                 </div>
                             </div>
-                            <div class="column is-1 box mx-2">
-                                <div class="has-text-left" style="height:100px">
-                                    <span class="subtitle">Sur commande global</span>
+                            <div class="column has-background-orange is-1 mx-1" style="height:150px;width:150px">
+                                <div class="has-text-left" style="min-height: 50px;">
+                                    <span class="subtitle is-6 has-text-white">Stock global</span>
                                 </div>
                                 <div class="has-text-right">
-                                    <span class="subtitle is-1 has-text-orange">{{ itemOnSalesGlobal }}</span>
+                                    <span class="subtitle is-2 has-text-white">{{ itemInStockGlobal }}</span>
                                 </div>
                             </div>
-                            <div class="column is-1 box mx-2">
-                                <div class="has-text-left" style="height:100px">
-                                    <span class="subtitle">Disponible global</span>
+                            <div class="column has-background-orange is-1 mx-1" style="height:150px;width:150px">
+                                <div class="has-text-left" style="min-height: 50px;">
+                                    <span class="subtitle is-6 has-text-white">Sur commande global</span>
                                 </div>
                                 <div class="has-text-right">
-                                    <span class="subtitle is-1 has-text-orange">{{ itemAvailableGlobal }}</span>
+                                    <span class="subtitle is-2 has-text-white">{{ itemOnSalesGlobal }}</span>
                                 </div>
                             </div>
-                            <div class="column is-1 box mx-2">
-                                <div class="has-text-left" style="height:100px">
-                                    <span class="subtitle">En cours d'achat global</span>
+                            <div class="column has-background-orangered is-1 mx-1" style="height:150px;width:150px">
+                                <div class="has-text-left" style="min-height: 50px;">
+                                    <span class="subtitle is-6 has-text-white">Disponible global</span>
                                 </div>
                                 <div class="has-text-right">
-                                    <span class="subtitle is-1 has-text-orange">{{ itemOnPurchaseGlobal }}</span>
+                                    <span class="subtitle is-2 has-text-white">{{ itemAvailableGlobal }}</span>
                                 </div>
                             </div>
-                            <div class="column">
-
+                            <div class="column has-background-orange is-1 mx-1" style="height:150px;width:150px">
+                                <div class="has-text-left" style="min-height: 50px;">
+                                    <span class="subtitle is-6 has-text-white">En cours d'achat global</span>
+                                </div>
+                                <div class="has-text-right">
+                                    <span class="subtitle is-2 has-text-white">{{ itemOnPurchaseGlobal }}</span>
+                                </div>
                             </div>
 
                         </div>
@@ -164,7 +164,7 @@
                         </div>
                         <div id="attribute_content" class="columns mt-5">
                             <div v-if="itemAttributeInfo.length>0">
-                                <table class="table  is-narrow  is-fullwidth box">
+                                <table class="table  is-narrow  is-bordered is-fullwidth box">
                                     <thead class=" my-2">
                                         <tr> 
                                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-2" style="min-width: 300px;">Caractéristique</th>
@@ -192,33 +192,39 @@
                         <div class="columns has-border-bottom">
                             <div class="column p-0 has-text-left has-text-weight-bold">
                                 <a @click="collapse('warranty_content');onglet4_expanded = !onglet4_expanded;" v-if="onglet4_expanded">
-                                    <span>Caractéristiques article</span>
+                                    <span>Plans de garantie</span>
                                 </a>
                                 <a @click="expand('warranty_content');onglet4_expanded = !onglet4_expanded;" v-if="!onglet4_expanded">
-                                    <span>Caractéristiques article</span>
+                                    <span>Plans de garantie</span>
                                     <span class="icon">
                                       <i class="fas fa-angle-right"></i>
                                     </span>
                                 </a>
                             </div>
                         </div>
-                        <div id="warranty_content" class="columns mt-5">
-                            <div v-if="itemAttributeInfo.length>0">
-                                <table class="table  is-narrow  is-fullwidth box">
+                        <div id="warranty_content" class="columns mt-5" style="overflow: scroll;">
+                            <div v-if="itemWarrantyInfo.length>=0">
+                                <table class="table  is-narrow is-bordered  is-fullwidth box">
                                     <thead class=" my-2">
                                         <tr> 
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-2" style="min-width: 300px;">Caractéristique</th>
-                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-2" style="min-width: 300px;">Valeur</th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;"><b>Plan de garantie</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;"><b>Description</b></th>
+                                            <th class="has-background-light has-text-grey has-text-right has-text-weight-normal is-size-4" style="min-width: 300px;"><b>Durée (mois)</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;"><b>Mode Tarification</b></th>
+                                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-4" style="min-width: 300px;"><b>Description Mode Tarification</b></th>
+                                            <th class="has-background-light has-text-grey has-text-right has-text-weight-normal is-size-4" style="min-width: 300px;"><b>Pourcentage</b></th>
+                                            <th class="has-background-light has-text-grey has-text-right has-text-weight-normal is-size-4" style="min-width: 300px;"><b>Montant</b></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr :id="index" v-for="(elt,index) of itemAttributeInfo" :key="index"  >
-                                            <td class="has-text-left">
-                                               <span class="subtitle is-6 has-text-weight-bold"> <b>{{ elt['Name'] }}</b></span>
-                                            </td>
-                                            <td class="has-text-left">
-                                                {{ elt['Value'] }}
-                                            </td>
+                                        <tr :id="index+'-warranty'" v-for="(elt,index) of itemWarrantyInfo" :key="index+'-warranty'"  >
+                                            <td class="has-text-left">{{ elt['Warranty Plan Code'] }}</td>
+                                            <td class="has-text-left">{{ elt['Name'] }}</td>
+                                            <td class="has-text-right">{{ elt['Duration (months)'] }}</td>
+                                            <td class="has-text-left">{{ elt['Pricing Mode'] }}</td>
+                                            <td class="has-text-left">{{ elt['Pricing Mode name'] }}</td>
+                                            <td class="has-text-right">{{ elt['Percentage'] }}</td>
+                                            <td class="has-text-right">{{ formatAmount(elt['Amount (LCY)']) }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -232,43 +238,58 @@
                 </div>
 
 <!---------composant info article----------------------->
-                <item-info class="item-info"></item-info>
+                <!---item-info class="item-info"></item-info-->
             </div>
+
+
+<!-----------Disponibilité article-------------------->     
+            <div :class="{'modal':true , 'is-active':true }" v-if="inventoryAvailabilityModalShowned">
+                <div class="modal-background has-background-white" style="opacity:0.7" @click="inventoryAvailabilityModalShowned=false"></div>
+                <div class="modal-content w-75 shadow has-background-light">
+                    <inventory-availability :itemNo="itemCardId"></inventory-availability>
+                </div>
+                <button class=" modal-close is-large has-background-dark is-large is-danger" aria-label="close" @click.prevent="inventoryAvailabilityModalShowned=false"></button>
+            </div>
+
+
         </div>
     </div>
 </template>
 
 <script>
 import ItemCardHeader from "./HeaderForCard.vue";
-import ItemInfo from "./ItemInfo.vue";
+//import ItemInfo from "./ItemInfo.vue";
+import InventoryAvailability from './InventoryAvailability.vue'
 import ItemCardRibbon from "./RibbonForCard.vue";
 import inputText from "./input/input-text.vue";
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 import axios from "axios";
-import { onMounted, ref } from "vue";
-import { useRoute} from 'vue-router'
+import { onBeforeMount, onMounted, ref } from "vue";
+import { useRoute,useRouter } from 'vue-router'
 
 
 export default {
     name: "item-card",
+    props:['itemNo'],
     components: {
       ItemCardHeader,
-      ItemInfo,
+      //ItemInfo,
       inputText,
-      ItemCardRibbon 
+      ItemCardRibbon,
+      InventoryAvailability 
     },
  
     setup() {
       const itemCardHeader = ref({});
-      const readOnlyMode = ref(true);
+
       //nom de l'hote dans l'url 
       const hostname = window.location.hostname;
-      const userLocation = ref(useWebUserInfoStore().defaultLocation)
-      const userRespCenter = ref(useWebUserInfoStore().responsibilityCenter)
-      const itemCardId = useRoute().params.id
+      const router = useRouter()
+      let itemCardId = useRoute().params.id
 
       const itemAttributeInfo = ref([])
+      const itemWarrantyInfo = ref([])
       const itemAvailabilityInfo = {
             itemInStockLocation:ref(0),
             itemOnSalesLocation:ref(0),
@@ -277,16 +298,18 @@ export default {
             itemOnSalesGlobal:ref(0),
             itemAvailableGlobal:ref(0),
             itemOnPurchaseGlobal:ref(0),
+            itemOnTransferLocation:ref(0),
         }
 
       function getItemAvailabilityInfo(){
-          axios.get(`http://${hostname}:3000/app/getItemAvailabilityInfo/${itemCardId}/${userLocation.value}`)
+          axios.get(`http://${hostname}:5000/app/getItemAvailabilityInfo/${itemCardId}/${useWebUserInfoStore().defaultLocation}`)
           .then(res =>{
               if (res.data.recordset[0]){
                   const data =  res.data.recordset[0]
                   itemAvailabilityInfo.itemInStockLocation.value = Math.trunc(Number(data["In Stock Location"]))
                   itemAvailabilityInfo.itemOnSalesLocation.value = Math.trunc(Number(data["On Sales Location"]))
-                  itemAvailabilityInfo.itemAvailableInLocation.value = Math.trunc(Number(data["In Stock Location"])) - Math.trunc(Number(data["On Sales Location"]))
+                  itemAvailabilityInfo.itemOnTransferLocation.value = Math.trunc(Number(data["On transfert Location"]))
+                  itemAvailabilityInfo.itemAvailableInLocation.value = Math.trunc(Number(data["In Stock Location"])) - Math.trunc(Number(data["On Sales Location"])) - Math.trunc(Number(data["On transfert Location"]))
                   itemAvailabilityInfo.itemInStockGlobal.value = Math.trunc(Number(data["In Stock Global"]))
                   itemAvailabilityInfo.itemOnSalesGlobal.value = Math.trunc(Number(data["On Sales Global"]))
                   itemAvailabilityInfo.itemAvailableGlobal.value = Math.trunc(Number(data["In Stock Global"])) - Math.trunc(Number(data["On Sales Global"]))
@@ -299,7 +322,7 @@ export default {
       }
 
       function getItemAttributeInfo(){
-          axios.get(`http://${hostname}:3000/app/getItemAttrib/${itemCardId}`)
+          axios.get(`http://${hostname}:5000/app/getItemAttrib/${itemCardId}`)
           .then(res =>{
               if (new Array(res.data.recordset).length>0){
                   itemAttributeInfo.value =  res.data.recordset
@@ -311,66 +334,83 @@ export default {
           })
       }
 
-      function getItemCardInfo(){
-          axios.get(`http://${hostname}:3000/app/getItemCard/${itemCardId}?respCenter=${userRespCenter.value}`)
-          .then(result => {
-            console.log(result)
-              itemCardHeader.value = result.data.recordset[0]
-              if(userLocation.value){
-                  getItemAvailabilityInfo()
-              }
-              getItemAttributeInfo()
-          }).catch(err=>console.log(err))
-      }
+        function getItemWarrantyInfo(){
+            axios.get(`http://${hostname}:5000/app/getItemwarrantyplan/${itemCardId}`)
+            .then(res =>{
+                itemWarrantyInfo.value =  res.data.recordset
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
 
-      onMounted(()=>{
-          if(userRespCenter.value){
-              getItemCardInfo()
-          }
-          else{
-              axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
-              .then(res=>{
-                  useWebUserInfoStore().fillWebUserInfo(res.data.recordset[0])
-                  userLocation.value = useWebUserInfoStore().defaultLocation
-                  userRespCenter.value = useWebUserInfoStore().responsibilityCenter
-                  getItemCardInfo()
-              })
-              .catch(err=>console.log(err))
-          }
-      })
+        function getItemCardInfo(){
+            axios.get(`http://${hostname}:5000/app/getItemCard/${itemCardId}?respCenter=${useWebUserInfoStore().responsibilityCenter}`)
+            .then(result => {
+                itemCardHeader.value = result.data.recordset[0]
+                if(useWebUserInfoStore().defaultLocation){
+                    getItemAvailabilityInfo()
+                }
+                getItemAttributeInfo()
+                getItemWarrantyInfo()
+            }).catch(err=>console.log(err))
+        }
+
+        function formatAmount(number){
+            if(number || number>=0){
+                return new Intl.NumberFormat('fr-FR', { style: 'decimal' ,minimumFractionDigits: 2, }).format(number)
+            }else{
+                return 0
+            }
+        }
+
+        onBeforeMount(() =>{
+            if(useWebUserInfoStore().name==''){
+                let userData = window.localStorage.getItem("userData");
+                if(!userData){
+                    router.push('/login')
+                }else{
+                    let userDataObjet = JSON.parse(userData)
+                    useWebUserInfoStore().fillWebUserInfo(userDataObjet)
+                }
+            }            
+        })
+
+        onMounted(()=>{
+                getItemCardInfo()
+        })
 
       // expose to template and other options API hooks
       return {
           itemCardHeader,
-          readOnlyMode,
-          ...itemAvailabilityInfo,
-          itemAttributeInfo,
-          getItemAvailabilityInfo
+          ...itemAvailabilityInfo,itemAttributeInfo,itemWarrantyInfo,
+          getItemAvailabilityInfo,
+          itemCardId,formatAmount,
       };
     },
 
     data() {
-      return {
-        itemCardId: this.$route.params.id,
-        //indique si les onglets sont réduits ou non
-        onglet1_expanded: true,
-        onglet2_expanded: true,
-        onglet3_expanded: true,
-        onglet4_expanded: true,
-        onglet5_expanded: true,
+        return {
+            //indique si les onglets sont réduits ou non
+            onglet1_expanded: true,
+            onglet2_expanded: true,
+            onglet3_expanded: true,
+            onglet4_expanded: true,
+            onglet5_expanded: true,
 
-        itemInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.itemCardRightInfoMaxWidth,
-        //indique si tous les options les lignes sont affichées
-        show_more_option: false,
+            itemInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.itemCardRightInfoMaxWidth,
+            //indique si tous les options les lignes sont affichées
+            show_more_option: false,
 
-        //nom de l'hote dans l'url 
-        hostname:window.location.hostname
-      };
+            //fenêtre de disponibilité article
+            inventoryAvailabilityModalShowned:false,
+        };
     },
     methods: {
 
         goBackToList(){
               useNavigationTabStore().setActiveTab('items')
+              useNavigationTabStore().setActiveGroup('sales')
               this.$router.push('/')
         },
     /////////////////////////methode pour masquer ou afficher le composant info à droit
@@ -399,11 +439,19 @@ export default {
         console.log(myElt.style.maxHeight);
         myElt.style.maxHeight = "0px";
       },   
+      //////////////////////////methode pour afficher le modal de disponibilité article
+      showItemAvaibilityInfoModal(){
+            this.inventoryAvailabilityModalShowned = true
+        },
     
     },
 };
 </script>
 <style scoped>
+
+.has-background-orange{
+    background-color: orange;
+}
 
 .item-info{
   max-width: v-bind(itemInfoCompMaxWidth);
@@ -414,7 +462,7 @@ export default {
 #availability_content,
 #attribute_content
 {
-  max-height: 5000px;
+  max-height: 3000px;
   overflow: hidden;
   transition: max-height 0.5s;
 }

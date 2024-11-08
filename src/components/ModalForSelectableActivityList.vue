@@ -17,7 +17,7 @@
                 <table class="table is-narrow is-hoverable">
                     <thead class=" my-2">
                         <tr> 
-                            <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow">N°</th>
+                            <th class="has-background-light tableFix1stColumn has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow">N°</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7 is-narrow">N° client</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Nom du client</th>
                             <th class="has-background-light has-text-grey has-text-left has-text-weight-normal is-size-7" style="min-width: 100px;">Objet</th>
@@ -34,20 +34,18 @@
 
                             <tr  :id="elt['No_']" v-for="(elt,index) of filteredActivityList" :key="index" @click="$emit('onGettingLineFromSelectableActivityListModal',elt);$emit('closeModal')">
                                 <td class="has-text-left is-narrow tableFix1stColumn has-background-light"> 
-                                    <a href="#" class="has-text-orange ">
-                                        {{ elt['No_'] }} 
-                                    </a>
+                                    {{ elt['No_'] }} 
                                 </td>
                                 <td class="has-text-left is-narrow"> {{ elt['Customer No_'] }}</td>
                                 <td class="has-text-left is-narrow"> {{ elt['Name'] }}</td>
                                 <td class="has-text-left is-narrow"> {{ elt['Subject'] }}</td>
                                 <td class="has-text-left is-narrow"> {{ elt['Description'] }}</td>
-                                <td class="has-text-left is-narrow"> {{ elt['Created on'] }}</td>
+                                <td class="has-text-left is-narrow"> {{ formatDateHour(elt['Created on']) }}</td>
                                 <td class="has-text-left is-narrow"> {{ elt['Created by'] }}</td>
-                                <td class="has-text-left is-narrow"> {{ elt['Scheduled Start Date'] }}</td>                    
-                                <td class="has-text-left is-narrow"> {{ elt['Scheduled End Date'] }}</td>
-                                <td class="has-text-left is-narrow"> {{ elt['Actual Start Date'] }}</td>        
-                                <td class="has-text-left is-narrow"> {{ elt['Actual End Date'] }}</td>        
+                                <td class="has-text-left is-narrow"> {{ formatDateHour(elt['Scheduled Start Date']) }}</td>                    
+                                <td class="has-text-left is-narrow"> {{ formatDateHour(elt['Scheduled End Date']) }}</td>
+                                <td class="has-text-left is-narrow"> {{ formatDateHour(elt['Actual Start Date']) }}</td>        
+                                <td class="has-text-left is-narrow"> {{ formatDateHour(elt['Actual End Date']) }}</td>        
                             </tr>
                     </tbody>
                 </table>
@@ -62,6 +60,8 @@
 import axios from 'axios'
 import inputSearch from './input/input-search.vue'
 import { computed, ref } from 'vue'
+import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
+
 
 
 export default{
@@ -81,10 +81,11 @@ export default{
 
         const filteredActivityList = computed(()=>
             elementList.value
-            .filter((row) => new String(row['No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+            .filter((row) => (new String(row['No_']).toLowerCase().includes(eltToSearch.value.toLowerCase())
                 || new String(row['Name']).toLowerCase().includes(eltToSearch.value.toLowerCase())
                 || new String(row['Description']).toLowerCase().includes(eltToSearch.value.toLowerCase())
-                || new String(row['Subject']).toLowerCase().includes(eltToSearch.value.toLowerCase())
+                || new String(row['Subject']).toLowerCase().includes(eltToSearch.value.toLowerCase()))
+                && new String(row['Created by']).toLowerCase() == useWebUserInfoStore().name.toLowerCase()
             )
       
         )
@@ -95,11 +96,22 @@ export default{
     },
     props:['isActive'],
     beforeMount(){
-        axios.get(`http://${this.hostname}:3000/app/getRAList`)
+        axios.get(`http://${this.hostname}:5000/app/getRecoveryActivityList`)
         .then(result => {
             this.elementList=result.data
         }).catch(err=>console.log(err))
 
+    },
+    methods:{
+        formatDateHour(date){
+            if(date){
+                const dateString = new String(date)
+                if (dateString.includes('1753')) return ''
+                else return new Date(date).toLocaleDateString() + ' à ' +new Date(date).toLocaleTimeString()
+            }else{
+                return ''
+            }
+        },
     }
 
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div class="" style="overflow-x: scroll;">
         <nav class="navbar p-0 is-transparent has-centered-logo-alt" role="navigation" aria-label="main navigation">
             <div class="navbar-brand is-hidden-desktop">
                 <span class="navbar-item">
@@ -42,16 +42,25 @@
                         <span aria-hidden="true"></span>
                     </a>
                 </div>
-                <div class="navbar-end p-0">
-                    <a class="navbar-item has-text-grey">
-                      <span class="subtitle">
-                        David DJOUBOUI
-                      </span>
+                <div class="navbar-end p-0 ">
+                    <a class="navbar-item has-text-grey mt-5 p-0" >
+                        <div class="has-text-right">
+                            <span class="subtitle is-6 mx-1 px-2 mt-1 has-background-orange has-text-white" style="position: relative;top:3px;border-radius: 10px;"> {{ userData.name }}</span>
+                            <span class="">
+                                <img src="../assets/images/gerald1.jpg"  style="min-width:30px;border-radius: 100%;"> 
+                            </span> 
+                            <br>
+                            <span class="mt-3 subtitle is-7" v-if="!userData.responsibilityCenter" style="visibility: hidden">Vous n'êtes pas associé à une centre de gestion</span>
+                            <span class="mt-3 subtitle is-7" v-if="userData.responsibilityCenter">Point de vente : </span>
+                            <span class="my-3 has-text-orange" v-if="userData.responsibilityCenter">{{ userData.defaultStoreCode }} - </span>
+                            <span class="mt-3 has-text-orange" v-if="userData.responsibilityCenter">{{ userData.responsibilityCenterName }}</span>
+                        </div>                       
                     </a>
-                    <a class="navbar-item">
-                      <figure class="image is-32x32">
-                      <img src="../assets/images/gerald1.jpg" class="is-rounded">
-                    </figure>
+
+                    <a class="navbar-item  has-text-grey ml-1" @click.prevent="logout">
+                        <span class="icon is-small has-text-white has-background-danger shadow p-3" style="border-radius: 5px;">
+                            <i class="fas fa-right-from-bracket"></i>
+                        </span>
                     </a>
                 </div>
             </div>
@@ -60,19 +69,23 @@
         <div class="has-text-left my-2">
             <a href="#"  @click="store.setActiveGroup('sales')" class=" m-2" :class="{'has-text-orange':store.activeGroup=='sales'}">
                 <span class="subtitle is-6 mr-1">Ventes</span>
-                <span class="icon is-small"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
+                <span class="icon is-small" :class="{'has-text-grey-lighter':store.activeGroup!=='sales'}"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
             </a>
             <a href="#" @click="store.setActiveGroup('inventory')" class="m-2" :class="{'has-text-orange':store.activeGroup=='inventory'}">
                 <span class="subtitle is-6 mr-1">Stock</span>
-                <span class="icon is-small"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
+                <span class="icon is-small" :class="{'has-text-grey-lighter':store.activeGroup!=='inventory'}"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
             </a>
             <a href="#" @click="store.setActiveGroup('recovery')" class="m-2" :class="{'has-text-orange':store.activeGroup=='recovery'}">
                 <span class="subtitle is-6 mr-1">Recouvrement</span>
-                <span class="icon is-small"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
+                <span class="icon is-small" :class="{'has-text-grey-lighter':store.activeGroup!=='recovery'}"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
+            </a>
+            <a href="#" @click="store.setActiveGroup('validation')" class="m-2" :class="{'has-text-orange':store.activeGroup=='validation'}">
+                <span class="subtitle is-6 mr-1">Validation</span>
+                <span class="icon is-small" :class="{'has-text-grey-lighter':store.activeGroup!=='validation'}"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
             </a>
             <a href="#" @click="store.setActiveGroup('others')" class="m-2" :class="{'has-text-orange':store.activeGroup=='others'}"> 
                 <span class="subtitle is-6 mr-1">Autre</span>
-                <span class="icon is-small"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
+                <span class="icon is-small" :class="{'has-text-grey-lighter':store.activeGroup!=='others'}"><i class="fas fa-chevron-down" aria-hidden="true"></i></span>
             </a>
         </div>
 
@@ -125,6 +138,13 @@
                             </a>
                         </li>
 
+                        <li :class="{'is-active':store.activeTab=='campaignAvailability'}" v-if="store.activeGroup=='inventory' ">
+                            <a @click="store.setActiveTab('campaignAvailability')" :class="{'has-text-orange':store.activeTab=='campaignAvailability'}">
+                                <span class="icon is-small"><i class="fas fa-mobile-screen" aria-hidden="true"></i></span>
+                                <span>Disponibilité article - promo</span>
+                            </a>
+                        </li>
+
                         <li :class="{'is-active':store.activeTab=='saleOrders'}" v-if="store.activeGroup=='sales'">
                             <a @click="store.setActiveTab('saleOrders')" :class="{'has-text-orange':store.activeTab=='saleOrders'}">
                                 <span class="icon is-small"><i class="fas fa-cart-shopping" aria-hidden="true"></i></span>
@@ -143,6 +163,13 @@
                             <a @click="store.setActiveTab('creditRequests')" :class="{'has-text-orange':store.activeTab=='creditRequests'}">
                                 <span class="icon is-small"><i class="fas fa-coins" aria-hidden="true"></i></span>
                                 <span>Demande de crédit</span>
+                            </a>
+                        </li>
+
+                        <li :class="{'is-active':store.activeTab=='creditContracts'}" v-if="store.activeGroup=='sales'">
+                            <a @click="store.setActiveTab('creditContracts')" :class="{'has-text-orange':store.activeTab=='creditContracts'}">
+                                <span class="icon is-small"><i class="fas fa-coins" aria-hidden="true"></i></span>
+                                <span>Contrats achat groupé</span>
                             </a>
                         </li>
 
@@ -167,10 +194,17 @@
                             </a>
                         </li>
 
-                        <li :class="{'is-active':store.activeTab=='assignedDebts'}" v-if="store.activeGroup=='recovery'">
+                        <!---li :class="{'is-active':store.activeTab=='assignedDebts'}" v-if="store.activeGroup=='recovery'">
                             <a @click="store.setActiveTab('assignedDebts')" :class="{'has-text-orange':store.activeTab=='assignedDebts'}">
                                 <span class="icon is-small"><i class="fas fa-tag" aria-hidden="true"></i></span>
                                 <span>Créances</span>
+                            </a>
+                        </li--->
+
+                        <li :class="{'is-active':store.activeTab=='assignedCustomers'}" v-if="store.activeGroup=='recovery'">
+                            <a @click="store.setActiveTab('assignedCustomers')" :class="{'has-text-orange':store.activeTab=='assignedCustomers'}">
+                                <span class="icon is-small"><i class="fas fa-tag" aria-hidden="true"></i></span>
+                                <span>Affectationss</span>
                             </a>
                         </li>
 
@@ -195,6 +229,30 @@
                             <span class="">Demandes de révision</span>
                           </a>
                         </li---->
+                        <li :class="{'is-active':store.activeTab=='discounts'}" v-if="store.activeGroup=='validation'">
+                          <a @click="store.setActiveTab('discounts')" :class="{'has-text-orange':store.activeTab=='discounts'}">
+                            <span class="icon is-small"><i class="fas fa-clock-rotate-left" aria-hidden="true"></i></span>
+                            <span>Demandes de remise</span>
+                          </a>
+                        </li>
+                        <li :class="{'is-active':store.activeTab=='soUnlocking'}" v-if="store.activeGroup=='validation'">
+                          <a @click="store.setActiveTab('soUnlocking')" :class="{'has-text-orange':store.activeTab=='soUnlocking'}">
+                            <span class="icon is-small"><i class="fas fa-clock-rotate-left" aria-hidden="true"></i></span>
+                            <span>Demandes de déblocage</span>
+                          </a>
+                        </li>
+                        <li :class="{'is-active':store.activeTab=='payments'}" v-if="store.activeGroup=='validation'">
+                          <a @click="store.setActiveTab('payments')" :class="{'has-text-orange':store.activeTab=='payments'}">
+                            <span class="icon is-small"><i class="fas fa-clock-rotate-left" aria-hidden="true"></i></span>
+                            <span>Demandes de validation paiement</span>
+                          </a>
+                        </li>
+                        <li :class="{'is-active':store.activeTab=='revisionRequests'}" v-if="store.activeGroup=='validation'">
+                          <a @click="store.setActiveTab('revisionRequests')" :class="{'has-text-orange':store.activeTab=='revisionRequests'}">
+                            <span class="icon is-small"><i class="fas fa-clock-rotate-left" aria-hidden="true"></i></span>
+                            <span>Demandes de révision</span>
+                          </a>
+                        </li>
                         <li :class="{'is-active':store.activeTab=='history'}" v-if="store.activeGroup=='others'">
                           <a @click="store.setActiveTab('history')" :class="{'has-text-orange':store.activeTab=='history'}">
                             <span class="icon is-small"><i class="fas fa-clock-rotate-left" aria-hidden="true"></i></span>
@@ -210,12 +268,20 @@
 <script setup>
 
   import {useNavigationTabStore} from '@/Stores/NavigationTab'
-
+    import { useWebUserInfoStore } from '@/Stores/WebUserInfo';
+    import { useRouter } from 'vue-router';
   const store = useNavigationTabStore()
+  const userData = useWebUserInfoStore()
+  const router = useRouter()
+
+  function logout(){
+    window.localStorage.removeItem("userData")
+    router.push('/login')
+  }
 
 </script>
 
-<style>
+<style scoped>
 #navbarBasicExample{
     overflow-x: scroll;
 }
@@ -231,4 +297,9 @@
     color: orange;
 
 }
+/* width */
+::-webkit-scrollbar {
+  height:1px;
+}
+
 </style>

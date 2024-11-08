@@ -4,7 +4,8 @@
         <div id="scrollBlock" class="modal-card box shadow is-rounded h-100" style="width: 90%">
 <!---------Composant entête fiche----------------------->
             <div id="card-header-comp">
-                <contact-card-Header :soDesc="contactName" pageTitle="Fiche contact" @onGoingBackToList="goBackToList" />
+                <contact-card-Header :soDesc="contactName" pageTitle="Fiche contact" 
+                @onGoingBackToList="goBackToList" />
             </div>
   
 <!---------Composant rubban fiche client----------------------->
@@ -71,9 +72,9 @@
                         <div id="general_content" class="columns">
                             <div class="column">
                                 <!----input-text labelInputText="No_" v-model="ContactCardHeader['No_']"></input-text--->
-                                <input-select v-model="contactCustomerNo" labelInputText="Code client" :is_disabled="false"  @openModal="activeModalForSelectableElementList='customerList';"></input-select>
+                                <input-select v-model="contactCustomerNo" labelInputText="Code client" :is_disabled="false"  @openModal="activeModalForSelectableElementList='customerList'"></input-select>
                                 
-                                <input-text labelInputText="Titre" v-model="contactSalutationCode"></input-text>
+                                <input-select labelInputText="Titre" v-model="contactSalutationCode"  :is_disabled="false" @openModal="activeModalForSelectableElementList='salutationList'"></input-select>
                                 
                                 <input-text labelInputText="Prenom" v-model="contactFirstName"></input-text>
                                 
@@ -81,22 +82,35 @@
                                 
                                 <input-text labelInputText="Nom" v-model="contactSurname" ></input-text>
                                 
-                                <input-text labelInputText="Nom Complet" v-model="contactName"></input-text>
+                                <input-text labelInputText="Nom Complet" :valueInputText="contactName" :is_disabled="true"></input-text>
                               
                                 <input-text labelInputText="Adresse : Ligne 1" v-model="contactAddress"></input-text>
-                            </div>
-                            <div class="column">
+                                
                                 <input-text labelInputText="Adresse : Ligne 2" v-model="contactAddress2"></input-text>
                                 
                                 <input-text labelInputText="Code postal" v-model="contactPostCode"></input-text>
                                 
                                 <input-text labelInputText="Ville" v-model="contactCity"></input-text>
+                            </div>
+                            <div class="column">
                                 
                                 <input-text labelInputText="Téléphone" v-model="contactPhoneNo"></input-text>
                                 
                                 <input-text labelInputText="Téléphone Mobile" v-model="contactMobilePhoneNo"></input-text>
                                 
+                                <input-text labelInputText="E-mail" v-model="contactEmail"></input-text>
+                                
                                 <input-text labelInputText="Fonction" v-model="contactJobTitle"></input-text>
+
+                                <input-text labelInputText="NIF" v-model="contactNIF"></input-text>
+
+                                <input-text labelInputText="STAT" v-model="contactSTAT"></input-text>
+
+                                <input-text labelInputText="RCS" v-model="contactRCS"></input-text>
+
+                                <input-text labelInputText="CIF" v-model="contactCIF"></input-text>
+
+                                <input-text labelInputText="N° identification" v-model="contactIDNo"></input-text>
                             </div>
                         </div>
                     </div>
@@ -112,6 +126,13 @@
             @onGettingLineFromSelectableCustomerListModal="(elt)=>fillCustomerInfoField(elt)">
         </modal-for-selectable-customer-list>
 
+        <modal-for-selectable-salutation-list 
+            v-if="activeModalForSelectableElementList=='salutationList'"  
+            :isActive="activeModalForSelectableElementList=='salutationList'" 
+            @closeModal="activeModalForSelectableElementList=''" 
+            @onGettingLineFromSelectableSalutationListModal="(elt)=>fillSalutationInfoField(elt)">
+        </modal-for-selectable-salutation-list>
+
     </div>
 </template>
 <script>
@@ -120,8 +141,10 @@
   import inputText from "./input/input-text.vue";
   import inputSelect from './input/input-select.vue'
   import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
-  import { ref } from 'vue'
+  import ModalForSelectableSalutationList from "./ModalForSelectableSalutationCodeList.vue";
+  import { computed, onBeforeMount, onMounted, ref } from 'vue'
   import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
+  import { useNavigationTabStore } from "@/Stores/NavigationTab";
   import { useRouter } from 'vue-router'
   import  axios  from 'axios'
 
@@ -130,13 +153,15 @@
   
   
   export default {
-    name: "contact-card",
+    emits: ['submit'],
+    name: "new-contact",
+    props:['redirectionIsDisabled','customerNo'],
     components: {
       ContactCardHeader,
       inputText,
       inputSelect,
       ContactCardRibbon,
-      ModalForSelectableCustomerList,
+      ModalForSelectableCustomerList,ModalForSelectableSalutationList,
     },
   
     data() {
@@ -150,6 +175,13 @@
       }
     },
     methods: {
+        goBackToList(){
+            if(!this.redirectionIsDisabled){
+                useNavigationTabStore().setActiveGroup('sales')
+                useNavigationTabStore().setActiveTab('contacts')
+                this.$router.push('/')
+            }
+        },
       
       expand(id) {
         const myElt = document.getElementById(id);
@@ -162,7 +194,7 @@
         myElt.style.maxHeight = "0px";
       },
     },
-    setup(){
+    setup(props,ctx){
 
         const router = useRouter()
 
@@ -179,108 +211,180 @@
         //variable de success serveur
         let success_message=ref('')
 
-        const webUserInfo = {
-            customerNo:useWebUserInfoStore().defaultCustomerNo,
-            company:useWebUserInfoStore().activeCompanyId,
-            name:useWebUserInfoStore().name
-        }
+        const contactName = computed(() => {
+            return contactCardInfo.contactFirstName.value + ' ' + contactCardInfo.contactMiddleName.value + ' ' + contactCardInfo.contactSurname.value
+        })
+
 
         const contactCardInfo = {
-          contactCustomerNo : ref(webUserInfo.customerNo),
-          contactSalutationCode : ref(''),
-          contactFirstName : ref(''),
-          contactMiddleName : ref(''),
-          contactSurname : ref(''),
-          contactName : ref(''),
-          contactAddress : ref(''),
-          contactAddress2 : ref(''),
-          contactPostCode : ref(''),
-          contactCity : ref(''),
-          contactPhoneNo : ref(''),
-          contactMobilePhoneNo : ref(''),
-          contactJobTitle : ref(''),
-          }
+            contactCustomerNo : ref(''),
+            contactSalutationCode : ref(''),
+            contactFirstName : ref(''),
+            contactMiddleName : ref(''),
+            contactSurname : ref(''),
+            //contactName : ref(''),
+            contactAddress : ref(''),
+            contactAddress2 : ref(''),
+            contactPostCode : ref(''),
+            contactCity : ref(''),
+            contactPhoneNo : ref(''),
+            contactMobilePhoneNo : ref(''),
+            contactJobTitle : ref(''),
+            contactEmail: ref(''),
+    
+            contactNIF: ref(''),
+            contactSTAT: ref(''),
+            contactRCS: ref(''),
+            contactCIF: ref(''),
+            contactIDNo: ref(''),
+        }
           
+        
+        function fillCustomerInfoField(customer){
+            contactCardInfo.contactCustomerNo.value=customer['No_']                
+        }
+        function fillSalutationInfoField(salutation){
+            contactCardInfo.contactSalutationCode.value = salutation['Code']
+        }
+          
+        //fonction pour gérer les erreurs lors de l'appel d'un service de BC
+        // function displayErrorMessage(errorObject){
+        //     if(errorObject.response && errorObject.response.status){
+        //         switch (errorObject.response.status){
+        //             case 401: 
+        //                 submitting_message.value=''
+        //                 error_message.value= errorObject.response.data;break;
+        //             case 400:
+        //                 submitting_message.value='' 
+        //                 error_message.value= errorObject.response.data
+        //                 error_message_code.value= errorObject.code;break;
+        //             case 404:
+        //                 submitting_message.value=''
+        //                 error_message.value=errorObject.response.data.error.message
+        //                 error_message_code.value= errorObject.response.data.error.code;break;
+        //             default:
+        //                 submitting_message.value=''
+        //                 error_message.value=errorObject.response
+        //         }
+        //     }else{
+        //         error_message.value = errorObject.message
+        //         error_message_code.value = errorObject.code
+        //     }
+        // }
 
-          function fillCustomerInfoField(customer){
-              contactCardInfo.contactCustomerNo.value=customer['No_']                
-          }
+        function displayErrorMessage(errorObject){
+            submitting_message.value = ''
+            if(errorObject.response){
+                if(errorObject.response.data){
+                    error_message.value = JSON.stringify(errorObject.response.data)
+                }else{
+                    error_message.value = JSON.stringify(errorObject.response)
+                }
+            }
+            else{
+                error_message.value = JSON.stringify(errorObject)
+            }
+        }
 
-          function displayErrorMessage(errorObject){
-              if(errorObject.response && errorObject.response.status){
-                  switch (errorObject.response.status){
-                      case 401: 
-                          submitting_message.value=''
-                          error_message.value= errorObject.response.data;break;
-                      case 400:
-                          submitting_message.value='' 
-                          error_message.value= errorObject.response.data
-                          error_message_code.value= errorObject.code;break;
-                      case 404:
-                          submitting_message.value=''
-                          error_message.value=errorObject.response.data.error.message
-                          error_message_code.value= errorObject.response.data.error.code;break;
-                      default:
-                          submitting_message.value=''
-                          error_message.value=errorObject.response
-                  }
-              }else{
-                  error_message.value = errorObject.message
-                  error_message_code.value = errorObject.code
-              }
-          }
+          //fonction pour formater les données à envoyer aux service de BC
+        function formatToBCJsonData(data){
+            const JSONFormatedData = JSON.stringify(data).split('"').join('\\"')
+            const JSONDataToSend = '{'+ '"inputJson":'+'"'+JSONFormatedData+'"' +'}'
+            console.log(JSONDataToSend)
+            return {data:JSONDataToSend}
+        }
+
+        function getDocumentNo(documentNo){
+            axios.get(`http://${hostname}:5000/app/getContactCard/${documentNo}`)
+            .then((result) => {
+                const contact = {
+                    code:documentNo,
+                    name:result.data.recordset[0]['Name']
+                }
+                ctx.emit('submit',contact)
+            })
+            .catch((err) => console.error(err));
+        }
 
           function createContact(sqData){
-              axios.post(`http://${hostname}:3000/app/getBCWSResponse?company=${webUserInfo.company}`,sqData)
-              .then(res => {
-                  submitting_message.value=''
-                  success_message.value='Enregistrement réussi, vous serez redirigé dans un instant'
-                  error_message.value=''
-                  setTimeout(()=> router.push(`/contactCard/${contactCardInfo.contactCustomerNo.value}/${res.data.documentNo}`),5000)
-              })
-              .catch(err => {
-                  displayErrorMessage(err)
-              })
+                axios.post(`http://${hostname}:5000/app/getBCWSResponse?company=${useWebUserInfoStore().activeCompanyId}`,sqData)
+                .then(res => {
+                    submitting_message.value=''
+                    if(!props.redirectionIsDisabled){
+                        success_message.value='Enregistrement réussi, vous serez redirigé dans un instant'
+                        error_message.value=''
+                        setTimeout(()=> router.push(`/contactCard/${res.data.documentNo}`),3000)
+                    }else{
+                            success_message.value='Enregistrement réussi'
+                        error_message.value=''
+                        setTimeout(()=> success_message.value ='' ,3000)
+                        getDocumentNo(res.data.documentNo)
+                    }
+                })
+                .catch(err => {
+                    displayErrorMessage(err)
+                })
           }
 
-          function formatToBCJsonData(data){
-                
-                const JSONFormatedData = JSON.stringify(data).split('"').join('\\"')
-                const JSONDataToSend = '{'+ '"inputJson":'+'"'+JSONFormatedData+'"' +'}'
-                console.log(JSONDataToSend)
-                return {data:JSONDataToSend}
-            }
-
+          
+            
+          //fonction pour soumettre la modifiaction de la fiche
             function submitForm(){
                 submitting_message.value='Enregistrement en cours'
                 const JSData = {
                     Parameter:'contacts_insert',
-                    webUserName:webUserInfo.name,
-                    ContactNo:'',
-                    contactCustomerNo : ref(webUserInfo.customerNo),
-                    contactSalutationCode : contactCardInfo.contactSalutationCode.value,
-                    contactFirstName : contactCardInfo.contactFirstName.value,
-                    contactMiddleName : contactCardInfo.contactMiddleName.value,
-                    contactSurname : contactCardInfo.contactSurname.value,
-                    contactName : contactCardInfo.contactName.value,
-                    contactAddress : contactCardInfo.contactAddress.value,
-                    contactAddress2 : contactCardInfo.contactAddress2.value,
-                    contactPostCode : contactCardInfo.contactPostCode.value,
-                    contactCity : contactCardInfo.contactCity.value,
-                    contactPhoneNo : contactCardInfo.contactPhoneNo.value,
-                    contactMobilePhoneNo : contactCardInfo.contactMobilePhoneNo.value,
-                    contactJobTitle : contactCardInfo.contactJobTitle.value
+                    webUserName:useWebUserInfoStore().name,
+                    'No_' : '',
+                    'Customer No_' : contactCardInfo.contactCustomerNo.value,
+                    'Salutation Code' : contactCardInfo.contactSalutationCode.value,
+                    'First Name' : contactCardInfo.contactFirstName.value,
+                    'Middle Name' : contactCardInfo.contactMiddleName.value,
+                    'Surname' : contactCardInfo.contactSurname.value,
+                    'Name' :contactName.value,
+                    'Image' : '',
+                    'Job Title' : contactCardInfo.contactJobTitle.value,
+                    'Address' : contactCardInfo.contactAddress.value,
+                    'Address 2' : contactCardInfo.contactAddress2.value,
+                    'Post Code' : contactCardInfo.contactPostCode.value,
+                    'City' : contactCardInfo.contactCity.value,
+                    'Phone No_' : contactCardInfo.contactPhoneNo.value,
+                    'Mobile Phone No_' : contactCardInfo.contactMobilePhoneNo.value,
+                    'E-Mail' : contactCardInfo.contactEmail.value,
+                    'NIF':contactCardInfo.contactNIF.value,
+                    'STAT':contactCardInfo.contactSTAT.value,
+                    'RCS':contactCardInfo.contactRCS.value,
+                    'CIF':contactCardInfo.contactCIF.value,
+                    'ID Number':contactCardInfo.contactIDNo.value,
                 }
                 createContact(formatToBCJsonData(JSData))
             }
 
+//Gestions des évènements et déclencheurs
+        onBeforeMount(() => {
+            if(useWebUserInfoStore().name==''){
+                let userData = window.localStorage.getItem("userData");
+                if(!userData){
+                    router.push('/login')
+                }else{
+                    let userDataObjet = JSON.parse(userData)
+                    useWebUserInfoStore().fillWebUserInfo(userDataObjet)
+                }
+            }
+        })
+        onMounted(() => {
+            if(props.customerNo)
+            contactCardInfo.contactCustomerNo.value = props.customerNo
+        })
+
+
           return{
+                contactName,
               ...contactCardInfo,
               submitting_message,
               error_message,
               error_message_code,
               success_message,
-              fillCustomerInfoField,
+              fillCustomerInfoField,fillSalutationInfoField,
               submitForm
           }
     }
@@ -292,7 +396,7 @@
   #communication_content,
   #international_content,
   #history_content {
-    max-height: 5000px;
+    max-height: 3000px;
     overflow: hidden;
     transition: max-height 0.5s;
   }

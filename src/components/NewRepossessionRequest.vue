@@ -79,20 +79,23 @@
                                 
                                 <input-select v-model="repossessionRequestDocumentNo" labelInputText="N° Document" @openModal="activeModalForSelectableElementList='invoiceList'"></input-select>
                                 
-                                <input-select v-model="repossessionRequestItemNo" labelInputText="Code Article" @openModal="activeModalForSelectableElementList='itemList'"></input-select>
+                                <input-text v-model="repossessionRequestDocumentRef" labelInputText="Ref Document"></input-text>
                                 
-                                <input-text v-model="repossessionRequestSerialNo" labelInputText="Numéro Série"></input-text>
+                                <input-select v-model="repossessionRequestItemNo" labelInputText="Code Article" @openModal="activeModalForSelectableElementList='itemList'" v-if="repossessionRequestDocumentRef"></input-select>
+                                <input-select v-model="repossessionRequestItemNo" labelInputText="Code Article" @openModal="activeModalForSelectableElementList='invoiceLineList'" v-else></input-select>
+                                                                
                             </div>
                             <div class="column">
+                                <input-text v-model="repossessionRequestSerialNo" labelInputText="Numéro Série"></input-text>
                                 <input-select-basic-1 v-model="repossessionRequestSource" labelInputText="Origine" :option-list="optionLabelListForRepossSource"></input-select-basic-1> 
 
+                                <input-select-basic-1 v-model="repossessionRequestType" labelInputText="Type" :option-list="optionLabelListForRepossType"></input-select-basic-1 > 
+                                
+                                <!---input-select-basic-1 v-model="repossessionRequestAcceptanceStatus" labelInputText="Statut Acceptation" :option-list="optionLabelListForRepossStatus"></input-select-basic-1----> 
+                                
                                 <input-text v-model="repossessionRequestMotivation" labelInputText="Motif"></input-text>
 
-                                <input-select-basic-1 v-model="repossessionRequestAcceptanceStatus" labelInputText="Statut Acceptation" :option-list="optionLabelListForRepossStatus"></input-select-basic-1> 
-
-                                <input-select-basic-1 v-model="repossessionRequestType" labelInputText="Type" :option-list="optionLabelListForRepossType"></input-select-basic-1 > 
-
-                                <input-select-basic-1 v-model="repossessionRequestItemStatus" labelInputText="Statut Article" :option-list="optionLabelListForRepossItemStatus"></input-select-basic-1> 
+                                <!---input-select-basic-1 v-model="repossessionRequestItemStatus" labelInputText="Statut Article" :option-list="optionLabelListForRepossItemStatus"></input-select-basic-1----> 
                             </div>
                         </div>                    
                     </div>
@@ -113,19 +116,29 @@
             @onGettingLineFromSelectableCustomerListModal="(elt)=>fillCustomerInfoField(elt)">
         </modal-for-selectable-customer-list>
 
-        <modal-for-selectable-item-list 
-            v-if="activeModalForSelectableElementList=='itemList'" 
-            :isActive="activeModalForSelectableElementList=='itemList'" 
-            @closeModal="activeModalForSelectableElementList=''"
-            @onGettingLineFromSelectableItemListModal="(elt)=>fillItemInfoField(elt)">
-        </modal-for-selectable-item-list>
 
         <modal-for-selectable-invoice-list 
             v-if="activeModalForSelectableElementList=='invoiceList'" 
             :isActive="activeModalForSelectableElementList=='invoiceList'" 
+            :customerNo="repossessionRequestCustomerNo"
             @closeModal="activeModalForSelectableElementList=''" 
-            @onGettingLineFromSelectableLocationListModal="(elt)=>fillIDocInfoField(elt)">
+            @onGettingLineFromSelectableInvoiceListModal="(elt)=>fillInvoiceInfoField(elt)">
         </modal-for-selectable-invoice-list>
+
+        <modal-for-selectable-invoice-line 
+            v-if="activeModalForSelectableElementList=='invoiceLineList'" 
+            :isActive="activeModalForSelectableElementList=='invoiceLineList'"
+            :documentNo="repossessionRequestDocumentNo" 
+            @closeModal="activeModalForSelectableElementList=''"
+            @onGettingLineFromSelectableInvoiceLineModal="(elt)=>fillItemInfoField(elt['Item No_'])">
+        </modal-for-selectable-invoice-line>
+
+        <modal-for-selectable-item-list 
+            v-if="activeModalForSelectableElementList=='itemList'" 
+            :isActive="activeModalForSelectableElementList=='itemList'"
+            @closeModal="activeModalForSelectableElementList=''"
+            @onGettingLineFromSelectableItemListModal="(elt)=>fillItemInfoField(elt['No_'])">
+        </modal-for-selectable-item-list>
 
 
 
@@ -140,8 +153,10 @@ import inputText from './input/input-text.vue'
 import inputSelect from './input/input-select.vue'
 import inputSelectBasic1 from './input/input-select-basic1.vue'
 import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue'
+import ModalForSelectableInvoiceList from './ModalForSelectableInvoiceList.vue'
+import ModalForSelectableInvoiceLine from './ModalForSelectableInvoiceLine.vue'
 import ModalForSelectableItemList from './ModalForSelectableItemList.vue'
-import { onMounted, ref } from 'vue'
+import { onBeforeMount, onMounted, ref, watch,  } from 'vue'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import  axios  from 'axios'
@@ -159,7 +174,9 @@ export default {
         inputSelect,
         inputSelectBasic1,
         ModalForSelectableCustomerList,
-        ModalForSelectableItemList
+        ModalForSelectableInvoiceList,
+        ModalForSelectableInvoiceLine,
+        ModalForSelectableItemList,
     },
     data(){
         return{
@@ -169,7 +186,7 @@ export default {
             height:'700px',
 
             //taille (largeur) initiale du composant custumerInfo
-            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.newquoteRightInfoMaxWidth,
+            customerInfoCompMaxWidth:useNavigationTabStore().tabRightInfo.newrepossRightInfoMaxWidth,
 
             //indique si les onglets de la page sont réduits ou pas
             onglet1_expanded:true,
@@ -204,7 +221,7 @@ export default {
             const optionLabelListForRepossItemStatus = ref([])
 
             function getOptionLabelList(field){
-                axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
+                axios.get(`http://${hostname}:5000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
                 .then(result => {
                     if (field=='[Reposs Source]')
                         optionLabelListForRepossSource.value=result.data.recordset
@@ -220,32 +237,33 @@ export default {
                 }).catch(err=>console.log(err))
             }
 
-            onMounted(() =>{
-                if(useWebUserInfoStore().defaultLanguage){
-                    getOptionLabelList('[Reposs Source]')
-                    getOptionLabelList('[Reposs Status]')
-                    getOptionLabelList('[Reposs Type]')
-                    getOptionLabelList('[Reposs Item Status]')
-                }else{
-                    axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
-                    .then(res=>{
-                        useWebUserInfoStore().fillWebUserInfo(res.data.recordset[0])
-                        getOptionLabelList('[Reposs Source]')
-                        getOptionLabelList('[Reposs Status]')
-                        getOptionLabelList('[Reposs Type]')
-                        getOptionLabelList('[Reposs Item Status]')
-                    })
-                    .catch(err=>console.log(err))
+
+            onBeforeMount(() => {
+                if(useWebUserInfoStore().name==''){
+                    let userData = window.localStorage.getItem("userData");
+                    if(!userData){
+                        router.push('/login')
+                    }else{
+                        let userDataObjet = JSON.parse(userData)
+                        useWebUserInfoStore().fillWebUserInfo(userDataObjet)
+                    }
                 }
+            })
 
-
+            onMounted(() =>{
+                getOptionLabelList('[Reposs Source]')
+                getOptionLabelList('[Reposs Status]')
+                getOptionLabelList('[Reposs Type]')
+                getOptionLabelList('[Reposs Item Status]')
             })
 
 
             const repossessionRequestCardHeaderInfo = {
                 repossessionRequestCustomerNo : ref(''),
                 repossessionRequestDocumentNo : ref(''),
+                repossessionRequestDocumentRef : ref(''),
                 repossessionRequestItemNo : ref(''),
+                repossessionRequestItemValue : ref(0.00),
                 repossessionRequestSerialNo : ref(''),
                 repossessionRequestSource : ref(0),
                 repossessionRequestMotivation : ref(''),
@@ -265,12 +283,18 @@ export default {
                 repossessionRequestCardHeaderInfo.repossessionRequestCustomerNo.value=customer['No_']
             }
 
-            function fillItemInfoField(item){
-                repossessionRequestCardHeaderInfo.repossessionRequestItemNo.value=item['No_']
+
+            function fillItemInfoField(itemNo){
+                repossessionRequestCardHeaderInfo.repossessionRequestItemNo.value=itemNo
             }
 
-            function fillDocInfoField(doc){
-                repossessionRequestCardHeaderInfo.repossessionRequestDocumentNo.value=doc['No_']
+            function fillInvoiceInfoField(invoice){
+                repossessionRequestCardHeaderInfo.repossessionRequestDocumentNo.value=invoice['Document No_']
+                if(repossessionRequestCardHeaderInfo.repossessionRequestDocumentRef.value)
+                    repossessionRequestCardHeaderInfo.repossessionRequestDocumentRef.value=''
+                
+                if(repossessionRequestCardHeaderInfo.repossessionRequestItemNo.value)
+                    repossessionRequestCardHeaderInfo.repossessionRequestItemNo.value =''
             }
 
             function displayErrorMessage(errorObject){
@@ -300,7 +324,7 @@ export default {
             }
 
             function createRepossessionRequest(rrData){
-                axios.post(`http://${hostname}:3000/app/getBCWSResponse?company=${useWebUserInfoStore().activeCompanyId}`,rrData)
+                axios.post(`http://${hostname}:5000/app/getBCWSResponse?company=${useWebUserInfoStore().activeCompanyId}`,rrData)
                 .then(res => {
                     submitting_message.value=''
                     success_message.value='Enregistrement réussi, vous serez redirigé dans un instant'
@@ -329,7 +353,9 @@ export default {
                     'No_':'',
                     'Customer No_': repossessionRequestCardHeaderInfo.repossessionRequestCustomerNo.value,
                     'Document No_': repossessionRequestCardHeaderInfo.repossessionRequestDocumentNo.value,
+                    'Document Ref.': repossessionRequestCardHeaderInfo.repossessionRequestDocumentRef.value,
                     'Item No_':repossessionRequestCardHeaderInfo.repossessionRequestItemNo.value,
+                    'Value':0,
                     'Serial No_':repossessionRequestCardHeaderInfo.repossessionRequestSerialNo.value,
                     'Created on':new Date().toISOString,
                     'Created by':useWebUserInfoStore().name,
@@ -337,10 +363,20 @@ export default {
                     'Motivation':repossessionRequestCardHeaderInfo.repossessionRequestMotivation.value,
                     'Reposs Status':repossessionRequestCardHeaderInfo.repossessionRequestAcceptanceStatus.value,
                     'Reposs Type':repossessionRequestCardHeaderInfo.repossessionRequestType.value, 
-                    'Reposs Item Status':repossessionRequestCardHeaderInfo.repossessionRequestItemNo.value,
+                    'Reposs Item Status':repossessionRequestCardHeaderInfo.repossessionRequestItemStatus.value
                 }
                 createRepossessionRequest(formatToBCJsonData(JSData))
             }
+
+            watch(repossessionRequestCardHeaderInfo.repossessionRequestDocumentRef, (newValue,oldValue) => {
+                if(newValue && newValue!==oldValue){
+                    repossessionRequestCardHeaderInfo.repossessionRequestDocumentNo.value=''
+                    if(repossessionRequestCardHeaderInfo.repossessionRequestItemNo.value)
+                        repossessionRequestCardHeaderInfo.repossessionRequestItemNo.value =''
+                }
+            })
+
+        
 
 
 
@@ -348,7 +384,7 @@ export default {
             ...repossessionRequestCardHeaderInfo,
             fillCustomerInfoField,
             fillItemInfoField,
-            fillDocInfoField,
+            fillInvoiceInfoField,
             submitForm,
             error_message,
             error_message_code,

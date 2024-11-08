@@ -7,8 +7,8 @@
         <div class="field-body">
             <div class="field">
                 <p class="control">
-                    <input :disabled="props.is_disabled" class="input " type="text has-text-dark" :value="props.valueInputText" v-if="props.is_disabled==true">
-                    <input :disabled="props.is_disabled" class="input " type="text has-text-dark" v-model="model" v-else>
+                    <input :disabled="props.is_disabled" class="input has-text-right" type="text has-text-dark" :value="props.valueInputText" v-if="props.is_disabled==true">
+                    <input :disabled="props.is_disabled" class="input has-text-dark" type="number" v-model="model" v-else>
                 </p>
             </div>
         </div>

@@ -70,7 +70,7 @@ export default{
     },
     props:['isActive'],
     beforeMount(){
-        axios.get(`http://${this.hostname}:3000/app/getSalesModeList`)
+        axios.get(`http://${this.hostname}:5000/app/getSalesModeList`)
         .then(result => {
             console.log(result)
             this.elementList=result.data

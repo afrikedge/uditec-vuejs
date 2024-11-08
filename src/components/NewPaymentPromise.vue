@@ -6,17 +6,17 @@
  
 <!---------Composant entête fiche----------------------->      
             <div id="card-header-comp">
-                <r-r-card-Header :soNo="'Client N° : '+paymentPromiseCustomerNo" :soDesc="paymentPromiseSubject" pageTitle="Promesse de règlement"
+                <payment-promise-Card-Header :soNo="'Client N° : '+paymentPromiseCustomerNo" :soDesc="paymentPromiseSubject" pageTitle="Promesse de règlement"
                 @onGoingBackToList='goBackToList'
-                ></r-r-card-Header>
+                ></payment-promise-Card-Header>
             </div>
 <!---------Composant rubban fiche client----------------------->      
-            <r-r-card-ribbon
+            <payment-promise-card-ribbon
             @onHidingOrShowingComponentInfo="hideOrShowComponentInfo"
             @onSubmittingForm="submitForm"
             componentWithCompInfo="newPayPromiseRightInfoMaxWidth"
             :readOnlyModeIsDisabled="true"
-            ></r-r-card-ribbon>
+            ></payment-promise-card-ribbon>
 
 <!---------Composant message d'enregistrement en cours ou d'erreur ou de success----------------------->      
             <article v-if="submitting_message" class="" >
@@ -93,8 +93,9 @@
 
                                 <input-number v-model="paymentPromisePromisedAmount" labelInputText="Montant promis"></input-number> 
 
-                                <input-number v-model="paymentPromiseHonoredAmount" labelInputText="Montant honoré"></input-number> 
-
+                                <!----input-number v-model="paymentPromiseHonoredAmount" labelInputText="Montant honoré"></input-number----> 
+                                
+                                <!----input-date v-model="paymentPromiseHonorationDate" labelInputText="Date honoration"></input-date----> 
                             
                                 <input-select-basic-1 v-model="paymentPromiseActivityType" labelInputText="Type d'activité de rappel" :option-list="optionLabelListForActivityType"></input-select-basic-1> 
                                 
@@ -102,7 +103,9 @@
                                 
                                 <input-date v-model="paymentPromiseRemindingDueDate" labelInputText="Echéance rappel"></input-date> 
                                 
-                                <input-select-basic-1 v-model="paymentPromiseStatus" labelInputText="Statut" :option-list="optionLabelListForPromiseStatus"></input-select-basic-1> 
+                                <input-text v-model="paymentPromiseObservations" labelInputText="Observations"></input-text>
+
+                                <!----input-select-basic-1 v-model="paymentPromiseStatus" labelInputText="Statut" :option-list="optionLabelListForPromiseStatus"></input-select-basic-1----> 
 
                             </div>
                         </div>                    
@@ -130,7 +133,7 @@
             :isActive="activeModalForSelectableElementList=='contactList'" 
             :customerNo="paymentPromiseCustomerNo"
             @closeModal="activeModalForSelectableElementList=''" 
-            @onGettingLineFromSelectableInvoiceListModal="(elt)=>fillContactInfoField(elt)">
+            @onGettingLineFromSelectableContactListModal="(elt)=>fillContactInfoField(elt)">
         </modal-for-selectable-contact-list>
 
         <modal-for-selectable-activity-list 
@@ -153,9 +156,9 @@
     </div>     
 </template>
 <script>
-import RRCardHeader from './HeaderForCard.vue'
+import PaymentPromiseCardHeader from './HeaderForCard.vue'
 import CustomerInfo from './CustomerInfo.vue'
-import RRCardRibbon from './RibbonForCard.vue'
+import PaymentPromiseCardRibbon from './RibbonForCard.vue'
 import inputText from './input/input-text.vue'
 import inputSelect from './input/input-select.vue'
 import inputDate from './input/input-date.vue'
@@ -165,7 +168,7 @@ import ModalForSelectableCustomerList from './ModalForSelectableCustomerList.vue
 import ModalForSelectableContactList from './ModalForSelectableContactList.vue'
 import ModalForSelectableActivityList from './ModalForSelectableActivityList.vue'
 import ModalForSelectableUserList from './ModalForSelectableExternalUserList.vue'
-import { onMounted, ref,  } from 'vue'
+import { onBeforeMount, onMounted, ref,  } from 'vue'
 import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
 import { useNavigationTabStore } from '@/Stores/NavigationTab'
 import  axios  from 'axios'
@@ -174,10 +177,10 @@ import { useRouter } from 'vue-router'
 
 
 export default {
-    name:'new-repossession-request',
+    name:'new-payment-promise',
     components:{
-        RRCardHeader,
-        RRCardRibbon,
+        PaymentPromiseCardHeader,
+        PaymentPromiseCardRibbon,
         CustomerInfo,
         inputText,
         inputSelect,
@@ -232,7 +235,7 @@ export default {
             const optionLabelListForPromiseStatus = ref([])
 
             function getOptionLabelList(field){
-                axios.get(`http://${hostname}:3000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
+                axios.get(`http://${hostname}:5000/app/getOptionLabelList?lg=${useWebUserInfoStore().defaultLanguage}&fd=${field}`)
                 .then(result => {
                     if (field=='[Activity Type]')
                         optionLabelListForActivityType.value=result.data.recordset
@@ -241,21 +244,21 @@ export default {
                 }).catch(err=>console.log(err))
             }
 
-            onMounted(() =>{
-                if(useWebUserInfoStore().defaultLanguage){
-                    getOptionLabelList('[Activity Type]')
-                    getOptionLabelList('[Promise Status]')
-                }else{
-                    axios.get(`http://${hostname}:3000/app/getUserInfo?webUser=DAVID`)
-                    .then(res=>{
-                        useWebUserInfoStore().fillWebUserInfo(res.data.recordset[0])
-                        getOptionLabelList('[Activity Type]')
-                        getOptionLabelList('[Promise Status]')
-                    })
-                    .catch(err=>console.log(err))
+            onBeforeMount(() => {
+                if(useWebUserInfoStore().name==''){
+                    let userData = window.localStorage.getItem("userData");
+                    if(!userData){
+                        router.push('/login')
+                    }else{
+                        let userDataObjet = JSON.parse(userData)
+                        useWebUserInfoStore().fillWebUserInfo(userDataObjet)
+                    }
                 }
+            })
 
-
+            onMounted(() =>{
+                getOptionLabelList('[Activity Type]')
+                getOptionLabelList('[Promise Status]')
             })
 
             
@@ -264,6 +267,7 @@ export default {
                 paymentPromiseCustomerNo : ref(''),
                 paymentPromiseContactNo : ref(''),
                 paymentPromiseDescription : ref(''),
+                paymentPromiseObservations : ref(''),
                 paymentPromiseOriginatedActivity : ref(''),
                 paymentPromiseAssignedTo : ref(''),
                 paymentPromisePromisedAmount:ref(0),
@@ -274,6 +278,7 @@ export default {
 
             const dateInfo= {
                 paymentPromiseDate: ref(currentDate),
+                paymentPromiseHonorationDate: ref(currentDate),
                 paymentPromiseRemindingDate: ref(currentDate),
                 paymentPromiseRemindingDueDate: ref(currentDate),
             }
@@ -331,7 +336,7 @@ export default {
             }
 
             function createpaymentPromise(rrData){
-                axios.post(`http://${hostname}:3000/app/getBCWSResponse?company=${useWebUserInfoStore().activeCompanyId}`,rrData)
+                axios.post(`http://${hostname}:5000/app/getBCWSResponse?company=${useWebUserInfoStore().activeCompanyId}`,rrData)
                 .then(res => {
                     submitting_message.value=''
                     success_message.value='Enregistrement réussi, vous serez redirigé dans un instant'
@@ -367,12 +372,14 @@ export default {
                     'Promise Date':dateInfo.paymentPromiseDate.value,
                     'Assigned to':paymentPromiseCardHeaderInfo.paymentPromiseAssignedTo.value,
                     'Promised amount':paymentPromiseCardHeaderInfo.paymentPromisePromisedAmount.value,
-                    'Honored amount':paymentPromiseCardHeaderInfo.paymentPromiseHonoredAmount.value,
+                    'Honored amount':0,
+                    'Honoration Date':'1753-01-01T00:00:00.000Z',
                     'Originated activity':paymentPromiseCardHeaderInfo.paymentPromiseOriginatedActivity.value, 
                     'Activity Type':paymentPromiseCardHeaderInfo.paymentPromiseActivityType.value,
                     'Riminding Date':dateInfo.paymentPromiseRemindingDate.value,
                     'Reminding Due Date':dateInfo.paymentPromiseRemindingDueDate.value,
-                    'Promise Status':paymentPromiseCardHeaderInfo.paymentPromiseStatus.value
+                    'Promise Status':paymentPromiseCardHeaderInfo.paymentPromiseStatus.value,
+                    'Observations':paymentPromiseCardHeaderInfo.paymentPromiseObservations.value
                 }
                 createpaymentPromise(formatToBCJsonData(JSData))
             }

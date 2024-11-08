@@ -2,7 +2,7 @@
     <div id="FRB">
     </div>
 </template>
-<style>
+<style scoped>
 #FRB{
     border-radius: 50%;
     height: 100px;

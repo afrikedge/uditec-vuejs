@@ -85,7 +85,7 @@ export default{
         }
     },
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getGlobalContactList`)
+        axios.get(`http://${this.hostname}:5000/app/getGlobalContactList`)
         .then(result => {
             this.elementList=result.data
         }).catch(err=>console.log(err))

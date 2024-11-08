@@ -72,7 +72,7 @@ export default{
         }
     },
     mounted(){
-        axios.get(`http://${this.hostname}:3000/app/getShipmentMethodList`)
+        axios.get(`http://${this.hostname}:5000/app/getShipmentMethodList`)
         .then(result => {
             this.elementList=result.data.recordset
         }).catch(err=>console.log(err))

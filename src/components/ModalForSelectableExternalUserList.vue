@@ -80,7 +80,7 @@ export default{
     },
     props:['isActive'],
     beforeMount(){
-        axios.get(`http://${this.hostname}:3000/app/getUserList`)
+        axios.get(`http://${this.hostname}:5000/app/getUserList`)
         .then(result => {
             this.elementList=result.data.recordset
         }).catch(err=>console.log(err))

@@ -94,7 +94,7 @@ export default{
         }
     },
     beforeMount(){
-        axios.get(`http://${this.hostname}:3000/app/getSIlist/${this.customerNo}`)
+        axios.get(`http://${this.hostname}:5000/app/getSIlist/${this.customerNo}`)
         .then(result => {
             this.elementList=result.data.recordset
         }).catch(err=>console.log(err))

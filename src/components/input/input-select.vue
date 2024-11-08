@@ -11,7 +11,7 @@
                     
                     <div class="field has-addons " v-else>
                         <div class="control is-expanded">
-                            <input class="input" type="text" v-model="model" readonly>
+                            <input class="input" type="text" v-model="model" readonly >
                         </div>
                         <div class="control">
                             <a class="button is-light" @click.prevent="$emit('openModal',model)">

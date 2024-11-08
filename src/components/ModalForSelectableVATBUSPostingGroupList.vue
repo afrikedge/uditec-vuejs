@@ -70,7 +70,7 @@ export default{
     },
     props:['isActive'],
     beforeMount(){
-        axios.get(`http://${this.hostname}:3000/app/getVATBUSPostingGroupList`)
+        axios.get(`http://${this.hostname}:5000/app/getVATBUSPostingGroupList`)
         .then(result => {
             this.elementList=result.data
         }).catch(err=>console.log(err))

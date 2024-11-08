@@ -16,12 +16,37 @@
                         il y'a une erreur
                     </span>
                 </div---->
+                <article v-if="errorInputMessage" class="message is-danger shadow">
+                    <div class="message-header">
+                            <span class="subtitle is-7 m-0 has-text-white"> 
+                                <span class="icon ">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </span>
+                                {{ errorInputMessage }}
+                            </span>
+                        <button class="delete" aria-label="delete" @click="errorInputMessage=''"></button>
+                    </div>
+                </article>
+                <article v-if="successInputMessage" class="message is-primary shadow">
+                    <div class="message-header">
+                            <span class="subtitle is-7 m-0 has-text-white"> 
+                                <span class="icon ">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                {{ successInputMessage }}
+                                <span class="icon ">
+                                    <i class="fas fa-arrows-rotate fa-pulse"></i>
+                                </span>
+                            </span>
+                        <button class="delete" aria-label="delete" @click="successInputMessage=''"></button>
+                    </div>
+                </article>
+                <form  @submit.prevent="loginUser">
 
-                <form>
                     <section class="modal-card-body">
                         <div class="field mb-3 mx-5  has-border-bottom">
                             <div class="control has-icons-left form-floating ">
-                                <input class="form-control input is-normal  is-light" type="text" placeholder="login" required>
+                                <input v-model="loginInput" class="form-control input is-normal  is-light" type="text" placeholder="login" required>
                                 <label class="label mx-5 " for="text"><strong>Code utilisateur</strong> </label>
                                 <span class="icon is-small is-left my-1">
                                     <i class="fas fa-user"></i>
@@ -31,7 +56,7 @@
 
                         <div class="field mx-5  has-border-bottom">
                             <div class="control has-icons-left form-floating">
-                                <input class="form-control input is-normal is-light has-border-bottom" :type="type_of_mdp_Field" placeholder="mdp"  required>
+                                <input v-model="mdpInput" class="form-control input is-normal is-light has-border-bottom" :type="type_of_mdp_Field" placeholder="mdp"  required>
                                 <label class="label mx-5 " for="password"><strong>Mot de passe </strong> </label>
                                 <span class="icon is-small is-left my-1 ">
                                     <i class="fas fa-key "></i>
@@ -60,6 +85,11 @@
     import buttonVue from '../components/input/Button'
     import fullRoundedBubble from '../components/dynamicBubbles/FullRoundedBubble.vue'
     import bubbleForButton from '../components/dynamicBubbles/BubbleForButton.vue'
+    import { useWebUserInfoStore } from '@/Stores/WebUserInfo'
+    import { onMounted, ref } from 'vue'
+    import { useRouter } from 'vue-router'
+
+import axios from 'axios'
     export default {
         components:{
             buttonVue,
@@ -77,12 +107,77 @@
                 this.type_of_mdp_Field = (this.type_of_mdp_Field == 'password') ? 'text' : 'password';
                 this.action_on_mdp_field = (this.action_on_mdp_field == 'Afficher') ? 'Masquer': 'Afficher';
             },
+        },
+        setup(){
+            const loginInput = ref('')
+            const mdpInput = ref('')
+            const errorInputMessage = ref('')
+            const successInputMessage = ref('')
+            const hostname = window.location.hostname   
+            const router = useRouter()
+    
+
+
+            // function getUser(){
+            //     axios.get(`http://${hostname}:5000/app/getWebUserInfo?userCode=${loginInput.value}`)
+            //     .then( result => {
+            //         console.log(result)
+            //     })
+            // }
+            function getCustomerUserInfo(){
+                if(useWebUserInfoStore().defaultCustomerNo){
+                    axios.get(`http://${hostname}:5000/app/getCustomerCard/${useWebUserInfoStore().defaultCustomerNo}`)
+                    .then(result => {
+                        useWebUserInfoStore().fillWebUserCustomerInfo(result.data.recordset[0])
+                        window.localStorage.setItem("userCustomerData", JSON.stringify(result.data.recordset[0]))
+                    }).catch(err=>console.log(err))
+                }
+            }
+
+            function loginUser(){
+                axios.get(`http://${hostname}:5000/app/getUserInfo?webUser=${loginInput.value}`)
+                .then( result => {
+                    if(mdpInput.value!=='Password01'){
+                        errorInputMessage.value ='Utilisateur ou mot de passe incorrect'
+                    }else{
+                        if(errorInputMessage.value){
+                            errorInputMessage.value=''
+                        }
+                        successInputMessage.value='Identifiants valides! Redirection...'
+                        let userData = result.data[0]
+                        useWebUserInfoStore().fillWebUserInfo(userData)
+                        getCustomerUserInfo()
+                        window.localStorage.setItem("userData", JSON.stringify(userData));
+                        setTimeout(()=> router.push('../'),5000)
+                    }
+                })
+                .catch(err => {
+                    if(err.response.data.message){
+                        console.log(err)
+                        errorInputMessage.value = err.response.data.message
+                    }
+                })
+                
+                
+            }
+
+            onMounted(() => {
+                if( window.localStorage.getItem("userData")){
+                    router.push('../')
+                }
+            })
+
+            return {
+                loginInput,mdpInput,
+                loginUser,
+                errorInputMessage,successInputMessage,
+            }
         }
     }
 
 </script>
 
-<style>
+<style scoped>
 .scroll::-webkit-scrollbar, #card_detail_column::-webkit-scrollbar {
   display: none;
 }

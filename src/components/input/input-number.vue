@@ -8,7 +8,7 @@
             <div class="field">
                 <p :class="{'control':true,'is-expanded':true,'is-loading':is_loading}">
                     <input :disabled="props.is_disabled" :class="['input',props.inputTextColor,props.inputTextWeight]" type="text" :value="props.valueInputText" v-if="props.is_disabled==true">
-                    <input class="input " type="number" v-model="model" :readonly="props.is_readOnly" v-else>
+                    <input class="input " type="number" v-model="model" :readonly="props.is_readOnly" @change="$emit('onChangingInputValue')" v-else>
                 </p>
             </div>
         </div>

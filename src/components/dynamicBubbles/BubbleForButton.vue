@@ -2,7 +2,7 @@
     <div id="BFB">
     </div>
 </template>
-<style>
+<style scoped>
 #BFB{
     border-radius: 50%;
     height: 300px;
